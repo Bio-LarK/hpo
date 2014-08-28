@@ -1,92 +1,289 @@
-$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+$icon-font-path:"../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/bootstrap.scss";
 // endbower
-
-.browsehappy {
-  margin: 0.2em 0;
-  background: #ccc;
-  color: #000;
-  padding: 0.2em 0;
+ .browsehappy {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
 }
-
 /* Space out content a bit */
+
 body {
-  padding-top: 20px;
-  padding-bottom: 20px;
+    background-color: #F4F4F4;
+    font-family: 'Open Sans', Sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(0,0,0,0.87);
+}
+footer {
+  margin-top: 40px;
 }
 
-/* Everything but the jumbotron gets side spacing for mobile first views */
-.header,
-.marketing,
-.footer {
-  padding-left: 15px;
-  padding-right: 15px;
+#loading-bar .bar {
+  background: rgba(0,0,0,0.3);
 }
+#loading-bar-spinner .spinner-icon {
+  border-top-color:  rgba(0,0,0,0.3);
+  border-left-color: rgba(0,0,0,0.3);
+}
+#loading-bar .peg {
+  -moz-box-shadow: rgba(0,0,0,0.3) 1px 0 6px 1px;
+  -ms-box-shadow: rgba(0,0,0,0.3) 1px 0 6px 1px;
+  -webkit-box-shadow: rgba(0,0,0,0.3) 1px 0 6px 1px;
+  box-shadow: rgba(0,0,0,0.3) 1px 0 6px 1px;
+}
+.navbar.navbar-bright {
+  border-radius: 0;
+  margin-bottom: 0;
+  background-color: #FFDA00;//; #FFC600;
+  border: none;
+  color: rgba(0,0,0,0.8);
+  font-size: 14px;
+  .navbar-brand {
+    text-transform: uppercase;
+    font-weight: bold;
+  }
 
-/* Custom page header */
-.header {
-  border-bottom: 1px solid #e5e5e5;
-
-  /* Make the masthead heading the same height as the navigation */
-  h3 {
-    margin-top: 0;
-    margin-bottom: 0;
-    line-height: 40px;
-    padding-bottom: 19px;
+  .navbar-search input {
+    border: none;
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: none;
+    border-radius: 100px;
+  }
+  .navbar-nav li {
+    margin-right: 5px;
+  }
+  .navbar-nav li a {
+    border-radius: 100px;
+    margin: 7px 0;
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+  .nav > li > a:hover, .nav > li > a:focus {
+    background-color: rgba(0,0,0,0.1);
+    color: rgba(0,0,0,0.87);
   }
 }
 
-/* Custom page footer */
-.footer {
-  padding-top: 19px;
-  color: #777;
-  border-top: 1px solid #e5e5e5;
-}
-
-.container-narrow > hr {
-  margin: 30px 0;
-}
-
-/* Main marketing message and sign up button */
-.jumbotron {
+.spinner {
+  font-size: 24px; 
   text-align: center;
-  border-bottom: 1px solid #e5e5e5;
-
-  .btn {
-    font-size: 21px;
-    padding: 14px 24px;
+  color: rgba(0,0,0,0.2);
+  .fa-spin {
+    -webkit-animation: spin 0.5s infinite linear;
+    -moz-animation: spin 0.5s infinite linear;
+    -o-animation: spin 0.5s infinite linear;
+    animation: spin 0.5s infinite linear;
   }
 }
 
-/* Supporting marketing content */
-.marketing {
-  margin: 40px 0;
+.footer {
+  background-color: white; 
+  padding: 20px; 
+  text-align: center;
+  .footer-poweredby {
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: rgba(0,0,0,0.54);
+  }
 
-  p + h4 {
-    margin-top: 28px;
+  &:hover a {
+    color: #3f51b5;
   }
 }
 
-/* Responsive: Portrait tablets and up */
-@media screen and (min-width: 768px) {
-  .container {
-    max-width: 730px;
+.logo-list {
+  list-style: none;
+  img {
+      // -webkit-filter: grayscale(100%);
+      // -moz-filter: grayscale(100%);
+      // filter: grayscale(100%);
+  }
+}
+.logo-list-item {
+  display: inline-block;
+  margin-right: 40px;
+}
+.logo-list-item-uq img {
+  max-height: 80px; max-width: 100px;
+}
+.logo-list-item-garvan img {
+  max-height: 110px; max-width: 110px;
+}
+.logo-list-item-usyd img {
+  max-height: 100px; max-width: 130px;
+}
+
+// .details {
+//   h3 {
+//     margin: 0;
+//     font-size: 14px;
+    
+//     color: rgba(0,0,0,0.87);
+//   }
+//   color: rgba(0,0,0,0.5);
+//   margin-bottom: 24px;;
+// }
+// a.details {
+//   margin-bottom: 0;
+// }
+
+.detail {
+  .detail-title {
+    font-size: 14px;
+    color: rgba(0,0,0,0.87);
+    line-height: 1.5;
+    font-weight: normal;
+    text-align: left;
+    margin: 0;
+  }
+  .detail-info, .detail-info a, a.detail-info {
+    color: rgba(0,0,0,0.5);
+  }
+}
+
+.detail-externalidentifiers {
+  .detail-title {
+    margin-bottom: 10px;
+  }
+}
+.detail-genotype {
+  .detail-title {
+    display: inline;
+  }
+  .detail-info {
+    display: inline;
+  }
+}
+
+.title {
+  margin-top: 36px;
+  margin-bottom: 36px;
+  h1 {
+    font-weight: bold;
+    margin: 0;
+    color: rgba(0,0,0,0.7);
+    text-transform: capitalize;
+  }
+}
+
+.list-er li {
+  line-height: 1.5;
+  color: rgba(0,0,0,0.7);
+  a {
+    color: rgba(0,0,0,0.7);
+  }
+  span {
+    color: rgba(0,0,0,0.87);
+  }
+}
+
+.panel {
+  border-radius: 2px;
+  h5 {
+      text-transform: capitalize;
+      font-weight: bold;
+      margin: 0;
+      color: rgba(0,0,0,0.65);
+      margin-bottom: 7px;
+  }
+  p:last-of-type {
+    margin-bottom: 0;
+  }
+  a {
+    transition: 0.2s color;
+  }
+  &:hover {
+    a, strong a {
+      color: #3f51b5;
+    }
   }
 
-  /* Remove the padding we set earlier */
-  .header,
-  .marketing,
-  .footer {
-    padding-left: 0;
-    padding-right: 0;
+  .panel-body {
+    padding: 20px;
   }
-  /* Space out the masthead */
-  .header {
-    margin-bottom: 30px;
+  .list-group-item {
+    padding: 14px 20px;
   }
-  /* Remove the bottom border on the jumbotron for visual effect */
-  .jumbotron {
-    border-bottom: 0;
+  a.list-group-item:hover {
+    background-color: inherit;
   }
+
+}
+
+.panels {
+  h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 36px;
+    margin-bottom: 24px;
+    color: rgba(0,0,0,0.5);
+    // text-transform: uppercase;
+  }
+  input.panels-filter {
+    border-radius: 100px;
+    border: none;
+    background-color: rgba(0,0,0,0.1);
+    position: relative;
+    top: -5px;
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+}
+
+
+.navbar-nav > li.active > a {
+	background-color: white;
+}
+a { 
+	color: inherit;
+}
+.ng-hide-add { 
+	animation:0.2s fadeOut ease; 
+	display: block !important;
+}
+
+/* when showing the picture */
+.ng-hide-remove      { 
+	animation:0.2s fadeIn ease; 
+}
+
+.text-muted, h1 small, h1 .small {
+	color: rgba(0,0,0, 0.54) !important;
+}
+
+.col-sm-4.ng-enter {
+  animation:5s fadeIn ease; 
+}
+.col-sm-4.ng-leave {
+  animation:5s fadeOut ease;
+}
+
+.my-repeat-animation.ng-enter {
+  left:-10px;
+  opacity:0;
+}
+.my-repeat-animation.ng-enter.ng-enter-active {
+  left:0;
+  opacity:1;
+}
+
+.my-repeat-animation.ng-leave {
+  left:0;
+  opacity:1;
+}
+.my-repeat-animation.ng-leave.ng-leave-active {
+  left:-10px;
+  opacity:0;
+}
+
+.my-repeat-animation.ng-move {
+  opacity:0.5;
+}
+.my-repeat-animation.ng-move.ng-move-active {
+  opacity:1;
 }

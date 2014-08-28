@@ -27,6 +27,39 @@ module.exports = function (grunt) {
         // Project settings
         yeoman: appConfig,
 
+        ngconstant: {
+            // Options for all targets
+            options: {
+                space: '  ',
+                wrap: '\'use strict\';\n\n {%= __ngModule %}',
+                name: 'config',
+            },
+            // Environment targets
+            development: {
+                options: {
+                    dest: '<%= yeoman.app %>/scripts/config.js'
+                },
+                constants: {
+                    ENV: {
+                        name: 'development',
+                        apiEndpoint: 'api'
+                    }
+                }
+            },
+            production: {
+                options: {
+                    dest: '<%= yeoman.dist %>/scripts/config.js'
+                },
+                constants: {
+                    ENV: {
+                        name: 'production',
+                        apiEndpoint: 'http://api.livesite.com'
+                    }
+                }
+            }
+        },
+
+
         // Watches files for changes and runs tasks based on the changed files
         watch: {
             bower: {
@@ -72,13 +105,13 @@ module.exports = function (grunt) {
                 livereload: 35729
             },
             proxies: [{
-                context: '/cortex',
-                host: '10.10.2.202',
-                port: 8080,
-                https: false,
-                xforward: false,
+                context: '/api',
+                host: '130.56.248.140',
+                rewrite: {
+                    '^/api': '/hpo/api',
+                },
                 headers: {
-                    "x-custom-added-header": value
+                    host: '130.56.248.140:80'
                 }
             }],
             livereload: {
@@ -410,6 +443,7 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
+            'ngconstant:development',
             'wiredep',
             'configureProxies:server',
             'concurrent:server',
@@ -434,6 +468,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
+        'ngconstant:production',
         'wiredep',
         'useminPrepare',
         'concurrent:dist',
