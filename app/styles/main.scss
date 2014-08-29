@@ -34,12 +34,13 @@ footer {
   -webkit-box-shadow: rgba(0,0,0,0.3) 1px 0 6px 1px;
   box-shadow: rgba(0,0,0,0.3) 1px 0 6px 1px;
 }
+
 .navbar.navbar-bright {
   border-radius: 0;
   margin-bottom: 0;
-  background-color: #FFDA00;//; #FFC600;
+  background-color: #63BA97;//; #FFC600;
   border: none;
-  color: rgba(0,0,0,0.8);
+  color: rgba(255,255,255,0.8);
   font-size: 14px;
   .navbar-brand {
     text-transform: uppercase;
@@ -51,6 +52,21 @@ footer {
     background-color: rgba(255, 255, 255, 0.5);
     box-shadow: none;
     border-radius: 100px;
+  }
+  .navbar-search input::-webkit-input-placeholder {
+   color: rgba(0,0,0,0.33);
+}
+
+  :-moz-placeholder { /* Firefox 18- */
+     color: red;  
+  }
+
+  ::-moz-placeholder {  /* Firefox 19+ */
+     color: red;  
+  }
+
+  :-ms-input-placeholder {  
+     color: red;  
   }
   .navbar-nav li {
     margin-right: 5px;
