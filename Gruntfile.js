@@ -1,4 +1,4 @@
-// Generated on 2014-08-28 using generator-angular 0.9.5
+// Generated on 2014-07-28 using generator-angular 0.9.5
 'use strict';
 
 // # Globbing
@@ -27,35 +27,68 @@ module.exports = function (grunt) {
         // Project settings
         yeoman: appConfig,
 
-        ngconstant: {
-            // Options for all targets
+        'gh-pages': {
             options: {
-                space: '  ',
-                wrap: '\'use strict\';\n\n {%= __ngModule %}',
-                name: 'config',
+                base: '<%= yeoman.dist %>'
             },
-            // Environment targets
-            development: {
+            'gh-pages': {
+                src: ['**']
+            },
+            'live': {
                 options: {
-                    dest: '<%= yeoman.app %>/scripts/config.js'
+                    branch: 'master',
+                    repo: 'ssh://craig@130.56.248.140/var/repo/orphanet.git'
                 },
-                constants: {
-                    ENV: {
-                        name: 'development',
-                        apiEndpoint: 'api'
-                    }
+                src: ['**']
+            }
+        },
+
+        changelog: {
+            options: {}
+        },
+
+        buildcontrol: {
+            options: {
+                dir: '<%= yeoman.dist %>',
+                commit: true,
+                push: true,
+                message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%',
+                connectCommits: true
+            },
+            pages: {
+                options: {
+                    remote: 'https://github.com/Bio-LarK/orpha.git',
+                    branch: 'gh-pages'
                 }
             },
-            production: {
+            live: {
                 options: {
-                    dest: '<%= yeoman.dist %>/scripts/config.js'
-                },
-                constants: {
-                    ENV: {
-                        name: 'production',
-                        apiEndpoint: 'http://api.livesite.com'
-                    }
+                    remote: 'ssh://craig@130.56.248.140/var/repo/hpo.git',
+                    branch: 'master',
+                    tag: require('./package.json').version
                 }
+            },
+            local: {
+                options: {
+                    remote: '../',
+                    branch: 'build'
+                }
+            }
+        },
+
+        bump: {
+            options: {
+                files: ['package.json'],
+                updateConfigs: [],
+                commit: true,
+                commitMessage: 'Release v%VERSION%',
+                commitFiles: ['-a'],
+                createTag: true,
+                tagName: 'v%VERSION%',
+                tagMessage: 'Version %VERSION%',
+                push: true,
+                pushTo: 'origin',
+                gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d'
             }
         },
 
@@ -173,6 +206,7 @@ module.exports = function (grunt) {
                 src: ['test/spec/{,*/}*.js']
             }
         },
+
 
         // Empties folders to start fresh
         clean: {
@@ -401,6 +435,11 @@ module.exports = function (grunt) {
                     cwd: '.',
                     src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
                     dest: '<%= yeoman.dist %>'
+                }, {
+                    expand: true,
+                    cwd: 'bower_components/fontawesome/fonts',
+                    src: ['**'],
+                    dest: '<%= yeoman.dist %>/fonts'
                 }]
             },
             styles: {
@@ -443,7 +482,6 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
-            'ngconstant:development',
             'wiredep',
             'configureProxies:server',
             'concurrent:server',
@@ -468,7 +506,6 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
-        'ngconstant:production',
         'wiredep',
         'useminPrepare',
         'concurrent:dist',
@@ -476,7 +513,7 @@ module.exports = function (grunt) {
         'concat',
         'ngmin',
         'copy:dist',
-        'cdnify',
+        // 'cdnify',
         'cssmin',
         'uglify',
         'filerev',
@@ -489,4 +526,10 @@ module.exports = function (grunt) {
         'test',
         'build'
     ]);
+
+    grunt.registerTask('deploy', 'Builds and deploys', function (type) {
+        type = type || 'patch';
+
+        grunt.task.run(['build', 'bump-only:' + type, 'changelog', 'bump-commit', 'buildcontrol:live']);
+    });
 };
