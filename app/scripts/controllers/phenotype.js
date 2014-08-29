@@ -12,7 +12,7 @@ angular.module('hpoApp')
         // $scope.disorderTracker = promiseTracker();
         // $scope.signsTracker = promiseTracker();
         // $scope.genesTracker = promiseTracker();
-        // $scope.toggleParents = toggleParents;
+        $scope.toggleParents = toggleParents;
         activate();
         ////////////
 
@@ -35,6 +35,15 @@ angular.module('hpoApp')
             // $scope.disorderTracker.addPromise(disorder.$promise);
             // $scope.signsTracker.addPromise(disorder.$promise);
             // $scope.genesTracker.addPromise(disorder.$promise);
+        }
+
+
+        function toggleParents(phenotype) {
+            phenotype.isShowingParents = !phenotype.isShowingParents;
+            if (phenotype.isShowingParents) {
+                phenotype.getParents();
+            }
+
         }
 
     });

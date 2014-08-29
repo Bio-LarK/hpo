@@ -16,7 +16,8 @@ angular
         'ngSanitize',
         'ngTouch',
         'ui.router',
-        'config'
+        'config',
+        'dotjem.angular.tree'
     ])
     .config(function ($stateProvider, $urlRouterProvider) {
         // 

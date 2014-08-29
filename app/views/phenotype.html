@@ -67,6 +67,9 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <h4 style="margin: 0; font-weight: bold; color:rgba(0,0,0,0.6); margin-bottom: 14px; font-size: 14px;">Alternative IDs</h4>
+                            <div class="text-muted" ng-hide="phenotype.concept_altid.length">
+                                No alternative IDs.
+                            </div>
                             <ul class="list-unstyled" style="margin: 0;">
                                 <li ng-repeat="altid in phenotype.concept_altid">
                                     {{ altid }}
@@ -108,15 +111,15 @@
                                             <div class="media-body">
                                                 <h5>
                                                     <a ui-sref="phenotype({phenotypeId: phenotype.nid})">
-                                                            {{ phenotype.concept_label }}
+                                                        {{ phenotype.concept_label }}
                                                     </a> 
                                                 </h5>
 
                                                 <p>An HPO summary for this concept is currently under development.</p>
                                             </div>
                                         </div>
-
                                     </div>
+
                                     <ul class="list-group">
                                         <li class="list-group-item">
                                             <div style="font-size: 12px; color: grey; text-transform: uppercase">
@@ -125,19 +128,20 @@
 
                                             <a href="" ng-click="toggleParents(phenotype);">
                                                 <i class="fa" ng-class="{
-                                                            'fa-caret-right': !phenotype.isShowingParents,
-                                                            'fa-caret-down': phenotype.isShowingParents,
-                                                }"></i> {{ phenotype.phenotype_name }}
+                                                    'fa-caret-right': !phenotype.isShowingParents,
+                                                    'fa-caret-down': phenotype.isShowingParents,
+                                                }"></i> 
+                                                {{ phenotype.concept_label }}
                                             </a>
                                             <div dx-start-with="phenotype" ng-show="phenotype.isShowingParents" style="padding-left: 10px;">
-                                                <div ng-repeat="parent in $dxPrior.phenotype_parent" ng-click="toggleParents(parent); $event.stopPropagation()" style="padding-left: 20px;">
+                                                <div ng-repeat="parent in $dxPrior.concept_parent" ng-click="toggleParents(parent); $event.stopPropagation()" style="padding-left: 20px;">
                                                     <a href="">
                                                         <i ng-class="{
                                                             'fa-caret-right': !parent.isShowingParents,
                                                             'fa-caret-down': parent.isShowingParents,
-                                                        }" class="fa" ng-show="parent.phenotype_parent.length > 0"></i>
-                            
-                                                        {{ parent.phenotype_name }}
+                                                        }" class="fa" ng-show="parent.concept_parent.length > 0"></i>
+                                                        
+                                                        {{ parent.concept_label }}
                                                     </a>
                                                     <div dx-connect="parent" ng-show="parent.isShowingParents"></div>
                                                 </div>

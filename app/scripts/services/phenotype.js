@@ -8,43 +8,50 @@
  * Factory in the hpoApp.
  */
 angular.module('hpoApp')
-    .factory('Phenotype', function ($resource, ENV) {
+    .factory('Phenotype', function ($resource, $q, $http, ENV) {
         console.log('ENV', ENV);
         var Phenotype = $resource(ENV.apiEndpoint + '/entity_node/:nid', {
             'parameters[type]': 'hpo_concept',
             nid: '@nid'
+        }, {
+            get: {
+                method: 'GET',
+                transformResponse: $http.defaults.transformResponse.concat([
+                    transformerGetResponse
+                ])
+            }
         });
-        // Phenotype.prototype.getParents = getParents;
+        Phenotype.prototype.getParents = getParents;
         return Phenotype;
 
         ////////////
 
-        // function getParents() {
-        //     // Get all the parent ids
-        //     var phenotype = this;
-        //     var ids = _.pluck(phenotype['concept_parent'])
-        //     var ids = _.map(this['disorder_parent'], function (parent) {
-        //         return parent.id || parent.nid;
-        //     });
-        //     if (!ids.length) {
-        //         return $q.when(null);
-        //     }
+        function transformerGetResponse(phenotype, headersGetter) {
+            // Convert parents to Disorder objects
+            phenotype['concept_parent'] = _.map(phenotype['concept_parent'], function (parent) {
+                return new Phenotype(parent);
+            });
+            return phenotype;
+        }
 
-        //     // var ids = _.pluck(this['disorder_parent'], 'id');
-        //     var request = _.indexBy(ids, function (ids, index) {
-        //         return 'parameters[nid][' + index + ']';
-        //     });
-        //     request.fields = ['nid', 'disorder_name', 'disorder_parent'].join(',');
+        function getParents() {
+            /* jshint validthis: true */
+            var phenotype = this;
+            var ids = _.map(this['concept_parent'], function (parent) {
+                return parent.id || parent.nid;
+            });
+            if (!ids || !ids.length) {
+                return $q.when([]);
+            }
 
-        //     return $http.get('http://130.56.248.140/orphanet/api/entity_node', {
-        //         params: request
-        //     }).then(function (response) {
-        //         that['disorder_parent'] = _.map(response.data, function (disorder) {
-        //             return new Disorder(disorder);
-        //         });
-        //         return that['disorder_parent'];
-        //     });
+            var request = _.indexBy(ids, function (ids, index) {
+                return 'parameters[nid][' + index + ']';
+            });
+            request.fields = ['nid', 'concept_label', 'concept_parent'].join(',');
 
-        // }
-
+            return Phenotype.query(request).$promise.then(function (phenotypes) {
+                phenotype['concept_parent'] = phenotypes;
+                // console.log('got phenotypes', phenotypes);
+            });
+        }
     });
