@@ -1,5 +1,5 @@
 <div>
-    <style>
+    <!-- <style>
     .details {
         float: left;
         margin-bottom: 0;
@@ -14,7 +14,7 @@
         color: rgba(0, 0, 0, 0.54);
         margin-bottom: 0;
     }
-    </style>
+    </style> -->
 
     <div class="container">
         <div class="title">
@@ -29,11 +29,11 @@
                     <h1>{{ phenotype.title || 'Loading...' }}
                         <br/>
                     </h1>
-                    <div style="color: rgba(0,0,0,0.5); margin-top: 7px;" ng-show="phenotype.phenotype_synonym.length">
+                    <div style="color: rgba(0,0,0,0.5); margin-top: 7px;" ng-show="phenotype.concept_synonym.length">
                         <small style="font-size: 16px;">
                             Synonyms:
-                            <span ng-repeat="synonym in phenotype.phenotype_synonym">
-                                {{ synonym }}
+                            <span ng-repeat="synonym in phenotype.concept_synonym">
+                                {{ synonym.synonym_value }}
                                 <span ng-show="!$last">,</span>
                             </span>
                         </small>
@@ -46,16 +46,43 @@
             </div>
         </div>
 
-        <div>
-            Alternative ID
-            <ul>
-                <li ng-repeat="altid in phenotype.concept_altid">
-                    {{ altid }}
-                </li>
-            </ul>
+        <div class="panels">
+            <div class="spinner" ng-show="disorderTracker.active();">
+                <i class="fa fa-spin fa-circle-o-notch"></i>
+            </div>
+            <div class="row" ng-hide="disorderTracker.active()">
+                <div class="col-sm-8">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <p>An HPO summary for this concept is currently under development.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4 style="margin: 0; font-weight: bold; color:rgba(0,0,0,0.6); margin-bottom: 14px; font-size: 14px;">Alternative IDs</h4>
+                            <ul class="list-unstyled" style="margin: 0;">
+                                <li ng-repeat="altid in phenotype.concept_altid">
+                                    {{ altid }}
+                                </li>
+                            </ul>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        
+
+
+
 
         <div class="panels">
             <h2>Classification</h2>
@@ -68,7 +95,7 @@
                     Root phenotype.
                 </p>
                 <div class="row">
-                
+
                     <div class="col-sm-12">
                         <div class="row" ng-repeat="row in phenotype.concept_parent | inSlicesOf:3">
                             <div class="col-sm-4" ng-repeat="phenotype in row">
@@ -84,18 +111,18 @@
                                                             {{ phenotype.concept_label }}
                                                     </a> 
                                                 </h5>
-                
+
                                                 <p>An HPO summary for this concept is currently under development.</p>
                                             </div>
                                         </div>
-                
+
                                     </div>
                                     <ul class="list-group">
                                         <li class="list-group-item">
                                             <div style="font-size: 12px; color: grey; text-transform: uppercase">
                                                 Location in hierarchy
                                             </div>
-                
+
                                             <a href="" ng-click="toggleParents(phenotype);">
                                                 <i class="fa" ng-class="{
                                                             'fa-caret-right': !phenotype.isShowingParents,
@@ -112,7 +139,7 @@
                             
                                                         {{ parent.phenotype_name }}
                                                     </a>
-                                                    <div dx-connect="parent" ng-show="parent.isShowingParents" />
+                                                    <div dx-connect="parent" ng-show="parent.isShowingParents"></div>
                                                 </div>
                                             </div>
                                         </li>
@@ -125,13 +152,9 @@
             </div>
         </div>
 
-        <pre>
-            {{ phenotype | json }}
-        </pre>
-
 
         <div class="panels">
-            <form class="form-inline pull-right" role="form" ng-show="phenotype.phenotype_child.length > 1">
+            <form class="form-inline pull-right" role="form" ng-show="phenotype.concept_child.length > 1">
                 <div class="form-group">
                     <label class="sr-only" for="exampleInputEmail2">Filter</label>
                     <input type="text" class="form-control panels-filter" id="exampleInputEmail2" placeholder="Filter" ng-model="filterChildren">
@@ -144,11 +167,11 @@
                 <i class="fa fa-spin fa-circle-o-notch"></i>
             </div>
             <div ng-hide="phenotypeTracker.active()">
-                <p ng-hide="phenotype.phenotype_child.length" class="text-muted">
+                <p ng-hide="phenotype.concept_child.length" class="text-muted">
                     No children.
                 </p>
-                
-                <div class="row" ng-repeat="row in phenotype.phenotype_child | filter:filterChildren |  inSlicesOf:3">
+
+                <div class="row" ng-repeat="row in phenotype.concept_child | filter:filterChildren |  inSlicesOf:3">
                     <div class="col-sm-4" ng-repeat="phenotype in row">
                         <div class="panel panel-default">
                             <div class="panel-body">
@@ -159,158 +182,19 @@
                                     <div class="media-body">
                                         <h5>
                                             <a ui-sref="phenotype({phenotypeId: phenotype.nid})">
-                                                {{ phenotype.phenotype_name }}
+                                                {{ phenotype.concept_label }}
                                             </a>
                                         </h5>
-                
-                                        <p>An Orphanet summary for this disease is currently under development.</p>
+
+                                        <p>An HPO summary for this concept is currently under development.</p>
                                     </div>
                                 </div>
-                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-        </div>
-
-        <div class="panels">
-            <form class="form-inline pull-right" role="form" ng-show="phenotype.phenotype_disgene.length > 1">
-                <div class="form-group">
-                    <label class="sr-only" for="exampleInputEmail2">Filter</label>
-                    <input type="text" class="form-control panels-filter" id="exampleInputEmail2" placeholder="Filter" ng-model="filterGenotype">
-                </div>
-                <!-- <button type="submit" class="btn btn-default">Sign in</button> -->
-            </form>
-
-            <h2>Genotype</h2>
-            <div class="spinner" ng-show="genesTracker.active();">
-                <i class="fa fa-spin fa-circle-o-notch"></i>
-            </div>
-            <div ng-hide="genesTracker.active()">
-                <p ng-hide="phenotype.phenotype_disgene.length" class="text-muted">
-                    No genotype.
-                </p>
-                <div class="row" ng-repeat="row in phenotype.phenotype_disgene | filter:filterGenotype | inSlicesOf:3">
-                    <div class="col-sm-4" ng-repeat="phenotype_gene in row">
-                        <div class="panel panel-default" ui-sref="gene({geneId: phenotype_gene.disgene_gene.nid })" style="cursor: pointer;">
-                            <div class="panel-body">
-                                <div class="media">
-                                    <div class="pull-left">
-                                        <img src="http://dummyimage.com/40x40/f57f17/f57f17" alt="" class="media-body">
-                                    </div>
-                                    <div class="media-body">
-                                        <div>
-                                            <span class="text-muted">
-                                                {{ phenotype_gene.disgene_at.dgt_name }}
-                                            </span>
-                                            <h5 style="display: inline">
-                                                <a ui-sref="gene({geneId: phenotype_gene.disgene_gene.nid})">{{ phenotype_gene.disgene_gene.gene_name }}</a>
-                                            </h5>
-                                            <!--<span ng-repeat="syn in phenotype_gene.disgene_gene.gene_synonym">, {{ syn }}</span>)-->
-                                        </div>
-                                        <div style="margin-top: 10px;">
-                                            <div class="detail detail-genotype">
-                                                <div class="detail-title">
-                                                    Symbol:
-                                                </div>
-                                                <div class="detail-info">
-                                                    {{ phenotype_gene.disgene_gene.gene_symbol }}
-                                                </div>
-                                            </div>
-                                            <div class="detail detail-genotype">
-                                                <div class="detail-title">
-                                                    Status:
-                                                </div>
-                                                <div class="detail-info">
-                                                    {{ phenotype_gene.disgene_as.dga_name }}
-                                                </div>
-                                            </div>
-                                            <!--<dl class="dl-horizontal detail detail-externalidentifiers">
-                                                <dt class="detail-title">Symbol</dt>
-                                                <dd class="detail-info">{{ phenotype_gene.disgene_gene.gene_symbol }}</dd>
-                                                <dt>
-                                                    Status
-                                                </dt>
-                                                <dd>{{ phenotype_gene.disgene_as.dga_name }}</dd>
-                                            </dl>-->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="list-group">
-                                <a href="" class="list-group-item">
-                                    <i class="fa fa-search"></i> View phenotypes ({{ phenotype_gene.disgene_gene.gene_disgene.length }})
-                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
-        <!-- http://130.56.248.140/orphanet/api/entity_node/115015/nodes_field_ds_sign?fields=ds_phenotype -->
-
-        <div class="panels">
-            <!-- <button class="btn btn-default pull-right">Edit</button> -->
-            <form class="form-inline pull-right" role="form" ng-show="phenotype.phenotype_phenotype.length > 1">
-                <div class="form-group">
-                    <label class="sr-only" for="exampleInputEmail2">Filter</label>
-                    <input type="text" class="form-control panels-filter" id="exampleInputEmail2" placeholder="Filter" ng-model="filterPhenotype">
-                </div>
-                <!-- <button type="submit" class="btn btn-default">Sign in</button> -->
-            </form>
-            <h2>Phenotype</h2>
-            <div class="spinner" ng-show="signsTracker.active();">
-                <i class="fa fa-spin fa-circle-o-notch"></i>
-            </div>
-            <div ng-hide="signsTracker.active();">
-                <p ng-hide="phenotype.phenotype_phenotype.length" class="text-muted">
-                    No phenotype.
-                </p>
-                <div class="row" ng-repeat="row in phenotype.phenotype_phenotype | filter:filterPhenotype | inSlicesOf:3">
-                    <div class="col-sm-4 repeated-item" ng-repeat="phenotype_phenotype in row">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <div class="media">
-                                    <div class="pull-left">
-                                        <img src="http://dummyimage.com/40x40/fdd835/fdd835" alt="" class="media-body">
-                                    </div>
-                                    <div class="media-body">
-                                        <div>
-                                            <!-- <a ui-sref="sign({signId: phenotype_phenotype.ds_sign.nid })"> -->
-                                            <h5>
-                                                <a ui-sref="sign({signId: phenotype_phenotype.ds_sign.nid })">
-                                                    {{ phenotype_phenotype.ds_sign.sign_name }}
-                                                </a>
-                                            </h5>
-                                            <!-- </a> -->
-                                            <p class="" ng-hide="phenotype_phenotype.ds_sign.sign_name">Loading...</p>
-                                        </div>
-                                        <div class="text-muted">
-                                            {{ phenotype_phenotype.ds_frequency.signfreq_name }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                
-                
-                            <div class="list-group" ng-show="phenotype_phenotype.ds_sign.sign_dissign.length">
-                                <a class="list-group-item" ui-sref="sign({signId: phenotype_phenotype.ds_sign.nid })">
-                                    <!-- <div class="row" style="font-size: 12px;"> -->
-                                    <!-- <div class="col-sm-12"> -->
-                                    <i class="fa fa-search"></i> View phenotypes
-                                    <span class="text-muted text-uppercase">({{ phenotype_phenotype.ds_sign.sign_dissign.length }})</span>
-                                    <!-- </div> -->
-                                    <!-- </div> -->
-                                </a>
-                                </ul>
-                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    </div>
+</div>
