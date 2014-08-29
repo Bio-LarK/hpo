@@ -116,10 +116,8 @@ footer {
   text-align: center;
   color: rgba(0,0,0,0.2);
   .fa-spin {
-    -webkit-animation: spin 0.5s infinite linear;
-    -moz-animation: spin 0.5s infinite linear;
-    -o-animation: spin 0.5s infinite linear;
-    animation: spin 0.5s infinite linear;
+    -webkit-animation: fa-spin 0.5s infinite linear;
+    animation: fa-spin 0.5s infinite linear;
   }
 }
 

@@ -18,7 +18,8 @@ angular
         'ui.router',
         'config',
         'dotjem.angular.tree',
-        'ui.bootstrap'
+        'ui.bootstrap',
+        'ajoslin.promise-tracker'
     ])
     .run(function ($state, $stateParams, $rootScope, searchService) {
         $rootScope.$state = $state;

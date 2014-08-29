@@ -8,20 +8,23 @@
  * Controller of the hpoApp
  */
 angular.module('hpoApp')
-    .controller('PhenotypeCtrl', function ($scope, $stateParams, Phenotype) {
+    .controller('PhenotypeCtrl', function ($scope, $stateParams, promiseTracker, Phenotype) {
         // $scope.disorderTracker = promiseTracker();
         // $scope.signsTracker = promiseTracker();
         // $scope.genesTracker = promiseTracker();
+        $scope.loadingTracker = promiseTracker();
         $scope.toggleParents = toggleParents;
         activate();
         ////////////
 
         function activate() {
-            Phenotype.get({
+            var promise = Phenotype.get({
                 nid: $stateParams.phenotypeId
             }, function (phenotype) {
                 $scope.phenotype = phenotype;
-            });
+            }).$promise;
+
+            $scope.loadingTracker.addPromise(promise);
             // Disorder.get({
             //     nid: $stateParams.disorderId //136402
             // }, function (disorder) {

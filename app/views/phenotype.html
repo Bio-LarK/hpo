@@ -18,7 +18,7 @@
 
     <div class="container">
         <div class="title">
-            <div class="pull-right text-muted" ng-hide="phenotypeTracker.active()">
+            <div class="pull-right text-muted" ng-hide="loadingTracker.active()">
                 Updated {{ phenotype.changed * 1000 | date:'d/M/yyyy' }}
             </div>
             <div class="media">
@@ -27,7 +27,6 @@
                 </div>
                 <div class="media-body">
                     <h1>{{ phenotype.title || 'Loading...' }}
-                        <br/>
                     </h1>
                     <div style="color: rgba(0,0,0,0.5); margin-top: 7px;" ng-show="phenotype.concept_synonym.length">
                         <small style="font-size: 16px;">
@@ -47,10 +46,7 @@
         </div>
 
         <div class="panels">
-            <div class="spinner" ng-show="disorderTracker.active();">
-                <i class="fa fa-spin fa-circle-o-notch"></i>
-            </div>
-            <div class="row" ng-hide="disorderTracker.active()">
+            <div class="row" ng-hide="loadingTracker.active()">
                 <div class="col-sm-8">
                     <div class="panel panel-default">
                         <div class="panel-body">
@@ -63,9 +59,11 @@
                     </div>
                 </div>
 
+
                 <div class="col-sm-4">
                     <div class="panel panel-default">
                         <div class="panel-body">
+                        
                             <h4 style="margin: 0; font-weight: bold; color:rgba(0,0,0,0.6); margin-bottom: 14px; font-size: 14px;">Alternative IDs</h4>
                             <div class="text-muted" ng-hide="phenotype.concept_altid.length">
                                 No alternative IDs.
@@ -75,11 +73,12 @@
                                     {{ altid }}
                                 </li>
                             </ul>
-
-
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="spinner" ng-show="loadingTracker.active();">
+                <i class="fa fa-spin fa-circle-o-notch"></i>
             </div>
         </div>
 
@@ -97,11 +96,8 @@
             </form>
 
             <h2>Classification</h2>
-            <div class="spinner" ng-show="phenotypeTracker.active();">
-                <i class="fa fa-spin fa-circle-o-notch"></i>
-            </div>
 
-            <div ng-hide="phenotypeTracker.active()">
+            <div ng-hide="loadingTracker.active()">
                 <p ng-hide="phenotype.concept_parent.length" class="text-muted">
                     Root phenotype.
                 </p>
@@ -162,6 +158,11 @@
                     </div>
                 </div>
             </div>
+
+            <div class="spinner" ng-show="loadingTracker.active();">
+                <i class="fa fa-spin fa-circle-o-notch"></i>
+            </div>
+
         </div>
 
 
@@ -175,10 +176,10 @@
             </form>
 
             <h2>Children</h2>
-            <div class="spinner" ng-show="phenotypeTracker.active();">
+            <div class="spinner" ng-show="loadingTracker.active();">
                 <i class="fa fa-spin fa-circle-o-notch"></i>
             </div>
-            <div ng-hide="phenotypeTracker.active()">
+            <div ng-hide="loadingTracker.active()">
                 <p ng-hide="phenotype.concept_child.length" class="text-muted">
                     No children.
                 </p>
