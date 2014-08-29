@@ -17,8 +17,14 @@ angular
         'ngTouch',
         'ui.router',
         'config',
-        'dotjem.angular.tree'
+        'dotjem.angular.tree',
+        'ui.bootstrap'
     ])
+    .run(function ($state, $stateParams, $rootScope, searchService) {
+        $rootScope.$state = $state;
+        $rootScope.$stateParams = $stateParams;
+        $rootScope.searchService = searchService;
+    })
     .config(function ($stateProvider, $urlRouterProvider) {
         // 
         // For any unmatched url, redirect to /state1
