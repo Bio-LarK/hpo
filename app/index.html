@@ -1,6 +1,7 @@
 <!doctype html>
 <html class="no-js">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <title></title>
     <meta name="description" content="">
@@ -13,28 +14,39 @@
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
-  </head>
-  <body ng-app="hpoApp">
+</head>
+
+<body ng-app="hpoApp">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-  
+
     <!-- Add your site or application content here -->
-    <div ng-include="'views/header.html'">
+    <div class="wrapper">
+        <div ng-include="'views/header.html'">
+        </div>
+        <ui-view></ui-view>
     </div>
-    <ui-view></ui-view>
     <div ng-include="'views/footer.html'"></div>
 
 
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-     <script>
-       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-       ga('create', 'UA-XXXXX-X');
-       ga('send', 'pageview');
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+    <script>
+    (function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function() {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-XXXXX-X');
+    ga('send', 'pageview');
     </script>
 
     <!-- build:js(.) scripts/oldieshim.js -->
@@ -44,8 +56,8 @@
     <![endif]-->
     <!-- endbuild -->
 
-    
-    
+
+
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
@@ -74,17 +86,19 @@
     <!-- endbower -->
     <!-- endbuild -->
 
-        <!-- ENV Config -->
-        <script src="scripts/config.js"></script>
+    <!-- ENV Config -->
+    <script src="scripts/config.js"></script>
 
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/main.js"></script>
-        <script src="scripts/controllers/phenotypes.js"></script>
-        <script src="scripts/services/phenotype.js"></script>
-        <script src="scripts/filters/inslicesof.js"></script>
-        <script src="scripts/controllers/phenotype.js"></script>
-        <!-- endbuild -->
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/phenotypes.js"></script>
+    <script src="scripts/services/phenotype.js"></script>
+    <script src="scripts/filters/inslicesof.js"></script>
+    <script src="scripts/controllers/phenotype.js"></script>
+    <script src="scripts/services/synonym.js"></script>
+    <!-- endbuild -->
 
 </body>
+
 </html>
