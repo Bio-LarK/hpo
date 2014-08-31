@@ -27,19 +27,35 @@ module.exports = function (grunt) {
         // Project settings
         yeoman: appConfig,
 
-        'gh-pages': {
+        ngconstant: {
+            // Options for all targets
             options: {
-                base: '<%= yeoman.dist %>'
+                space: '  ',
+                wrap: '"use strict";\n\n {%= __ngModule %}',
+                name: 'config',
             },
-            'gh-pages': {
-                src: ['**']
-            },
-            'live': {
+            // Environment targets
+            development: {
                 options: {
-                    branch: 'master',
-                    repo: 'ssh://craig@130.56.248.140/var/repo/orphanet.git'
+                    dest: '<%= yeoman.app %>/scripts/config.js'
                 },
-                src: ['**']
+                constants: {
+                    ENV: {
+                        name: 'development',
+                        apiEndpoint: 'api'
+                    }
+                }
+            },
+            production: {
+                options: {
+                    dest: '<%= yeoman.dist %>/scripts/config.js'
+                },
+                constants: {
+                    ENV: {
+                        name: 'production',
+                        apiEndpoint: 'http://130.56.248.140/hpo/api'
+                    }
+                }
             }
         },
 
@@ -484,6 +500,7 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
+            'ngconstant:development',
             'wiredep',
             'configureProxies:server',
             'concurrent:server',
@@ -508,6 +525,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
+        'ngconstant:production',
         'wiredep',
         'useminPrepare',
         'concurrent:dist',
