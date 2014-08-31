@@ -1,3 +1,12 @@
+<a name="0.2.9"></a>
+### 0.2.9 (2014-09-01)
+
+
+#### Features
+
+* **build:** add ng-constant ([49378bd2](https://github.com/Bio-LarK/hpo/commit/49378bd2d4d8ffd4bdd7edc529f01efdbbdd8b82))
+
+
 <a name="0.2.8"></a>
 ### 0.2.8 (2014-09-01)
 
