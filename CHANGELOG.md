@@ -1,3 +1,13 @@
+<a name="0.3.2"></a>
+### 0.3.2 (2014-09-01)
+
+
+#### Features
+
+* **favicon:** add favicon ([3162b62f](https://github.com/Bio-LarK/hpo/commit/3162b62fe823d1ce91f6f4f3ada90093e135880c))
+* **page-title:** add page title service ([edb0bd24](https://github.com/Bio-LarK/hpo/commit/edb0bd2454427dcd9efd26c4e90ce9dc334ca3e5))
+
+
 <a name="0.3.1"></a>
 ### 0.3.1 (2014-09-01)
 
