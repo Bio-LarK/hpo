@@ -1,3 +1,12 @@
+<a name="0.2.10"></a>
+### 0.2.10 (2014-09-01)
+
+
+#### Features
+
+* **drupal:** add drupal ([e3d5bb07](https://github.com/Bio-LarK/hpo/commit/e3d5bb07f37a0e27e13dcc914e09e768169696d0))
+
+
 <a name="0.2.9"></a>
 ### 0.2.9 (2014-09-01)
 
