@@ -1,0 +1,12 @@
+name = HPO Configuration
+description = Provides the implementation for importing the HPO ontology.
+core = 7.x
+package = HPO
+
+dependencies[] = entityreference
+
+files[] = hpo_import.module
+files[] = hpo_import.install
+files[] = includes/HPOImport.inc
+
+configure = admin/config/system/hpo_configuration

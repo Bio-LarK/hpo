@@ -1,0 +1,115 @@
+<?php
+
+// $Id: hpo_import.module $
+
+define('_IMPORT_CONTENT_', 'edit-configuration-import-content');
+
+function hpo_import_menu() {
+    $items['admin/config/system/hpo_configuration'] = array(
+        'title' => 'HPO Configuration',
+        'description' => 'Configuration of the HPO content.',
+        'page callback' => 'hpo_config_page',
+        'access arguments' => array('administer content'),
+        'type' => MENU_NORMAL_ITEM,
+    );
+
+    return $items;
+}
+
+function hpo_config_page() {
+    return drupal_get_form('hpo_config_form');
+}
+
+function hpo_config_form() {
+    $form['#attributes'] = array('enctype' => "multipart/form-data");
+
+    $form['configuration'] = array(
+        '#type' => 'vertical_tabs',
+        '#title' => t('Configuration'),
+        '#collapsible' => TRUE,
+        '#collapsed' => FALSE,
+        '#tree' => TRUE,
+    );
+
+    $form['configuration']['import_content'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Import content'),
+        '#weight' => 1,
+        '#collapsible' => TRUE,
+        '#collapsed' => FALSE,
+        '#tree' => TRUE,
+        'value' => import_content_form(),
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Submit',
+    );
+
+    return $form;
+}
+
+function import_content_form() {
+    $content_form = array();
+    $content_form['#attributes'] = array('enctype' => "multipart/form-data");
+
+    $content_form['hpo_onto_file'] = array(
+        '#type' => 'textfield',
+        '#title' => t('HPO Ontology file'),
+        '#description' => t('Specify the path to the HPO ontology file.'),
+    );
+
+    return $content_form;
+}
+
+function hpo_config_form_submit($form, &$form_state) {
+    $active_tab = $form_state['input']['configuration']['configuration__active_tab'];
+    if ($active_tab === _IMPORT_CONTENT_) {
+        $hpo_onto_file = $form_state['values']['configuration']['import_content']['value']['hpo_onto_file'];
+
+	delete_nodes('hpo_concept');
+
+	$import_obj = new HPOImport();
+        $import_obj->create_hpo_list();
+        $import_obj->create_hpo_concepts();
+
+	/*
+        $ok = 1;
+        if ($hpo_onto_file === '') {
+            $ok = 0;
+            drupal_set_message('Please enter a valid HPO ontology file.', 'error');
+        }
+
+        if ($ok === 1) {
+//            delete_nodes('external_reference');
+//            count_nodes('external_reference');
+//           count_nodes('gene');
+
+            $import_obj = new HPOImport($hpo_onto_file);
+        }
+	*/
+    }
+
+    return $form;
+}
+
+function count_nodes($type) {
+    $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(':type' => $type));
+    $count = 0;
+    foreach ($result as $row) {
+        $count++;
+    }
+    drupal_set_message($count);
+}
+
+function delete_nodes($type) {
+    $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(':type' => $type));
+    $nids = array();
+    foreach ($result as $row) {
+        node_delete($row->nid);
+//        $nids[] = $row->nid;
+    }
+//    node_delete_multiple($nids);
+}

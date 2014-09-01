@@ -1,0 +1,264 @@
+<?php
+// $Id: hpo_concept.install $
+
+function hpo_concept_install() {
+    $t = get_t();
+
+    $hpo_concept = array(
+        'type' => 'hpo_concept',
+        'name' => $t('HPO Concept'),
+        'base' => 'node_content',
+        'description' => $t('The HPO Concept content type.')
+    );
+
+    $content_type = node_type_set_defaults($hpo_concept);
+    node_add_body_field($content_type);
+    node_type_save($content_type);
+
+    $body_instance = field_info_instance('node', 'body', 'hpo_concept');
+    $body_instance['type'] = 'text_long';
+    $body_instance['label'] = 'Definition';
+
+    foreach (_hpo_concept_installed_fields() as $field) {
+        field_create_field($field);
+    }
+
+    foreach (_hpo_concept_installed_instances() as $instance) {
+        $instance['entity_type'] = 'node';
+        $instance['bundle'] = $hpo_concept['type'];
+        field_create_instance($instance);
+    }
+
+    variable_set('comment_hpo_concept', COMMENT_NODE_CLOSED);
+    variable_set('node_options_hpo_concept', array('status'));
+    variable_set('node_preview_hpo_concept', DRUPAL_DISABLED);
+    variable_set('node_submitted_hpo_concept', FALSE);
+}
+
+function _hpo_concept_installed_fields() {
+    $t = get_t();
+    return array(
+        'field_concept_uri' => array(
+            'field_name'	=> 'field_concept_uri',
+            'label'		=>$t('URI'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_concept_label' => array(
+            'field_name'	=> 'field_concept_label',
+            'label'		=> $t('Label'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_concept_altid' => array(
+            'field_name'	=> 'field_concept_altid',
+            'label'		=> $t('Alternative ID'),
+            'cardinality'	=> -1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_concept_synonym' => array(
+            'field_name'	=> 'field_concept_synonym',
+            'label'		=> $t('Synonym'),
+            'cardinality'	=> -1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+                'referenceable_types' => array(
+                    'hpo_synonym' => 'hpo_synonym'
+                )
+            )
+        ),
+        'field_concept_parent' => array(
+            'field_name'	=> 'field_concept_parent',
+            'label'		=> $t('Parent'),
+            'cardinality'	=> -1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+                'referenceable_types' => array(
+                    'hpo_concept' => 'hpo_concept'
+                )
+            )
+        ),
+        'field_concept_child' => array(
+            'field_name'	=> 'field_concept_child',
+            'label'		=> $t('Child'),
+            'cardinality'	=> -1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+                'referenceable_types' => array(
+                    'hpo_concept' => 'hpo_concept'
+                )
+            )
+        ),
+    );
+}
+
+function _hpo_concept_installed_instances() {
+    $t = get_t();
+    return array(
+        'field_concept_uri' => array(
+            'field_name' => 'field_concept_uri',
+            'label'       => $t('URI'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_concept_label' => array(
+            'field_name' => 'field_concept_label',
+            'label'       => $t('Label'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_concept_altid' => array(
+            'field_name' => 'field_concept_altid',
+            'label'       => $t('Alternative ID'),
+            'cardinality' => -1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_concept_parent' => array(
+            'field_name'	=> 'field_concept_parent',
+            'label'		=> $t('Parent'),
+            'cardinality'	=> -1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_concept_synonym' => array(
+            'field_name'	=> 'field_concept_synonym',
+            'label'		=> $t('Synonym'),
+            'cardinality'	=> -1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_concept_child' => array(
+            'field_name'	=> 'field_concept_child',
+            'label'		=> $t('Child'),
+            'cardinality'	=> -1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+    );
+}
+
+function hpo_concept_uninstall() {
+    $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(':type' => 'hpo_concept'));
+    $nids = array();
+    foreach ($result as $row) {
+        $nids[] = $row->nid;
+    }
+
+    node_delete_multiple($nids);
+
+    foreach (array_keys(_hpo_concept_installed_fields()) as $field) {
+        field_delete_field($field);
+    }
+
+    $instances = field_info_instances('node', 'hpo_concept');
+    foreach ($instances as $instance_name => $instance) {
+        field_delete_instance($instance);
+    }
+
+    node_type_delete('hpo_concept');
+
+    field_purge_batch(1000);
+}

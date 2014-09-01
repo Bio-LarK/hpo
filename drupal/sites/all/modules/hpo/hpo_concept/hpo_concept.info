@@ -1,0 +1,9 @@
+name = HPO Concept Content Type
+description = Provides the implementation for the HPO Concept content type.
+core = 7.x
+package = HPO
+
+dependencies[] = entityreference
+
+files[] = hpo_concept.module
+files[] = hpo_concept.install
