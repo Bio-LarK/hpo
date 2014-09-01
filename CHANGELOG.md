@@ -1,3 +1,12 @@
+<a name="0.3.1"></a>
+### 0.3.1 (2014-09-01)
+
+
+#### Bug Fixes
+
+* **fonts:** fix font awesome not being included ([c4d1f20c](https://github.com/Bio-LarK/hpo/commit/c4d1f20c0f26c7105a60b7f5d7832986c6105060))
+
+
 <a name="0.3.0"></a>
 ## 0.3.0 (2014-09-01)
 
