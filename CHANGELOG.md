@@ -1,3 +1,12 @@
+<a name="0.4.2"></a>
+### 0.4.2 (2014-09-01)
+
+
+#### Bug Fixes
+
+* **drupal:** remove rewrite base ([a3fc6295](https://github.com/Bio-LarK/hpo/commit/a3fc6295fe56feedf6c4158f148aa70ac2998efd))
+
+
 <a name="0.4.1"></a>
 ### 0.4.1 (2014-09-01)
 
