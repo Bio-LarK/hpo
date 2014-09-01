@@ -21,10 +21,11 @@ angular
         'ui.bootstrap',
         'ajoslin.promise-tracker'
     ])
-    .run(function ($state, $stateParams, $rootScope, searchService) {
+    .run(function ($state, $stateParams, $rootScope, searchService, pageService) {
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
         $rootScope.searchService = searchService;
+        $rootScope.pageService = pageService;
     })
     .config(function ($stateProvider, $urlRouterProvider) {
         // 

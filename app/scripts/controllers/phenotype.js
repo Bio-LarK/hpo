@@ -8,7 +8,7 @@
  * Controller of the hpoApp
  */
 angular.module('hpoApp')
-    .controller('PhenotypeCtrl', function ($scope, $stateParams, promiseTracker, Phenotype) {
+    .controller('PhenotypeCtrl', function ($scope, $stateParams, promiseTracker, Phenotype, pageService) {
         // $scope.disorderTracker = promiseTracker();
         // $scope.signsTracker = promiseTracker();
         // $scope.genesTracker = promiseTracker();
@@ -18,10 +18,13 @@ angular.module('hpoApp')
         ////////////
 
         function activate() {
+            pageService.setTitle('Loading...');
+
             var promise = Phenotype.get({
                 nid: $stateParams.phenotypeId
             }, function (phenotype) {
                 $scope.phenotype = phenotype;
+                pageService.setTitle(phenotype['concept_label']);
             }).$promise;
 
             $scope.loadingTracker.addPromise(promise);

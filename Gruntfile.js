@@ -158,9 +158,9 @@ module.exports = function (grunt) {
             proxies: [{
                 context: '/drupal',
                 host: '130.56.248.140',
-                // rewrite: {
-                //     '^/drupal': '/drupal/api',
-                // },
+                rewrite: {
+                    '^/drupal': '/hpo/drupal',
+                },
                 headers: {
                     host: '130.56.248.140:80'
                 }

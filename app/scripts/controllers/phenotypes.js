@@ -8,7 +8,7 @@
  * Controller of the hpoApp
  */
 angular.module('hpoApp')
-    .controller('PhenotypesCtrl', function ($scope, Phenotype, promiseTracker) {
+    .controller('PhenotypesCtrl', function ($scope, Phenotype, promiseTracker, pageService) {
         $scope.loadMore = loadMore;
         $scope.loadingTracker = promiseTracker();
         $scope.page = 0;
@@ -18,6 +18,7 @@ angular.module('hpoApp')
         //////////////
 
         function activate() {
+            pageService.setTitle('Phenotypes');
             var promise = getPhenotypes($scope.page++);
             $scope.loadingTracker.addPromise(promise);
         }
