@@ -1,3 +1,12 @@
+<a name="0.3.0"></a>
+## 0.3.0 (2014-09-01)
+
+
+#### Bug Fixes
+
+* **drupal:** change rewrite base to subdirectory ([84d8645d](https://github.com/Bio-LarK/hpo/commit/84d8645d13995f7253f6d0cbfe19e375b42b27c7))
+
+
 <a name="0.2.11"></a>
 ### 0.2.11 (2014-09-01)
 
