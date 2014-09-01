@@ -1,0 +1,9 @@
+<?php
+
+// $Id: hpo_import.install $
+
+function hpo_import_install() {
+}
+
+function hpo_import_uninstall() {
+}

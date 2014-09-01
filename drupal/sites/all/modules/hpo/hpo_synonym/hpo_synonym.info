@@ -1,0 +1,9 @@
+name = HPO Synonym Content Type
+description = Provides the implementation for the HPO Synonym content type.
+core = 7.x
+package = HPO
+
+dependencies[] = entityreference
+
+files[] = hpo_synonym.module
+files[] = hpo_synonym.install

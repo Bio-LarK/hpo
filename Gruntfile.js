@@ -42,7 +42,7 @@ module.exports = function (grunt) {
                 constants: {
                     ENV: {
                         name: 'development',
-                        apiEndpoint: 'api'
+                        apiEndpoint: 'drupal/api'
                     }
                 }
             },
@@ -53,7 +53,7 @@ module.exports = function (grunt) {
                 constants: {
                     ENV: {
                         name: 'production',
-                        apiEndpoint: 'http://130.56.248.140/hpo/api'
+                        apiEndpoint: 'drupal/api'
                     }
                 }
             }
@@ -156,11 +156,11 @@ module.exports = function (grunt) {
                 livereload: 35729
             },
             proxies: [{
-                context: '/api',
+                context: '/drupal',
                 host: '130.56.248.140',
-                rewrite: {
-                    '^/api': '/hpo/api',
-                },
+                // rewrite: {
+                //     '^/drupal': '/drupal/api',
+                // },
                 headers: {
                     host: '130.56.248.140:80'
                 }
@@ -307,7 +307,8 @@ module.exports = function (grunt) {
                     '<%= yeoman.dist %>/scripts/{,*/}*.js',
                     '<%= yeoman.dist %>/styles/{,*/}*.css',
                     '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-                    '<%= yeoman.dist %>/styles/fonts/*'
+                    '<%= yeoman.dist %>/styles/fonts/*',
+                    '!<%= yeoman.dist %>/images/logo-vitruvian.svg',
                 ]
             }
         },
@@ -458,6 +459,13 @@ module.exports = function (grunt) {
                     cwd: 'bower_components/fontawesome/fonts',
                     src: ['**'],
                     dest: '<%= yeoman.dist %>/fonts'
+                }, {
+                    // put drupal in the dist
+                    expand: true,
+                    dot: true, // include hidden files
+                    cwd: 'drupal',
+                    dest: '<%= yeoman.dist %>/drupal',
+                    src: ['**', '!sites/default/settings.php', '!sites/default/files/**/*']
                 }]
             },
             styles: {

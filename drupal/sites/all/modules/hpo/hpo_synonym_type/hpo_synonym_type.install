@@ -1,0 +1,128 @@
+<?php
+// $Id: hpo_synonym_type.install $
+
+function hpo_synonym_type_install() {
+    $t = get_t();
+
+    $hpo_synonym_type = array(
+        'type' => 'hpo_synonym_type',
+        'name' => $t('HPO Synonym Type'),
+        'base' => 'node_content',
+        'description' => $t('The HPO Synonym Type content type.')
+    );
+
+    $content_type = node_type_set_defaults($hpo_synonym_type);
+    node_type_save($content_type);
+
+    foreach (_hpo_synonym_type_installed_fields() as $field) {
+        field_create_field($field);
+    }
+
+    foreach (_hpo_synonym_type_installed_instances() as $instance) {
+        $instance['entity_type'] = 'node';
+        $instance['bundle'] = $hpo_synonym_type['type'];
+        field_create_instance($instance);
+    }
+
+    variable_set('comment_hpo_synonym_type', COMMENT_NODE_CLOSED);
+    variable_set('node_options_hpo_synonym_type', array('status'));
+    variable_set('node_preview_hpo_synonym_type', DRUPAL_DISABLED);
+    variable_set('node_submitted_hpo_synonym_type', FALSE);
+}
+
+function _hpo_synonym_type_installed_fields() {
+    $t = get_t();
+    return array(
+        'field_syntype_value' => array(
+            'field_name'	=> 'field_syntype_value',
+            'label'		=>$t('Value'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_syntype_uri' => array(
+            'field_name'	=> 'field_syntype_uri',
+            'label'		=>$t('URI'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+    );
+}
+
+function _hpo_synonym_type_installed_instances() {
+    $t = get_t();
+    return array(
+        'field_syntype_value' => array(
+            'field_name' => 'field_syntype_value',
+            'label'       => $t('Value'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_syntype_uri' => array(
+            'field_name' => 'field_syntype_uri',
+            'label'       => $t('URI'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),    );
+}
+
+function hpo_synonym_type_uninstall() {
+    $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(':type' => 'hpo_synonym_type'));
+    $nids = array();
+    foreach ($result as $row) {
+        $nids[] = $row->nid;
+    }
+
+    node_delete_multiple($nids);
+
+    foreach (array_keys(_hpo_synonym_type_installed_fields()) as $field) {
+        field_delete_field($field);
+    }
+
+    $instances = field_info_instances('node', 'hpo_synonym_type');
+    foreach ($instances as $instance_name => $instance) {
+        field_delete_instance($instance);
+    }
+
+    node_type_delete('hpo_synonym_type');
+
+    field_purge_batch(1000);
+}
