@@ -1,3 +1,12 @@
+<a name="0.4.1"></a>
+### 0.4.1 (2014-09-01)
+
+
+#### Bug Fixes
+
+* **navbar:** add phenotypes link to navbar ([d3938187](https://github.com/Bio-LarK/hpo/commit/d3938187996d7ae54f79139fdb38cdcc689d3f0b))
+
+
 <a name="0.4.0"></a>
 ## 0.4.0 (2014-09-01)
 
