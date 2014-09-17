@@ -1,0 +1,7 @@
+name = Editorial operation reply type content type
+description = Provides the implementation for the Editorial operation reply type content type.
+core = 7.x
+package = Orphanet
+
+files[] = eop_reply.module
+files[] = eop_reply.install

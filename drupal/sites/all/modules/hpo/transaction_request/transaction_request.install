@@ -1,0 +1,196 @@
+<?php
+
+// $Id: transaction_request.install $
+
+function transaction_request_install() {
+    $t = get_t();
+
+    $transaction_request = array(
+        'type' => 'transaction_request',
+        'name' => $t('Transaction request'),
+        'base' => 'node_content',
+        'description' => $t('The Transaction request content type.')
+    );
+
+    $content_type = node_type_set_defaults($transaction_request);
+    node_type_save($content_type);
+
+    foreach (_transaction_request_installed_fields() as $field) {
+        field_create_field($field);
+    }
+
+    foreach (_transaction_request_installed_instances() as $instance) {
+        $instance['entity_type'] = 'node';
+        $instance['bundle'] = $transaction_request['type'];
+        field_create_instance($instance);
+    }
+
+    variable_set('comment_transaction_request', COMMENT_NODE_CLOSED);
+    variable_set('node_options_transaction_request', array('status'));
+    variable_set('node_preview_transaction_request', DRUPAL_DISABLED);
+    variable_set('node_submitted_transaction_request', FALSE);
+}
+
+function _transaction_request_installed_fields() {
+    $t = get_t();
+    return array(
+        'field_tr_timestamp' => array(
+            'field_name'	=> 'field_tr_timestamp',
+            'label'		=>$t('Timestamp'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_tr_status' => array(
+            'field_name'	=> 'field_tr_status',
+            'label'		=> $t('Status'),
+            'cardinality'	=> 1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+                'referenceable_types' => array(
+                    'tr_status' => 'tr_status'
+                )
+            )
+        ),
+        'field_tr_user' => array(
+            'field_name'	=> 'field_tr_user',
+            'label'		=> $t('User'),
+            'cardinality'	=> 1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+		 'target_type' => 'user',
+            )
+        ),
+        'field_tr_trans' => array(
+            'field_name'	=> 'field_tr_trans',
+            'label'		=> $t('Transaction item'),
+            'cardinality'	=> -1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+                'referenceable_types' => array(
+                    'list_transaction' => 'list_transaction'
+                )
+            )
+        )
+    );
+}
+
+function _transaction_request_installed_instances() {
+    $t = get_t();
+    return array(
+        'field_tr_timestamp' => array(
+            'field_name' => 'field_tr_timestamp',
+            'label'       => $t('Timestamp'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_tr_status' => array(
+            'field_name'	=> 'field_tr_status',
+            'label'		=> $t('Status'),
+            'cardinality'	=> 1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_tr_user' => array(
+            'field_name'	=> 'field_tr_user',
+            'label'		=> $t('User'),
+            'cardinality'	=> 1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_tr_trans' => array(
+            'field_name'	=> 'field_tr_trans',
+            'label'		=> $t('Transaction item'),
+            'cardinality'	=> -1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        )
+    );
+}
+
+function transaction_request_uninstall() {
+    $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(':type' => 'transaction_request'));
+    $nids = array();
+    foreach ($result as $row) {
+        $nids[] = $row->nid;
+    }
+
+    node_delete_multiple($nids);
+
+    foreach (array_keys(_transaction_request_installed_fields()) as $field) {
+        field_delete_field($field);
+    }
+
+    $instances = field_info_instances('node', 'transaction_request');
+    foreach ($instances as $instance_name => $instance) {
+        field_delete_instance($instance);
+    }
+
+    node_type_delete('transaction_request');
+
+    field_purge_batch(1000);
+}

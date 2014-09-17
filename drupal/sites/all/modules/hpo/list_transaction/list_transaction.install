@@ -1,0 +1,321 @@
+<?php
+
+// $Id: list_transaction.install $
+
+function list_transaction_install() {
+    $t = get_t();
+
+    $list_transaction = array(
+        'type' => 'list_transaction',
+        'name' => $t('List transaction'),
+        'base' => 'node_content',
+        'description' => $t('The List transaction content type.')
+    );
+
+    $content_type = node_type_set_defaults($list_transaction);
+    node_add_body_field($content_type);
+    node_type_save($content_type);
+
+    $body_instance = field_info_instance('node', 'body', 'list_transaction');
+    $body_instance['type'] = 'text_long';
+    $body_instance['label'] = 'Comment';
+
+    foreach (_list_transaction_installed_fields() as $field) {
+        field_create_field($field);
+    }
+
+    foreach (_list_transaction_installed_instances() as $instance) {
+        $instance['entity_type'] = 'node';
+        $instance['bundle'] = $list_transaction['type'];
+        field_create_instance($instance);
+    }
+
+    variable_set('comment_list_transaction', COMMENT_NODE_CLOSED);
+    variable_set('node_options_list_transaction', array('status'));
+    variable_set('node_preview_list_transaction', DRUPAL_DISABLED);
+    variable_set('node_submitted_list_transaction', FALSE);
+}
+
+function _list_transaction_installed_fields() {
+    $t = get_t();
+    return array(
+        'field_ltrans_position' => array(
+            'field_name'	=> 'field_ltrans_position',
+            'label'		=> $t('Position'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_ltrans_onnode' => array(
+            'field_name'	=> 'field_ltrans_onnode',
+            'label'		=> $t('On node'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_ltrans_onprop' => array(
+            'field_name'	=> 'field_ltrans_onprop',
+            'label'		=> $t('On property'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_ltrans_cvalref' => array(
+            'field_name'	=> 'field_ltrans_cvalref',
+            'label'		=> $t('Current value as reference'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_ltrans_svalref' => array(
+            'field_name'	=> 'field_ltrans_svalref',
+            'label'		=> $t('Suggested value as reference'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_ltrans_cvalplain' => array(
+            'field_name'	=> 'field_ltrans_cvalplain',
+            'label'		=> $t('Current value as plain'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_ltrans_svalplain' => array(
+            'field_name'	=> 'field_ltrans_svalplain',
+            'label'		=> $t('Suggested value as plain'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_ltrans_ctype' => array(
+            'field_name'	=> 'field_ltrans_ctype',
+            'label'		=> $t('Change type'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        )
+    );
+}
+
+function _list_transaction_installed_instances() {
+    $t = get_t();
+    return array(
+        'field_ltrans_position' => array(
+            'field_name' => 'field_ltrans_position',
+            'label'       => $t('Position'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_ltrans_onnode' => array(
+            'field_name' => 'field_ltrans_onnode',
+            'label'       => $t('On node'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_ltrans_onprop' => array(
+            'field_name' => 'field_ltrans_onprop',
+            'label'       => $t('On property'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_ltrans_cvalref' => array(
+            'field_name' => 'field_ltrans_cvalref',
+            'label'       => $t('Current value as reference'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_ltrans_svalref' => array(
+            'field_name' => 'field_ltrans_svalref',
+            'label'       => $t('Suggested value as reference'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_ltrans_cvalplain' => array(
+            'field_name' => 'field_ltrans_cvalplain',
+            'label'       => $t('Current value as plain'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_ltrans_svalplain' => array(
+            'field_name' => 'field_ltrans_svalplain',
+            'label'       => $t('Suggested value as plain'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_ltrans_ctype' => array(
+            'field_name' => 'field_ltrans_ctype',
+            'label'       => $t('Change type'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        )  
+    );
+}
+
+function list_transaction_uninstall() {
+    $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(':type' => 'list_transaction'));
+    $nids = array();
+    foreach ($result as $row) {
+        $nids[] = $row->nid;
+    }
+
+    node_delete_multiple($nids);
+
+    foreach (array_keys(_list_transaction_installed_fields()) as $field) {
+        field_delete_field($field);
+    }
+
+    $instances = field_info_instances('node', 'list_transaction');
+    foreach ($instances as $instance_name => $instance) {
+        field_delete_instance($instance);
+    }
+
+    node_type_delete('list_transaction');
+
+    field_purge_batch(1000);
+}
