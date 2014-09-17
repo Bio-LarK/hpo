@@ -1,0 +1,35 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="editVm.cancel()">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">{{ editVm.concept.title }}</h4>
+    </div>
+    <form role="form">
+        <div class="modal-body">
+            <div class="form-group">
+                <label>
+                    {{ editVm.propertyLabel }}
+                </label>
+                <select ng-model="editVm.prevalenceClass" ng-options="class as class.title for class in editVm.prevalenceClasses" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label>
+                    Explain the change
+                </label>
+                <textarea msd-elastic="\n" ng-model="editVm.reason" class="form-control" rows="10"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="pull-left">
+                <div style="">
+                    <img src="https://s3.amazonaws.com/uifaces/faces/twitter/aaroni/48.jpg" style="width:35px;height:35px" alt="" />&nbsp;&nbsp;Dr John Smith
+                </div>
+            </div>
+            
+            <button class="btn btn-default" ng-click="editVm.cancel()">Cancel</button>
+            <button type="submit" class="btn btn-primary" ng-click="editVm.save(yo)">Propose Change</button>
+        </div>
+    </form>
+</div>

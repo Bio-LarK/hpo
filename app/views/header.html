@@ -22,6 +22,8 @@
             <ul class="nav navbar-nav">
                 <li ng-class="{'active': $state.includes('phenotypes')}"><a ui-sref="phenotypes">Phenotypes</a>
                 </li>
+                <li ng-class="{'active': $state.includes('suggestion') || $state.includes('suggestions')}"><a ui-sref="suggestions">Suggestions</a>
+                    </li>
                 <!-- <li ng-class="{'active': $state.includes('genes') || $state.includes('gene')}"><a ui-sref="genes">Genes</a>
                 </li>
                 <li ng-class="{'active': $state.includes('signs') || $state.includes('sign')}"><a ui-sref="signs">Clinical Signs</a>

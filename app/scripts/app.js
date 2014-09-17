@@ -34,6 +34,16 @@ angular
         //
         // Now set up the states
         $stateProvider
+        .state('suggestions', {
+                url: '/suggestions',
+                controller: 'SuggestionsCtrl as vm',
+                templateUrl: 'views/suggestions.html',
+            })
+            .state('suggestion', {
+                url: '/suggestions/:suggestionId',
+                controller: 'SuggestionCtrl as vm',
+                templateUrl: 'views/suggestion.html',
+            })
         // .state('genes', {
         //     url: '/genes?page',
         //     controller: 'GenesCtrl',

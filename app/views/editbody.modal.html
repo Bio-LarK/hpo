@@ -1,0 +1,45 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="vm.cancel()">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">{{ vm.concept.title }}</h4>
+    </div>
+    <form role="form">
+        <div class="modal-body">
+            <div class="form-group">
+                <label>
+                    Description
+                </label>
+                <text-angular ng-model="vm.propertyValue" ta-toolbar="[]"></text-angular>
+                <div class="text-right">
+                    <span class="label label-info" ng-class="{'label-danger': 500 - vm.propertyValue.length < 40}">
+                        {{ 500 - vm.propertyValue.length }} remaining        
+                    </span>
+                    &nbsp;&nbsp;
+                    <span class="text-muted">
+                        DEMO - 500 Character Limit
+                    </span>
+                </div>
+                
+            </div>
+            <div class="form-group">
+                <label>
+                    Explain the change
+                </label>
+                <textarea msd-elastic="\n" ng-model="vm.reason" class="form-control" rows="10"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="pull-left">
+                <div style="">
+                    <img src="https://s3.amazonaws.com/uifaces/faces/twitter/aaroni/48.jpg" style="width:35px;height:35px" alt="" />&nbsp;&nbsp;Dr John Smith
+                </div>
+            </div>
+            
+            <button class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+            <button type="submit" class="btn btn-primary" ng-click="vm.save()" ng-disabled="vm.propertyValue.length > 500">Propose Change</button>
+        </div>
+    </form>
+</div>
