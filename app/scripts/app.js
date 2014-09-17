@@ -19,7 +19,9 @@ angular
         'config',
         'dotjem.angular.tree',
         'ui.bootstrap',
-        'ajoslin.promise-tracker'
+        'ajoslin.promise-tracker',
+        'toaster',
+        'textAngular'
     ])
     .run(function ($state, $stateParams, $rootScope, searchService, pageService) {
         $rootScope.$state = $state;

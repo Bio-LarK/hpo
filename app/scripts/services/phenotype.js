@@ -27,6 +27,7 @@ angular.module('hpoApp')
         ////////////
 
         function transformerGetResponse(phenotype, headersGetter) {
+            phenotype.body = 'An HPO summary for this concept is currently under development.';
             // Convert parents to Disorder objects
             phenotype['concept_parent'] = _.map(phenotype['concept_parent'], function (parent) {
                 return new Phenotype(parent);

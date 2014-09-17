@@ -1,5 +1,10 @@
 $icon-font-path:"../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 // bower:scss
+
+$brand-primary: #658FB2; 
+$brand-info: #63BA97;
+$border-radius-base: 3px;
+
 @import "bootstrap-sass-official/assets/stylesheets/bootstrap.scss";
 // endbower
  .browsehappy {
@@ -23,6 +28,27 @@ body {
 }
 footer {
   margin-top: 40px;
+}
+
+.ta-editor {
+    min-height: 300px;
+    height: auto;
+    overflow: auto;
+    font-family: inherit;
+    font-size: 100%;
+    // margin:20px 0;
+}
+
+.editable {
+  border-bottom: 2px $brand-primary dotted; 
+  cursor: pointer;
+}
+.editable-card {
+  border: 2px $brand-primary dotted; 
+  cursor: pointer;
+  a {
+    color: black !important;
+  }
 }
 
 #loading-bar .bar {

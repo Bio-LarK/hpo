@@ -8,12 +8,15 @@
  * Controller of the hpoApp
  */
 angular.module('hpoApp')
-    .controller('PhenotypeCtrl', function ($scope, $stateParams, promiseTracker, Phenotype, pageService) {
-        // $scope.disorderTracker = promiseTracker();
-        // $scope.signsTracker = promiseTracker();
-        // $scope.genesTracker = promiseTracker();
-        $scope.loadingTracker = promiseTracker();
-        $scope.toggleParents = toggleParents;
+    .controller('PhenotypeCtrl', function ($scope, $stateParams, promiseTracker, Phenotype, pageService, modalService) {
+        
+        var vm = $scope;
+        vm.loadingTracker = promiseTracker();
+        vm.phenotype = null;
+        vm.toggleParents = toggleParents;
+        vm.isEditing = true;
+        vm.editBody = editBody;
+        vm.editTitle = editTitle;
         activate();
         ////////////
 
@@ -49,7 +52,13 @@ angular.module('hpoApp')
             if (phenotype.isShowingParents) {
                 phenotype.getParents();
             }
+        }
 
+        function editTitle() {
+            return modalService.openEditTitle(vm.phenotype);
+        }
+        function editBody() {
+            return modalService.openEditDescription(vm.phenotype);
         }
 
     });
