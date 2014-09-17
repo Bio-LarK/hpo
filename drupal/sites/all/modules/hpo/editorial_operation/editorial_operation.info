@@ -1,0 +1,7 @@
+name = Editorial operation content type
+description = Provides the implementation for the Editorial operation content type.
+core = 7.x
+package = Orphanet
+
+files[] = editorial_operation.module
+files[] = editorial_operation.install

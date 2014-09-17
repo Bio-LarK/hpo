@@ -1,0 +1,7 @@
+name = Transaction status content type
+description = Provides the implementation for the Transaction status content type.
+core = 7.x
+package = Orphanet
+
+files[] = tr_status.module
+files[] = tr_status.install

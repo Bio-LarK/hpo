@@ -1,0 +1,7 @@
+name = Transaction request content type
+description = Provides the implementation for the Transaction request content type.
+core = 7.x
+package = Orphanet
+
+files[] = transaction_request.module
+files[] = transaction_request.install

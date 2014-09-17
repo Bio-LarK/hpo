@@ -1,0 +1,135 @@
+<?php
+
+// $Id: tr_status.install $
+
+function tr_status_install() {
+    $t = get_t();
+
+    $tr_status = array(
+        'type' => 'tr_status',
+        'name' => $t('Transaction status'),
+        'base' => 'node_content',
+        'description' => $t('The Transaction status content type.')
+    );
+
+    $content_type = node_type_set_defaults($tr_status);
+    node_type_save($content_type);
+
+    foreach (_tr_status_installed_fields() as $field) {
+        field_create_field($field);
+    }
+
+    foreach (_tr_status_installed_instances() as $instance) {
+        $instance['entity_type'] = 'node';
+        $instance['bundle'] = $tr_status['type'];
+        field_create_instance($instance);
+    }
+
+    variable_set('comment_tr_status', COMMENT_NODE_CLOSED);
+    variable_set('node_options_tr_status', array('status'));
+    variable_set('node_preview_tr_status', DRUPAL_DISABLED);
+    variable_set('node_submitted_tr_status', FALSE);
+
+    _create_nodes();
+}
+
+function _create_nodes() { 
+    $accept_node = new stdClass();
+    $accept_node->type = 'tr_status';
+    $accept_node->language = 'und';
+    $accept_node->uid = 1;
+    $accept_node->title = 'Accepted';
+    $accept_node->field_trstatus_value['und'][0]['value'] = 'Accepted';
+    node_save($accept_node);
+    
+    $reject_node = new stdClass();
+    $reject_node->type = 'tr_status';
+    $reject_node->language = 'und';
+    $reject_node->uid = 1;
+    $reject_node->title = 'Rejected';
+    $reject_node->field_trstatus_value['und'][0]['value'] = 'Rejected';
+    node_save($reject_node);
+
+    $submitted_node = new stdClass();
+    $submitted_node->type = 'tr_status';
+    $submitted_node->language = 'und';
+    $submitted_node->uid = 1;
+    $submitted_node->title = 'Submitted';
+    $submitted_node->field_trstatus_value['und'][0]['value'] = 'Submitted';
+    node_save($submitted_node);
+
+    $archived_node = new stdClass();
+    $archived_node->type = 'tr_status';
+    $archived_node->language = 'und';
+    $archived_node->uid = 1;
+    $archived_node->title = 'Archived';
+    $archived_node->field_trstatus_value['und'][0]['value'] = 'Archived';
+    node_save($archived_node);
+}
+
+function _tr_status_installed_fields() {
+    $t = get_t();
+    return array(
+        'field_trstatus_value' => array(
+            'field_name'	=> 'field_trstatus_value',
+            'label'		=> $t('Status value'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+    );
+}
+
+function _tr_status_installed_instances() {
+    $t = get_t();
+    return array(
+        'field_trstatus_value' => array(
+            'field_name' => 'field_trstatus_value',
+            'label'       => $t('Status value'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+    );
+}
+
+function tr_status_uninstall() {
+    $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(':type' => 'tr_status'));
+    $nids = array();
+    foreach ($result as $row) {
+        $nids[] = $row->nid;
+    }
+
+    node_delete_multiple($nids);
+
+    foreach (array_keys(_tr_status_installed_fields()) as $field) {
+        field_delete_field($field);
+    }
+
+    $instances = field_info_instances('node', 'tr_status');
+    foreach ($instances as $instance_name => $instance) {
+        field_delete_instance($instance);
+    }
+
+    node_type_delete('tr_status');
+
+    field_purge_batch(1000);
+}

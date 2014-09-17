@@ -1,0 +1,7 @@
+name = List transaction content type
+description = Provides the implementation for the List transaction content type.
+core = 7.x
+package = Orphanet
+
+files[] = list_transaction.module
+files[] = list_transaction.install
