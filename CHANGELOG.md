@@ -1,3 +1,12 @@
+<a name="0.4.3"></a>
+### 0.4.3 (2014-09-17)
+
+
+#### Features
+
+* **drupal:** add suggestion modules ([4cabd5e3](https://github.com/Bio-LarK/hpo/commit/4cabd5e397682f498b7ec638dfd1fe2785ded153))
+
+
 <a name="0.4.2"></a>
 ### 0.4.2 (2014-09-01)
 
