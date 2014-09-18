@@ -1,3 +1,12 @@
+<a name="0.6.0"></a>
+## 0.6.0 (2014-09-18)
+
+
+#### Bug Fixes
+
+* **stylesheet:** move brand variables out of bower ([5b5a261f](https://github.com/Bio-LarK/hpo/commit/5b5a261f04adfdcc33cdbac0c580d814b92d8fae))
+
+
 <a name="0.5.1"></a>
 ### 0.5.1 (2014-09-18)
 
