@@ -1,5 +1,12 @@
-$icon-font-path:"../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
-// bower:scss
+// $icon-font-path:"../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+// // bower:scss
+
+
+$brand-primary: #658FB2;
+$brand-info: #63BA97;
+$border-radius-base: 3px;
+
+
 @import "bootstrap-sass-official/assets/stylesheets/bootstrap.scss";
 // endbower
  .browsehappy {
@@ -302,48 +309,6 @@ footer {
 a { 
 	color: inherit;
 }
-.ng-hide-add { 
-	animation:0.2s fadeOut ease; 
-	display: block !important;
-}
-
-/* when showing the picture */
-.ng-hide-remove      { 
-	animation:0.2s fadeIn ease; 
-}
-
 .text-muted, h1 small, h1 .small {
 	color: rgba(0,0,0, 0.54) !important;
-}
-
-.col-sm-4.ng-enter {
-  animation:5s fadeIn ease; 
-}
-.col-sm-4.ng-leave {
-  animation:5s fadeOut ease;
-}
-
-.my-repeat-animation.ng-enter {
-  left:-10px;
-  opacity:0;
-}
-.my-repeat-animation.ng-enter.ng-enter-active {
-  left:0;
-  opacity:1;
-}
-
-.my-repeat-animation.ng-leave {
-  left:0;
-  opacity:1;
-}
-.my-repeat-animation.ng-leave.ng-leave-active {
-  left:-10px;
-  opacity:0;
-}
-
-.my-repeat-animation.ng-move {
-  opacity:0.5;
-}
-.my-repeat-animation.ng-move.ng-move-active {
-  opacity:1;
 }
