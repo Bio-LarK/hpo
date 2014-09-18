@@ -21,6 +21,7 @@ angular
         'ui.bootstrap',
         'ajoslin.promise-tracker',
         'toaster',
+        'monospaced.elastic',
         'textAngular'
     ])
     .run(function ($state, $stateParams, $rootScope, searchService, pageService) {
