@@ -1,3 +1,12 @@
+<a name="0.7.2"></a>
+### 0.7.2 (2014-09-18)
+
+
+#### Features
+
+* **phenotype-edit:** add a state for phenotype edit ([d4adfaf6](https://github.com/Bio-LarK/hpo/commit/d4adfaf6d92d5943c7c3c95bdbba1d531115e91d))
+
+
 <a name="0.7.1"></a>
 ### 0.7.1 (2014-09-18)
 
