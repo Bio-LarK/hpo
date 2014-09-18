@@ -1,32 +1,35 @@
 // $icon-font-path:"../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 
-$brand-primary: #658FB2;
-$brand-info: #63BA97;
+// Colors
+$brand-primary: #63BA97;// #658FB2;
+$brand-info: #658FB2; //#63BA97;
+
+// Border Radius
 $border-radius-base: 3px;
+
+// Fonts
+$font-family-sans-serif:  'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
 // // bower:scss
  @import "bootstrap-sass-official/assets/stylesheets/bootstrap.scss";
  // endbower
+
  .browsehappy {
     margin: 0.2em 0;
     background: #ccc;
-    color: #000;
     padding: 0.2em 0;
 }
 /* Space out content a bit */
 
 
 body {
-    background-color: white;// #F4F4F4;
-    font-family: 'Open Sans', Sans-serif;
-    font-size: 14px;
-    line-height: 1.5;
-    color: rgba(0,0,0,0.87);
+    background-color: white;
 }
 .wrapper {
-  background-color: #F4F4F4;
+  background-color: $gray-lighter;
   padding-bottom: 50px;
 }
+
 footer {
   margin-top: 40px;
 }
@@ -86,7 +89,7 @@ footer {
 .navbar.navbar-bright {
   border-radius: 0;
   margin-bottom: 0;
-  background-color: #63BA97;//; #FFC600;
+  background-color: $brand-primary;//; #FFC600;
   border: none;
   color: rgba(255,255,255,0.9);
   font-size: 14px;
@@ -176,7 +179,7 @@ footer {
   }
 
   &:hover a {
-    color: #248389;
+    color: $brand-primary;
   }
 }
 
