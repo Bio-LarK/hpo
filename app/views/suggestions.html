@@ -28,10 +28,10 @@
             </div>
             
             <div class="list-group">
-                <div class="list-group-item text-center" ng-show="vm.suggestions === null">
+                <div class="list-group-item text-center" ng-show="vm.suggestions == null">
                     <i class="fa fa-spin fa-circle-o-notch"></i>
                 </div>
-                <div class="list-group-item text-muted" ng-hide="vm.suggestions.length">
+                <div class="list-group-item text-muted" ng-show="vm.suggestions.length == 0">
                     No suggestions
                 </div>
                 <div class="list-group-item" ng-repeat="suggestion in vm.suggestions | orderBy:'-changed'">
