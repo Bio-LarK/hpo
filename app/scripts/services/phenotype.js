@@ -8,7 +8,7 @@
  * Factory in the hpoApp.
  */
 angular.module('hpoApp')
-    .factory('Phenotype', function ($resource, $q, $http, ENV) {
+    .factory('Phenotype', function ($resource, $q, $http, ENV, Synonym) {
         console.log('ENV', ENV);
         var Phenotype = $resource(ENV.apiEndpoint + '/entity_node/:nid', {
             'parameters[type]': 'hpo_concept',
@@ -31,6 +31,9 @@ angular.module('hpoApp')
             // Convert parents to Disorder objects
             phenotype['concept_parent'] = _.map(phenotype['concept_parent'], function (parent) {
                 return new Phenotype(parent);
+            });
+            phenotype['concept_synonym'] = _.map(phenotype['concept_synonym'], function (synonym) {
+                return new Synonym(synonym);
             });
             return phenotype;
         }

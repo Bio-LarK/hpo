@@ -8,17 +8,26 @@
  * Factory in the hpoApp.
  */
 angular.module('hpoApp')
-    .factory('Synonym', function ($resource, ENV) {
+    .factory('Synonym', function ($resource, ENV, $http, $log) {
         console.log('ENV', ENV);
         var Synonym = $resource(ENV.apiEndpoint + '/entity_node/:nid', {
             'parameters[type]': 'hpo_synonym',
             nid: '@nid'
         });
-        // Phenotype.prototype.getParents = getParents;
+        Synonym.prototype.loadType = loadType;
         return Synonym;
 
         ////////////
 
+        function loadType() {
+             /* jshint validthis: true */
+            var synonym = this;
+            $log.debug('synonymn', synonym);
+            return $http.get(ENV.apiEndpoint + '/entity_node/' + synonym['synonym_type'].id).then(function (response) {
+                synonym['synonym_type'] = response.data;
+                return synonym;
+            });
+        }
         // function getParents() {
         //     // Get all the parent ids
         //     var phenotype = this;

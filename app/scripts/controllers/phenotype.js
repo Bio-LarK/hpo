@@ -9,17 +9,18 @@
  */
 angular.module('hpoApp')
     .controller('PhenotypeCtrl', function ($scope, $stateParams, promiseTracker, 
-        Phenotype, pageService, $state, modalService) {
+        Phenotype, pageService, $state, modalService, $log) {
         
         var vm = $scope;
         vm.loadingTracker = promiseTracker();
         vm.phenotype = null;
         vm.toggleParents = toggleParents;
-        vm.isEditing = false;
+        vm.isEditing = true;
         vm.editBody = editBody;
         vm.editTitle = editTitle;
         vm.editClassification = editClassification;
         vm.changeEditing = changeEditing;
+        vm.editSynonym = editSynonym;
         activate();
         ////////////
 
@@ -29,11 +30,13 @@ angular.module('hpoApp')
             var promise = Phenotype.get({
                 nid: $stateParams.phenotypeId
             }, function (phenotype) {
-                $scope.phenotype = phenotype;
+                vm.phenotype = phenotype;
                 pageService.setTitle(phenotype['concept_label']);
+                $log.debug(vm.phenotype);
             }).$promise;
 
             $scope.loadingTracker.addPromise(promise);
+
             // Disorder.get({
             //     nid: $stateParams.disorderId //136402
             // }, function (disorder) {
@@ -74,6 +77,9 @@ angular.module('hpoApp')
         }
         function editBody() {
             return modalService.openEditDescription(vm.phenotype);
+        }
+        function editSynonym(synonym) {
+            return modalService.openEditSynonym(vm.phenotype, synonym);   
         }
 
     });

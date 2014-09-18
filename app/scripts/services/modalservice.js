@@ -15,12 +15,30 @@ angular.module('hpoApp')
             openAgeOfDeath: openAgeOfDeath,
             openEditTitle: openEditTitle,
             openEditDescription: openEditDescription,
-            openEditClassification: openEditClassification
+            openEditClassification: openEditClassification,
+            openEditSynonym: openEditSynonym
         };
         return service;
 
         ///////
 
+        function openEditSynonym(phenotype, synonym) {
+            var config = {
+                synonym: synonym,
+                phenotype: phenotype
+            };
+
+            return $modal.open({
+                templateUrl: 'views/editsynonym.modal.html',
+                controller: 'EditSynonymCtrl as vm',
+                resolve: {
+                    config: function() {
+                        return config;
+                    }
+
+                }
+            });
+        }
         function openEditTitle(concept) {   
             var config = {
                 concept: concept,

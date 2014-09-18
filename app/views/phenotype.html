@@ -39,13 +39,15 @@
                     <h1 ng-hide="isEditing">
                         {{ phenotype.title || 'Loading...' }}
                     </h1>
-                    <h1 ng-show="isEditing"ng-click="editTitle()">
-                        <span class="editable">{{ phenotype.title || 'Loading...' }}</span>
+                    <h1 ng-show="isEditing">
+                        <span class="editable" ng-click="editTitle()">{{ phenotype.title || 'Loading...' }}</span>
                     </h1>
-                    <div style="color: rgba(0,0,0,0.5); margin-top: 7px;" ng-show="phenotype.concept_synonym.length">
+                    <div style="color: rgba(0,0,0,0.5); margin-top: 7px;">
                         <small style="font-size: 16px;">
                             Synonyms:
-                            <span ng-repeat="synonym in phenotype.concept_synonym">
+                            <span ng-hide="phenotype.concept_synonym">No synonyms</span>
+
+                            <span ng-repeat="synonym in phenotype.concept_synonym" class="editable" ng-click="editSynonym(synonym)">
                                 {{ synonym.synonym_value }}
                                 <span ng-show="!$last">,</span>
                             </span>
@@ -112,7 +114,7 @@
 
 
             <h2>
-                <span class="editable" ng-click="isEditing && editClassification()">
+                <span>
                     Classification    
                 </span>
                 
@@ -129,8 +131,15 @@
 
                     <div class="col-sm-12">
                         <div class="row" ng-repeat="row in phenotype.concept_parent | filter:filterClassification |  inSlicesOf:3">
+                            <!-- <div class="col-sm-4">
+                                <div class="panel panel-default editable-card" style="text-align: center; color: #63ba97; background-color: transparent;" >
+                                    <div class="panel-body" style="line-height: 9;">
+                                        <i class="fa fa-plus"></i>
+                                    </div>
+                                </div>
+                            </div> -->
                             <div class="col-sm-4" ng-repeat="phenotype in row">
-                                <div class="panel panel-default">
+                                <div class="panel panel-default editable-card" ng-click="editClassification()">
                                     <div class="panel-body">
                                         <div class="media">
                                             <div class="pull-left">
