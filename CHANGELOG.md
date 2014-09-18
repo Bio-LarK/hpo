@@ -1,3 +1,12 @@
+<a name="0.7.1"></a>
+### 0.7.1 (2014-09-18)
+
+
+#### Features
+
+* **edit-classification:** scaffold out classification modal ([946c2756](https://github.com/Bio-LarK/hpo/commit/946c27563f1fc74170ede23a5542be3d8620bcce))
+
+
 <a name="0.7.0"></a>
 ## 0.7.0 (2014-09-18)
 
