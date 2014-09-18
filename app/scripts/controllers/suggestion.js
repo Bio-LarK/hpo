@@ -14,6 +14,7 @@ angular.module('hpoApp')
         vm.accept = accept;
         vm.reject = reject;
         vm.statues = null;
+        vm.isOpen = false;
     	activate();
 
     	//////////
@@ -28,6 +29,8 @@ angular.module('hpoApp')
                 nid: $stateParams.suggestionId
             }).$promise.then(function(transactionRequest) {
                 vm.suggestion = transactionRequest;
+
+                vm.isOpen = vm.suggestion['$tr_status'].nid === _.find(vm.statues, { 'title': 'Submitted'}).nid;
                 _.each(transactionRequest['$tr_trans'], function(listTransaction) {
                     listTransaction.loadReferences().then(function(listTransaction) {
                         // bit of moving stuff about
