@@ -47,30 +47,14 @@ angular
                 controller: 'SuggestionCtrl as vm',
                 templateUrl: 'views/suggestion.html',
             })
-        // .state('genes', {
-        //     url: '/genes?page',
-        //     controller: 'GenesCtrl',
-        //     templateUrl: 'views/genes.html'
-        // })
-        // .state('gene', {
-        //     url: '/gene/:geneId/disorders',
-        //     controller: 'GeneCtrl',
-        //     templateUrl: 'views/gene.html'
-        // })
-        // .state('sign', {
-        //     url: '/sign/:signId/disorders',
-        //     controller: 'SignCtrl',
-        //     templateUrl: 'views/sign.html'
-        // })
-        // .state('signs', {
-        //     url: '/signs',
-        //     controller: 'SignsCtrl',
-        //     templateUrl: 'views/signs.html'
-        // })
+
         .state('phenotype', {
             url: '/phenotypes/:phenotypeId',
             controller: 'PhenotypeCtrl',
             templateUrl: 'views/phenotype.html',
+        })
+        .state('phenotype.edit', {
+            url: '/edit',
         })
             .state('phenotypes', {
                 url: '/phenotypes',

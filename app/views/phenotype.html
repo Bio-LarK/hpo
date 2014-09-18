@@ -20,8 +20,8 @@
         <div class="panel-body">
             <div class="container">
                 <div class="btn-group">
-                    <label class="btn btn-default" ng-class="{'btn-primary': isEditing}" ng-model="isEditing" btn-radio="true">Suggest Change</label>
-                    <label class="btn btn-default" ng-model="isEditing" btn-radio="false">Off</label>
+                    <label class="btn btn-default" ng-class="{'btn-primary': isEditing}" ng-model="isEditing" btn-radio="true" ng-change="changeEditing(isEditing)">Suggest Change</label>
+                    <label class="btn btn-default" ng-model="isEditing" btn-radio="false" ng-change="changeEditing(isEditing)">Off</label>
                 </div>
             </div>
         </div>
