@@ -37,7 +37,7 @@
                 </div>
                 <div class="media-body">
                     <h1 ng-click="editTitle()">
-                        <span class="editable">{{ phenotype.title || 'Loading...' }}</span>
+                        {{ phenotype.title || 'Loading...' }}
                     </h1>
                     <div style="color: rgba(0,0,0,0.5); margin-top: 7px;" ng-show="phenotype.concept_synonym.length">
                         <small style="font-size: 16px;">
