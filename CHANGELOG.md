@@ -1,3 +1,24 @@
+<a name="0.5.1"></a>
+### 0.5.1 (2014-09-18)
+
+
+#### Bug Fixes
+
+* **edit-modals:** reduce size of reason textarea ([48669aad](https://github.com/Bio-LarK/hpo/commit/48669aad341964767c045488f6d8043d4d96157a))
+* **style:** fix brand colors ([86d63c39](https://github.com/Bio-LarK/hpo/commit/86d63c39eca3ccb1c4f31363a67d093663c8371b))
+* **stylesheet:** fix animation breaking appearance of site ([8c8a5f4b](https://github.com/Bio-LarK/hpo/commit/8c8a5f4b7495ac6d23baca74eb578f4aa132be9f))
+* **suggestion:** fix accept/reject appearing when already closed ([5e699fde](https://github.com/Bio-LarK/hpo/commit/5e699fdebfcf6a299368cc855d1492648b0d4dc8))
+* **suggestions:** fix loading not appearing correctly ([bc08e3f5](https://github.com/Bio-LarK/hpo/commit/bc08e3f57ba7aaac16a3393821ebceb254e64335))
+
+
+#### Features
+
+* **elastic-textarea:** add elastic text area ([61b266d7](https://github.com/Bio-LarK/hpo/commit/61b266d7ab1e55d66d16f6a8f6f955c9017d2254))
+* **phenotype:**
+  * add edit toggle to phenotype ([ee5583a3](https://github.com/Bio-LarK/hpo/commit/ee5583a3a39e24981835bc1119f094c0af670426))
+  * add editing appearing to title ([065b31f5](https://github.com/Bio-LarK/hpo/commit/065b31f568ceb4bb5046345929e48bf5631d169e))
+
+
 <a name="0.5.0"></a>
 ## 0.5.0 (2014-09-17)
 
