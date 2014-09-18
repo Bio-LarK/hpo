@@ -1,3 +1,17 @@
+<a name="0.7.0"></a>
+## 0.7.0 (2014-09-18)
+
+
+#### Bug Fixes
+
+* **header:** highlight phenotype ([bd649baa](https://github.com/Bio-LarK/hpo/commit/bd649baa2068210017f27ab449b1248c6b7cb1ae))
+
+
+#### Features
+
+* **phenotype:** scaffold classification modal ([2fc06673](https://github.com/Bio-LarK/hpo/commit/2fc066735660e8f58d88808cc2df7f2586765018))
+
+
 <a name="0.6.0"></a>
 ## 0.6.0 (2014-09-18)
 
