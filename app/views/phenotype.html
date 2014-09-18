@@ -36,8 +36,11 @@
                     <img src="http://dummyimage.com/70x70/dddddd/dddddd" alt="" class="media-object">
                 </div>
                 <div class="media-body">
-                    <h1 ng-click="editTitle()">
+                    <h1 ng-hide="isEditing">
                         {{ phenotype.title || 'Loading...' }}
+                    </h1>
+                    <h1 ng-show="isEditing"ng-click="editTitle()">
+                        <span class="editable">{{ phenotype.title || 'Loading...' }}</span>
                     </h1>
                     <div style="color: rgba(0,0,0,0.5); margin-top: 7px;" ng-show="phenotype.concept_synonym.length">
                         <small style="font-size: 16px;">
@@ -59,7 +62,7 @@
         <div class="panels">
             <div class="row" ng-hide="loadingTracker.active()">
                 <div class="col-sm-8">
-                    <div class="panel panel-default editable-card" ng-click="editBody()">
+                    <div class="panel panel-default" ng-click="isEditing && editBody()" ng-class="{'editable-card': isEditing}">
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-sm-12">
