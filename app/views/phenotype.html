@@ -26,7 +26,7 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    <div class="container" ng-class="{'is-editing': isEditing}">
         <div class="title">
             <div class="pull-right text-muted" ng-hide="loadingTracker.active()">
                 Updated {{ phenotype.changed * 1000 | date:'d/M/yyyy' }}
@@ -109,7 +109,17 @@
                 <!-- <button type="submit" class="btn btn-default">Sign in</button> -->
             </form>
 
-            <h2>Classification</h2>
+
+
+            <h2>
+                <span class="editable" ng-click="isEditing && editClassification()">
+                    Classification    
+                </span>
+                
+                <!-- <button class="btn btn-edit" ng-show="isEditing" ng-click="editTitle()"><i class="fa fa-pencil"></i> Edit</button> -->
+            <!-- <button class="btn btn-default editable-card"></button> -->
+            </h2>
+            
 
             <div ng-hide="loadingTracker.active()">
                 <p ng-hide="phenotype.concept_parent.length" class="text-muted">

@@ -14,7 +14,8 @@ angular.module('hpoApp')
             openAgeOfOnset: openAgeOfOnset,
             openAgeOfDeath: openAgeOfDeath,
             openEditTitle: openEditTitle,
-            openEditDescription: openEditDescription
+            openEditDescription: openEditDescription,
+            openEditClassification: openEditClassification
         };
         return service;
 
@@ -38,6 +39,26 @@ angular.module('hpoApp')
                 }
             });
         }
+
+        function openEditClassification(concept) {   
+            var config = {
+                concept: concept,
+                propertyName: 'body',
+                propertyLabel: 'Description'
+            };
+
+            return $modal.open({
+                templateUrl: 'views/editclassification.modal.html',
+                controller: 'EditTitleCtrl as vm',
+                resolve: {
+                    config: function() {
+                        return config;
+                    }
+
+                }
+            });
+        }
+
 
         function openEditDescription(concept) {   
             var config = {
