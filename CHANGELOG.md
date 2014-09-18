@@ -1,3 +1,12 @@
+<a name="0.11.0"></a>
+## 0.11.0 (2014-09-18)
+
+
+#### Features
+
+* **phenotype:** add ability to edit a synonym ([98160e98](https://github.com/Bio-LarK/hpo/commit/98160e98c75f3f54738f5d52b8210bf17e147495))
+
+
 <a name="0.10.0"></a>
 ## 0.10.0 (2014-09-18)
 
