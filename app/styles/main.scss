@@ -1,14 +1,12 @@
 // $icon-font-path:"../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
-// // bower:scss
-
 
 $brand-primary: #658FB2;
 $brand-info: #63BA97;
 $border-radius-base: 3px;
 
-
-@import "bootstrap-sass-official/assets/stylesheets/bootstrap.scss";
-// endbower
+// // bower:scss
+ @import "bootstrap-sass-official/assets/stylesheets/bootstrap.scss";
+ // endbower
  .browsehappy {
     margin: 0.2em 0;
     background: #ccc;
