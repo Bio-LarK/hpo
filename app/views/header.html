@@ -20,7 +20,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li ng-class="{'active': $state.includes('phenotypes')}"><a ui-sref="phenotypes">Phenotypes</a>
+                <li ng-class="{'active': $state.includes('phenotypes') || $state.includes('phenotype')}"><a ui-sref="phenotypes">Phenotypes</a>
                 </li>
                 <li ng-class="{'active': $state.includes('suggestion') || $state.includes('suggestions')}"><a ui-sref="suggestions">Suggestions</a>
                     </li>
