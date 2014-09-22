@@ -260,6 +260,7 @@ class ServicesEntityResourceController implements ServicesResourceControllerInte
 
         if(is_string($value)) && strpos($value,'*') !== false) {
           $operator = 'CONTAINS';
+          $value = str_replace('*','',$value);
         } else {
           $operator = null;
         }
