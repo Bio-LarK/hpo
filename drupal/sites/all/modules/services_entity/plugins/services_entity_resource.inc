@@ -258,8 +258,9 @@ class ServicesEntityResourceController implements ServicesResourceControllerInte
       }
       else {
 
-        if(is_string($value)) && strpos($value,'*') !== false) {
+        if(is_string($value) && strpos($value,'*') !== false) {
           $operator = 'CONTAINS';
+          $value = str_replace('*','',$value);
         } else {
           $operator = null;
         }
