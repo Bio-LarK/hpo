@@ -1,6 +1,6 @@
 {
   "name": "hpo",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "devDependencies": {
     "grunt": "^0.4.1",
     "grunt-autoprefixer": "^0.7.3",
