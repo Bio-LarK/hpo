@@ -1,3 +1,12 @@
+<a name="0.12.2"></a>
+### 0.12.2 (2014-09-22)
+
+
+#### Bug Fixes
+
+* **drupal:** remove wildcard before searching ([2cf01255](https://github.com/Bio-LarK/hpo/commit/2cf01255d116564c383dcf0d7335eebb6bbfc781))
+
+
 <a name="0.12.0"></a>
 ## 0.12.0 (2014-09-22)
 
