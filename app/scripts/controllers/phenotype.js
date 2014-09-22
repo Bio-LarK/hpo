@@ -36,20 +36,6 @@ angular.module('hpoApp')
             }).$promise;
 
             $scope.loadingTracker.addPromise(promise);
-
-            // Disorder.get({
-            //     nid: $stateParams.disorderId //136402
-            // }, function (disorder) {
-            //     $scope.disorder = disorder;
-            //     // var genesPromise = disorder.getGenes();
-            //     // $scope.genesTracker.addPromise(genesPromise);
-            //     // var signsPromise = disorder.getSigns();
-            //     // $scope.signsTracker.addPromise(signsPromise);
-            //     Page.setTitle(disorder['disorder_name']);
-            // });
-            // $scope.disorderTracker.addPromise(disorder.$promise);
-            // $scope.signsTracker.addPromise(disorder.$promise);
-            // $scope.genesTracker.addPromise(disorder.$promise);
         }
 
         function changeEditing(isEditing) {

@@ -67,7 +67,7 @@ angular.module('hpoApp')
 
             return $modal.open({
                 templateUrl: 'views/editclassification.modal.html',
-                controller: 'EditTitleCtrl as vm',
+                controller: 'EditClassificationCtrl as vm',
                 resolve: {
                     config: function() {
                         return config;

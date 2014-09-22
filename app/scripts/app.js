@@ -22,7 +22,8 @@ angular
         'ajoslin.promise-tracker',
         'toaster',
         'monospaced.elastic',
-        'textAngular'
+        'textAngular',
+        'ui.select'
     ])
     .run(function ($state, $stateParams, $rootScope, searchService, pageService) {
         $rootScope.$state = $state;
@@ -30,8 +31,10 @@ angular
         $rootScope.searchService = searchService;
         $rootScope.pageService = pageService;
     })
-    .config(function ($stateProvider, $urlRouterProvider) {
-        // 
+    .config(function ($stateProvider, $urlRouterProvider,uiSelectConfig) {
+
+        uiSelectConfig.theme = 'bootstrap';
+
         // For any unmatched url, redirect to /state1
         $urlRouterProvider.otherwise('/phenotypes');
         //
