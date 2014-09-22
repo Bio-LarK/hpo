@@ -248,6 +248,7 @@ class ServicesEntityResourceController implements ServicesResourceControllerInte
       // query.
       $field_info = field_info_field($property);
       $operation = 'field' . $operation;
+
       if (is_array($value)) {
         // Specific column filters are given, so add a query condition for each
         // one of them.
@@ -256,10 +257,17 @@ class ServicesEntityResourceController implements ServicesResourceControllerInte
         }
       }
       else {
+
+        if(is_string($value)) && strpos($value,'*') !== false) {
+          $operator = 'CONTAINS';
+        } else {
+          $operator = null;
+        }
+
         // Just pick the first field column for the operation.
         $columns = array_keys($field_info['columns']);
         $column = $columns[0];
-        $query->$operation($field_info, $column, $value);
+        $query->$operation($field_info, $column, $value, $operator);
       }
 
       return;
