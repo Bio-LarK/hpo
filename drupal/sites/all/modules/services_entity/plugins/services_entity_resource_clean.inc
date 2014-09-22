@@ -148,7 +148,7 @@ class ServicesEntityResourceControllerClean extends ServicesEntityResourceContro
     }
     //echo 'getting data<br/>';
     $data = array();
-    header("Content-type: text/html;");    
+    
     $filtered = $this->property_access_filter($wrapper);
     //echo 'wrapper is ' . $wrapper . '<br/>';
     foreach ($filtered as $name => $property) {
@@ -159,18 +159,17 @@ class ServicesEntityResourceControllerClean extends ServicesEntityResourceContro
       if ($related && $fields != '*' && !in_array($name, $fields_array)) {
         continue;
       }
-      //echo 'matches<br/>';
+      
       try {
         if ($property instanceof EntityDrupalWrapper) {
-	 //  echo 'entiy drupal wrapper<br/>';          
-// For referenced entities only return the URI.
-	  if($related) {
-	    $data[$name] = $this->get_data($property, $fields, false);
-	  } else {
+          // For referenced entities only return the URI.
+          if($related) {
+            $data[$name] = $this->get_data($property, $fields, false);
+          } else {
             if ($id = $property->getIdentifier()) {
               $data[$name] = $this->get_resource_reference($property->type(), $id);
             }
-	  }
+          }
         }
         elseif ($property instanceof EntityValueWrapper) {
 	   //echo $name . "- value<br/>";          
