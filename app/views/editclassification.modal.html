@@ -8,11 +8,12 @@
     </div>
     <form role="form">
         <div class="modal-body">
-            <p class="text-muted" ng-bind="vm.message">
+            <p class="text-muted" ng-bind="vm.infoMessage">
             </p>
             <div ng-repeat="parent in vm.parents" style="margin-bottom: 10px;">
                 <div ng-click="vm.removeParent(parent, vm.parents);" class="form-control">
-                    <i class="fa fa-times"></i> {{ parent.title }}
+                    <i class="fa fa-times pull-right"></i> 
+                    {{ parent.title }} 
                 </div>
             </div>
             <div>
@@ -40,7 +41,7 @@
                 <label>
                     Explain the change
                 </label>
-                <textarea msd-elastic="\n" ng-model="vm.reason" class="form-control" rows="1"></textarea>
+                <textarea placeholder="What is the reason for this change?" msd-elastic="\n" ng-model="vm.reason" class="form-control" rows="1"></textarea>
             </div>
         </div>
         <div class="modal-footer">
