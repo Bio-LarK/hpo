@@ -15,7 +15,7 @@ angular.module('hpoApp')
         vm.loadingTracker = promiseTracker();
         vm.phenotype = null;
         vm.toggleParents = toggleParents;
-        vm.isEditing = true;
+        vm.isEditing = false;
         vm.editBody = editBody;
         vm.editTitle = editTitle;
         vm.editClassification = editClassification;
