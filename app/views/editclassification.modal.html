@@ -4,24 +4,33 @@
             <span aria-hidden="true">&times;</span>
             <span class="sr-only">Close</span>
         </button>
-        <h4 class="modal-title">Editing Classification</h4>
+        <h4 class="modal-title">{{ vm.phenotype.title }}</h4>
     </div>
     <form role="form">
-
         <div class="modal-body">
-            <div ng-repeat="parent in vm.phenotype.concept_parent">
-                <i class="fa fa-times"></i> {{ parent.title }}
+            <p class="text-muted" ng-bind="vm.message">
+            </p>
+            <div ng-repeat="parent in vm.parents" style="margin-bottom: 10px;">
+                <div ng-click="vm.removeParent(parent, vm.parents);" class="form-control">
+                    <i class="fa fa-times"></i> {{ parent.title }}
+                </div>
             </div>
             <div>
-            	
-                <ui-select ng-model="vm.address.selected" theme="bootstrap" ng-disabled="disabled" reset-search-input="false">
-                    <ui-select-match placeholder="Enter an address...">
-                    	{{ $select.selected.title }}
-                    </ui-select-match>
-                    <ui-select-choices repeat="phenotype in vm.phenotypes">
-                        <div ng-bind-html="phenotype.title | highlight: $select.search"></div>
-                    </ui-select-choices>
-                </ui-select>
+                <div class="row">
+                    <div class="col-sm-11">
+                        <ui-select ng-model="vm.newParent.selected" theme="bootstrap" ng-disabled="disabled" reset-search-input="false">
+                            <ui-select-match placeholder="Search for a phenotype">
+                                {{ $select.selected.title }}
+                            </ui-select-match>
+                            <ui-select-choices repeat="phenotype in vm.phenotypes" refresh="vm.refreshPhenotypes($select.search)" refresh-delay="0">
+                                <div ng-bind-html="phenotype.title | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-sm-1">
+                        <button class="btn btn-default pull-right" ng-class="{'btn-primary': vm.newParent.selected}" ng-click="vm.addParent(vm.newParent.selected)">Add</button>
+                    </div>
+                </div>
             </div>
             <div class="form-group">
 
@@ -42,7 +51,7 @@
             </div>
 
             <button class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
-            <button type="submit" class="btn btn-primary" ng-click="vm.save(yo)">Propose Change</button>
+            <button type="submit" class="btn btn-primary" ng-click="vm.save()">Propose Change</button>
         </div>
     </form>
 </div>

@@ -117,7 +117,7 @@
                 <span>
                     Classification    
                 </span>
-                
+                <button class="btn btn-edit" ng-click="editClassification()" ng-show="isEditing">Add</button>
                 <!-- <button class="btn btn-edit" ng-show="isEditing" ng-click="editTitle()"><i class="fa fa-pencil"></i> Edit</button> -->
             <!-- <button class="btn btn-default editable-card"></button> -->
             </h2>
@@ -131,13 +131,13 @@
 
                     <div class="col-sm-12">
                         <div class="row" ng-repeat="row in phenotype.concept_parent | filter:filterClassification |  inSlicesOf:3">
-                            <!-- <div class="col-sm-4">
-                                <div class="panel panel-default editable-card" style="text-align: center; color: #63ba97; background-color: transparent;" >
+                            <!--<div class="col-sm-4" ng-show="isEditing">
+                                <div class="panel panel-default editable-card" style="text-align: center; color: #63ba97; background-color: transparent;" ng-click="editClassification()">
                                     <div class="panel-body" style="line-height: 9;">
                                         <i class="fa fa-plus"></i>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>-->
                             <div class="col-sm-4" ng-repeat="phenotype in row">
                                 <div class="panel panel-default editable-card" ng-click="editClassification()">
                                     <div class="panel-body">
@@ -207,7 +207,12 @@
                 <!-- <button type="submit" class="btn btn-default">Sign in</button> -->
             </form>
 
-            <h2>Children</h2>
+            
+            <h2>
+                Children
+                <button class="btn btn-edit" ng-show="isEditing" ng-click="editChildren()">Add</button>
+            </h2>
+
             <div class="spinner" ng-show="loadingTracker.active();">
                 <i class="fa fa-spin fa-circle-o-notch"></i>
             </div>
@@ -215,10 +220,11 @@
                 <p ng-hide="phenotype.concept_child.length" class="text-muted">
                     No children.
                 </p>
-
+    
                 <div class="row" ng-repeat="row in phenotype.concept_child | filter:filterChildren |  inSlicesOf:3">
+
                     <div class="col-sm-4" ng-repeat="phenotype in row">
-                        <div class="panel panel-default">
+                        <div class="panel panel-default editable-card">
                             <div class="panel-body">
                                 <div class="media">
                                     <div class="pull-left">

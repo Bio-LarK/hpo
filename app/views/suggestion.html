@@ -1,6 +1,6 @@
 <div class="container">
     <div class="title">
-        <ol class="breadcrumb" style="margin:0; padding: 0; margin-bottom: 10px;">
+        <ol class="breadcrumb" style="margin:0; padding: 0; margin-bottom: 10px; background-color: transparent;">
             <li><a ui-sref="suggestions">Suggestions</a>
             </li>
             <li class="active">Suggestion #{{ vm.suggestion.nid }}</li>
@@ -20,7 +20,6 @@
                 <div class="label label-default" ng-class="{'label-success': vm.suggestion.$tr_status.nid == 1, 'label-danger': vm.suggestion.$tr_status.nid == 2}">
                     {{ vm.suggestion.$tr_status.trstatus_value }}
                 </div>
-
             </div>
 
             <div class="media" style="margin-top: 0;">
@@ -40,8 +39,9 @@
             </div>
         </div>
         <div class="panel-body">
-
-            <h4 style="margin: 0; margin-bottom: 14px;" class="text-capitalize">
+            <h4 ng-bind-html="vm.suggestion.$onNodeDescription" style="margin: 0; margin-bottom: 14px;" class="text-capitalize">
+            </h4>
+            <!-- <h4 class="text-capitalize">
 
                 <span ng-show="vm.suggestion.$relatedNodes.length > 1">
                     Relationship between
@@ -54,12 +54,15 @@
                     <a ui-sref="disorder({disorderId: vm.suggestion.$relatedNodes[0].nid})">{{ vm.suggestion.$relatedNodes[0].title }}</a>
                 </span>
 
-            </h4>
+            </h4> -->
 
 
             <div ng-repeat="transaction in vm.suggestion.$tr_trans">
-                <div style="margin-bottom: 14px;">
+                <div ng-bind-html="transaction.description"></div>
+                
+                <!--<div style="margin-bottom: 14px;">
                     <div ng-show="transaction.isRefChange">
+                        {{ transaction.ltrans_ctype }}
                         <strong>
                             {{ transaction.ltrans_onprop }}
                         </strong>: {{ transaction.ltrans_cvalref.title || 'Unknown' }}
@@ -72,7 +75,7 @@
                         <div ng-show="transaction.ltrans_onprop=='body'">
                             <div>
                                 <strong>
-                                {{ transaction.ltrans_onprop }}
+                                    {{ transaction.ltrans_onprop }}
                                 </strong>:
                             </div>
                             <div ng-bind-html="transaction.ltrans_cvalplain"></div>
@@ -83,17 +86,15 @@
                         </div>
                         <div ng-hide="transaction.ltrans_onprop=='body'">
                             <strong>
-                            {{ transaction.ltrans_onprop }}
+                                {{ transaction.ltrans_onprop }}
                             </strong>: {{ transaction.ltrans_cvalplain || 'Unknown' }}
                             <i class="fa fa-arrow-right"></i>
                             {{ transaction.ltrans_svalplain }}
                         </div>
                     </div>
-                    
-
-                </div>
+                </div>-->
             </div>
-            <div>
+            <div style="margin-top: 20px;">
                 <div ng-bind-html="vm.suggestion.body.value"></div>
             </div>
             <div>
@@ -101,7 +102,7 @@
             </div>
         </div>
     </div>
-    <div class="panel panel-default" ng-show="vm.isOpen">
+    <div class="panel panel-default" ng-show="vm.suggestion.$isOpen">
         <div class="panel-body">
             <div class="pull-left">
                 <div style="">

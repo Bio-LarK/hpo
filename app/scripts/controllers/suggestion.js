@@ -8,7 +8,8 @@
  * Controller of the orphaApp
  */
 angular.module('hpoApp')
-  .controller('SuggestionCtrl', function ($stateParams, TransactionRequest, $state, $http, toaster, ENV, $log) {
+  .controller('SuggestionCtrl', function ($stateParams, transactionStatusService, 
+    TransactionRequest, $state, $http, toaster, ENV, $log) {
     	var vm = this;
         vm.suggestion = null;
         vm.accept = accept;
@@ -19,7 +20,7 @@ angular.module('hpoApp')
 
     	//////////
     	function activate() {
-            getStatusCodes().then(function() {
+            transactionStatusService.loadStatusCodes().then(function() {
                 return getTransactions();
             });
     	}
@@ -29,35 +30,32 @@ angular.module('hpoApp')
                 nid: $stateParams.suggestionId
             }).$promise.then(function(transactionRequest) {
                 vm.suggestion = transactionRequest;
-
-                vm.isOpen = vm.suggestion['$tr_status'].nid === _.find(vm.statues, { 'title': 'Submitted'}).nid;
-                _.each(transactionRequest['$tr_trans'], function(listTransaction) {
-                    listTransaction.loadReferences().then(function(listTransaction) {
-                        // bit of moving stuff about
-                        // the transaction request needs to know the nodes
-                        // but it doesnt, so we just grab those from the first 
-                        // list transaction
-                        if(!transactionRequest.$relatedNodes) {
-                            transactionRequest.$relatedNodes = listTransaction.relatedNodes;
-                        }
-                    });
-                });
-            });   
-        }
-
-        function getStatusCodes() {
-            return $http.get(ENV.apiEndpoint + '/entity_node?parameters[type]=tr_status').then(function(response) {
-                vm.statues = response.data;
+                return transactionRequest.loadTransactions();
             });
+
+            // return TransactionRequest.get({
+            //     nid: $stateParams.suggestionId
+            // }).$promise.then(function(transactionRequest) {
+            //     vm.suggestion = transactionRequest;
+
+            //     vm.isOpen = transactionStatusService.isSubmitted(vm.suggestion['$tr_status'].nid);
+                
+            //     _.each(transactionRequest['$tr_trans'], function(listTransaction) {
+            //         listTransaction.loadReferences().then(function(listTransaction) {
+            //             // bit of moving stuff about
+            //             // the transaction request needs to know the nodes
+            //             // but it doesnt, so we just grab those from the first 
+            //             // list transaction
+            //             if(!transactionRequest.$relatedNodes) {
+            //                 transactionRequest.$relatedNodes = listTransaction.relatedNodes;
+            //             }
+            //         });
+            //     });
+            // });   
         }
 
         function accept(suggestion) {
-            var acceptedStatus = _.find(vm.statues, { 'title': 'Accepted'});
-            if(!acceptedStatus) {
-                $log.error('Couldnt find accept status');
-                return;
-            }
-            suggestion['tr_status'] = acceptedStatus.nid;
+            suggestion['tr_status'] = transactionStatusService.acceptedNid;
             suggestion.$update().then(function() {
                 toaster.pop('success', 'Suggestion Accepted');
                 $state.go('suggestions');    
@@ -65,13 +63,7 @@ angular.module('hpoApp')
         }
 
         function reject(suggestion) {
-            var rejectedStatus = _.find(vm.statues, { 'title': 'Rejected'});
-            if(!rejectedStatus) {
-                $log.error('Couldnt find accept status');
-                return;
-            }
-
-            suggestion['tr_status'] = rejectedStatus.nid;
+            suggestion['tr_status'] = transactionStatusService.rejectedNid;
             suggestion.$update().then(function() {
                 toaster.pop('success', 'Suggestion Rejected');
                 $state.go('suggestions');    

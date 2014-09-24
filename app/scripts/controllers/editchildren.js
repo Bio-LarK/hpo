@@ -8,21 +8,25 @@
  * Controller of the hpoApp
  */
 angular.module('hpoApp')
-    .controller('EditClassificationCtrl', function(transactionStatusService, $log, config, 
+    .controller('EditChildrenCtrl', function(transactionStatusService, $log, config, 
     	Phenotype, searchService, TransactionRequest, ListTransaction, toaster, $modalInstance, $q) {
+
         var vm = this;
         vm.config = config;
         vm.phenotype = config.concept;
-        var message = 'Add or remove children from ' + vm.phenotype.title;
-        vm.message = message;
-        vm.reason = '';
-        vm.parents = _.clone(vm.phenotype['concept_parent']);
+
+        vm.infoMessage = config.infoMessage;
+        vm.propertyName = config.propertyName;
+        vm.transactionRequestTitle = config.transactionRequestTitle;
+        vm.parents = _.clone(vm.phenotype[vm.propertyName]);
         vm.phenotypes = null;
+        vm.reason = '';
 		vm.refreshPhenotypes = refreshPhenotypes;
 		vm.addParent = addParent;
 		vm.removeParent = removeParent;
         vm.newParent = null;
         vm.save = save;
+        vm.cancel = cancel;
        
        	activate();
 
@@ -63,13 +67,17 @@ angular.module('hpoApp')
     		});
         }
 
+        function cancel() {
+            $modalInstance.dismiss('cancel');
+        }
+
         function save() {
             // Create add list
 
             vm.addedParents = _.reject(vm.parents, function(newParent) {
-                return _.find(vm.phenotype['concept_parent'], {nid: newParent.nid});
+                return _.find(vm.phenotype[vm.propertyName], {nid: newParent.nid});
             });
-            vm.removedParents = _.reject(vm.phenotype['concept_parent'], function(newParent) {
+            vm.removedParents = _.reject(vm.phenotype[vm.propertyName], function(newParent) {
                 return _.find(vm.parents, {nid: newParent.nid});
             });
 
@@ -79,7 +87,7 @@ angular.module('hpoApp')
                     'type': 'list_transaction',
 
                     'ltrans_onnode': vm.phenotype.nid,
-                    'ltrans_onprop': 'concept_parent',
+                    'ltrans_onprop': vm.propertyName,
                     'ltrans_ctype': 'add',
                     'ltrans_svalref': parent.nid,
                 });
@@ -91,7 +99,7 @@ angular.module('hpoApp')
                     'type': 'list_transaction',
 
                     'ltrans_onnode': vm.phenotype.nid,
-                    'ltrans_onprop': 'concept_parent',
+                    'ltrans_onprop': vm.propertyName,
                     'ltrans_ctype': 'remove',
                     'ltrans_svalref': parent.nid,
                 });
@@ -102,7 +110,7 @@ angular.module('hpoApp')
 
             $q.all(listTransactionRequests).then(function(listTransactions) {
                 var transactionRequest = new TransactionRequest({
-                    title: vm.phenotype.title + ' - Update Parent Hierarchy',
+                    title: vm.transactionRequestTitle,
                     type: 'transaction_request',
                     'tr_timestamp': new Date().getTime() / 1000,
                     'tr_trans': _.pluck(listTransactions, 'nid'),

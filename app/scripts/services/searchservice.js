@@ -8,9 +8,10 @@
  * Factory in the hpoApp.
  */
 angular.module('hpoApp')
-    .factory('searchService', function(ENV, $http, $state) {
+    .factory('searchService', function(ENV, $http, $state, Phenotype) {
         var service = {
             getResults: getResults,
+            findPhenotypes: findPhenotypes,
             changed: changed
         };
         return service;
@@ -23,12 +24,26 @@ angular.module('hpoApp')
             });
         }
 
+        function findPhenotypes(text) {
+            var url = ENV.apiEndpoint + '/entity_node'; 
+            return $http.get(url, {
+                params: {
+                    'parameters[title]': text + '*',
+                    'parameters[type]': 'hpo_concept',
+                    'field': 'nid,title'
+                }
+            }).then(function(response) {
+                return _.map(response.data, function(data) {
+                    return new Phenotype(data);
+                });
+            }); 
+        }
+
         function changed($item, $model, $label) {
             var params = {
-                phenotypeId: $item.node
+                phenotypeId: $item.nid
             };
             $state.go('phenotype', params);
         }
-
 
     });

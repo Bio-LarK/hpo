@@ -16,6 +16,7 @@ angular.module('hpoApp')
             openEditTitle: openEditTitle,
             openEditDescription: openEditDescription,
             openEditClassification: openEditClassification,
+            openEditChildren: openEditChildren,
             openEditSynonym: openEditSynonym
         };
         return service;
@@ -58,16 +59,38 @@ angular.module('hpoApp')
             });
         }
 
-        function openEditClassification(concept) {   
+        function openEditChildren(concept) {
             var config = {
                 concept: concept,
-                propertyName: 'body',
-                propertyLabel: 'Description'
+                infoMessage: 'Add or remove children from ' + concept.title,
+                propertyName: 'concept_child',
+                transactionRequestTitle: concept.title + ' - Update Children'
             };
 
             return $modal.open({
                 templateUrl: 'views/editclassification.modal.html',
-                controller: 'EditClassificationCtrl as vm',
+                controller: 'EditChildrenCtrl as vm',
+                resolve: {
+                    config: function() {
+                        return config;
+                    }
+
+                }
+            });
+        }
+
+        function openEditClassification(concept) {   
+
+            var config = {
+                concept: concept,
+                infoMessage: 'Add or remove parent from ' + concept.title,
+                propertyName: 'concept_parent',
+                transactionRequestTitle: concept.title + ' - Update Parent Hierarchy'
+            };
+
+            return $modal.open({
+                templateUrl: 'views/editclassification.modal.html',
+                controller: 'EditChildrenCtrl as vm',
                 resolve: {
                     config: function() {
                         return config;

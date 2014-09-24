@@ -21,6 +21,7 @@ angular.module('hpoApp')
         vm.editClassification = editClassification;
         vm.changeEditing = changeEditing;
         vm.editSynonym = editSynonym;
+        vm.editChildren = editChildren;
         activate();
         ////////////
 
@@ -55,6 +56,9 @@ angular.module('hpoApp')
             }
         }
 
+        function editChildren() {
+            return modalService.openEditChildren(vm.phenotype);
+        }
         function editClassification() {
             return modalService.openEditClassification(vm.phenotype);
         }

@@ -40,10 +40,10 @@ angular.module('hpoApp')
                     }
                 });
                 if (temp) {
-                    console.log('no change');
+                    // console.log('no change');
                     return temp;
                 }
-                console.log('change');
+                // console.log('change');
                 $rootScope.arraysinSliceOf.push(array);
                 return array;
             };
