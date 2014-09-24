@@ -1,3 +1,12 @@
+<a name="0.12.3"></a>
+### 0.12.3 (2014-09-24)
+
+
+#### Features
+
+* **phenotype:** change classification ([5ed2bca4](https://github.com/Bio-LarK/hpo/commit/5ed2bca44a8016ce81b1a8e26d1b3155b3a6ebc6))
+
+
 <a name="0.12.2"></a>
 ### 0.12.2 (2014-09-22)
 
