@@ -1,3 +1,13 @@
+<a name="0.12.4"></a>
+### 0.12.4 (2014-09-24)
+
+
+#### Bug Fixes
+
+* **edit-classification-modal:** add placeholder and move close button ([7a2a38c1](https://github.com/Bio-LarK/hpo/commit/7a2a38c1df1bac494cbff5ce99c65f45b25e2f2e))
+* **phenotype:** remove default editing status ([ba3fa71d](https://github.com/Bio-LarK/hpo/commit/ba3fa71d52f40fcd64f60cc79fe14da40307f20b))
+
+
 <a name="0.12.3"></a>
 ### 0.12.3 (2014-09-24)
 
