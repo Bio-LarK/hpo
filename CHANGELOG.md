@@ -1,3 +1,14 @@
+<a name="0.12.5"></a>
+### 0.12.5 (2014-09-25)
+
+
+#### Bug Fixes
+
+* **editing:** fix clicking cards when editing ([c038db12](https://github.com/Bio-LarK/hpo/commit/c038db12b1b66e9ebcc006dec8c66a1c029a01f7))
+* **index:** remove reference to cmclick ([b34e0dbc](https://github.com/Bio-LarK/hpo/commit/b34e0dbc5cead3cee59d4b177521f2661fe8955a))
+* **phenotype:** disable editing of synonyms ([80bd9139](https://github.com/Bio-LarK/hpo/commit/80bd9139af59f690954e3f5329aecf9b4d60e394))
+
+
 <a name="0.12.4"></a>
 ### 0.12.4 (2014-09-24)
 
