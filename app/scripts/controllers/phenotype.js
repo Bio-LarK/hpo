@@ -22,6 +22,7 @@ angular.module('hpoApp')
         vm.changeEditing = changeEditing;
         vm.editSynonym = editSynonym;
         vm.editChildren = editChildren;
+        vm.goToPhenotype = goToPhenotype;
         activate();
         ////////////
 
@@ -56,6 +57,13 @@ angular.module('hpoApp')
             }
         }
 
+        function goToPhenotype(phenotypeId) {
+            $log.debug('go to phenotype', phenotypeId);
+            if(vm.isEditing) {
+               return; 
+            }
+            $state.go('phenotype', {phenotypeId: phenotypeId});
+        }
         function editChildren() {
             return modalService.openEditChildren(vm.phenotype);
         }
@@ -69,7 +77,7 @@ angular.module('hpoApp')
             return modalService.openEditDescription(vm.phenotype);
         }
         function editSynonym(synonym) {
-            return modalService.openEditSynonym(vm.phenotype, synonym);   
+            return modalService.openEditSynonym(vm.phenotype, synonym);
         }
 
     });

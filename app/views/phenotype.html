@@ -139,7 +139,7 @@
                                 </div>
                             </div>-->
                             <div class="col-sm-4" ng-repeat="phenotype in row">
-                                <div class="panel panel-default editable-card" ng-click="editClassification()">
+                                <div class="panel panel-default editable-card" ng-click="isEditing && editClassification()">
                                     <div class="panel-body">
                                         <div class="media">
                                             <div class="pull-left">
@@ -147,7 +147,7 @@
                                             </div>
                                             <div class="media-body">
                                                 <h5>
-                                                    <a ui-sref="phenotype({phenotypeId: phenotype.nid})">
+                                                    <a cm-sref="phenotype({phenotypeId: phenotype.nid})">
                                                         {{ phenotype.concept_label }}
                                                     </a> 
                                                 </h5>
@@ -224,7 +224,7 @@
                 <div class="row" ng-repeat="row in phenotype.concept_child | filter:filterChildren |  inSlicesOf:3">
 
                     <div class="col-sm-4" ng-repeat="phenotype in row">
-                        <div class="panel panel-default editable-card">
+                        <div class="panel panel-default editable-card" ng-click="isEditing && editChildren()">
                             <div class="panel-body">
                                 <div class="media">
                                     <div class="pull-left">
@@ -232,7 +232,7 @@
                                     </div>
                                     <div class="media-body">
                                         <h5>
-                                            <a ui-sref="phenotype({phenotypeId: phenotype.nid})">
+                                            <a cm-sref="phenotype({phenotypeId: phenotype.nid})">
                                                 {{ phenotype.concept_label }}
                                             </a>
                                         </h5>
