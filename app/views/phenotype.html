@@ -17,7 +17,7 @@
     </style> -->
 
     <div class="panel panel-default">
-        <div class="panel-body">
+        <div class="panel-body" style="padding: 10px;">
             <div class="container">
                 <div class="btn-group">
                     <label class="btn btn-default" ng-class="{'btn-primary': isEditing}" ng-model="isEditing" btn-radio="true" ng-change="changeEditing(isEditing)">Suggest Change</label>
@@ -47,7 +47,7 @@
                             Synonyms:
                             <span ng-hide="phenotype.concept_synonym">No synonyms</span>
 
-                            <span ng-repeat="synonym in phenotype.concept_synonym" class="editable" ng-click="editSynonym(synonym)">
+                            <span ng-repeat="synonym in phenotype.concept_synonym" class="editable" ng-click="isEditing && editSynonym(synonym)">
                                 {{ synonym.synonym_value }}
                                 <span ng-show="!$last">,</span>
                             </span>
