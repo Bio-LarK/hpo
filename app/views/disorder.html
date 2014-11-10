@@ -83,6 +83,9 @@
 
 
 
+
+
+
     <!-- <div class="edit-bar" style="background-color: white; padding: 10px;" ui-scrollfix>
         <div class="container "> -->
     <!-- <div>
@@ -175,7 +178,8 @@
                             <small style="font-size: 16px;">
                                 Synonyms:
                                 <span ng-repeat="synonym in disorder.disorder_synonym">
-                                    {{ synonym.title }}<span ng-show="!$last">,</span>
+                                    {{ synonym.title }}
+                                    <span ng-show="!$last">,</span>
                                 </span>
                             </small>
                         </span>
@@ -187,7 +191,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="panels">
             <div class="spinner" ng-show="disorderTracker.active();">
                 <i class="fa fa-spin fa-circle-o-notch"></i>
@@ -196,7 +200,7 @@
                 <div class="col-sm-8">
                     <div class="panel panel-default">
                         <div class="list-group">
-                            <div class="list-group-item">
+                            <!--<div class="list-group-item">
                                 <div class="row" ng-show="isEditing">
                                     <div class="col-sm-3">
                                         <div class="detail">
@@ -285,7 +289,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
                         <div class="panel-body" ng-click="isEditing && editDescription()" ng-class="{'editable-card': isEditing}">
                             <div class="row">
@@ -354,23 +358,13 @@
                 <div class="col-sm-4">
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <h4 style="margin: 0; font-weight: bold; color:rgba(0,0,0,0.6); margin-bottom: 14px; font-size: 14px;">External Identifiers</h4>
+                            <h4 style="margin: 0; font-weight: bold; color:rgba(0,0,0,0.6); margin-bottom: 14px; font-size: 14px;">Alternate IDs</h4>
 
-                            <dl class="dl-horizontal detail detail-externalidentifiers" style="margin: 0;">
-                                <dt class="detail-title">Orphanumber</dt>
-                                <dd class="detail-info">
-                                    <a target="_" ng-href="http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=EN&Expert={{ disorder.disorder_orphanumber }}">
-                                        ORPHA{{ disorder.disorder_orphanumber }}    
-                                    </a>
-                                </dd>
-
-                                <dt class="detail-title" ng-repeat-start="er in disorder.disorder_er">
-                                    {{ er.er_source }}
-                                </dt>
-                                <dd ng-repeat-end class="detail-info">
-                                    {{ er.er_reference }}
-                                </dd>
-                            </dl>
+                            <ul>
+                                <li ng-repeat="alternateId in disorder.disorder_altid">
+                                    {{ alternateId }}
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -712,3 +706,8 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <pre>
+        {{ disorder | json }}
+    </pre>
