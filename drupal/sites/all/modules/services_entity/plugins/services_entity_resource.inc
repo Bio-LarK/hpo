@@ -3,7 +3,7 @@
 /**
  * Generic controller for entity-bases resources.
  */
-class ServicesEntityResourceController extends ServicesResourceControllerAbstract {
+class ServicesEntityResourceController implements ServicesResourceControllerInterface {
 
   /**
    * Implements ServicesResourceControllerInterface::access().
@@ -59,28 +59,17 @@ class ServicesEntityResourceController extends ServicesResourceControllerAbstrac
   /**
    * Implements ServicesResourceControllerInterface::retrieve().
    */
-  public function retrieve($entity_type, $entity_id, $fields, $revision) {
-    if (!empty($revision)) {
-      // If a specific revision is requested, then retrieve it.
-      if ($entity = entity_revision_load($entity_type, $revision)) {
-        list($id) = entity_extract_ids($entity_type, $entity);
-        if ($id !== $entity_id) {
-          services_error('Requested revision id does not match the resource id.', 406);
-        }
-      }
-    }
-    else {
-      $entity = entity_load_single($entity_type, $entity_id);
-    }
-
+  public function retrieve($entity_type, $entity_id, $fields) {
+    $entity = entity_load_single($entity_type, $entity_id);
     if (!$entity) {
-      services_error('Entity or revision not found', 404);
+      services_error('Entity not found', 404);
     }
     // Users get special treatment to remove sensitive data.
     if ($entity_type == 'user') {
       // Use the helper that Services module already has.
       services_remove_user_data($entity);
     }
+    services_remove_user_data($entity);
     return $this->limit_fields($entity, $fields);
   }
 
@@ -246,7 +235,15 @@ class ServicesEntityResourceController extends ServicesResourceControllerAbstrac
       // If the property is defined in the schema, use the schema property.
       // The EFQ method is either 'propertyCondition' or 'OrderByCondition'.
       $operation = 'property' . $operation;
-      $query->$operation($property, $value);
+
+      if(is_string($value) && strpos($value,'*') !== false) {
+          $operator = 'CONTAINS';
+          $value = str_replace('*','',$value);
+        } else {
+          $operator = null;
+        }
+
+      $query->$operation($property, $value, $operator);
       return;
     }
 
@@ -259,6 +256,7 @@ class ServicesEntityResourceController extends ServicesResourceControllerAbstrac
       // query.
       $field_info = field_info_field($property);
       $operation = 'field' . $operation;
+
       if (is_array($value)) {
         // Specific column filters are given, so add a query condition for each
         // one of them.
@@ -267,10 +265,18 @@ class ServicesEntityResourceController extends ServicesResourceControllerAbstrac
         }
       }
       else {
+
+        if(is_string($value) && strpos($value,'*') !== false) {
+          $operator = 'CONTAINS';
+          $value = str_replace('*','',$value);
+        } else {
+          $operator = null;
+        }
+
         // Just pick the first field column for the operation.
         $columns = array_keys($field_info['columns']);
         $column = $columns[0];
-        $query->$operation($field_info, $column, $value);
+        $query->$operation($field_info, $column, $value, $operator);
       }
 
       return;
