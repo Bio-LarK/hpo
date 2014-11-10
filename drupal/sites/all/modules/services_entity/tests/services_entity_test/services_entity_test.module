@@ -45,10 +45,35 @@ function services_entity_test_entity_info() {
 /**
  * Implements callback_entity_info_access().
  */
-function services_entity_test_access() {
-  // For now, just always return TRUE.
-  // We can figure out testing access later.
-  return TRUE;
+function services_entity_test_access($op, $entity, $account, $entity_type) {
+  $permission_string = "$op services_entity_test entities";
+
+  // todo: for the index service, fake different 'view' access to different
+  // entities.
+
+  return user_access($permission_string, $account);
+}
+
+/**
+ * Implements hook_permission().
+ */
+function services_entity_test_permission() {
+  return array(
+    'create services_entity_test entities' => array(
+      'title' => t('View'),
+    ),
+    'view services_entity_test entities' => array(
+      'title' => t('View'),
+    ),
+    // This is normally 'edit' for most entities, but this keeps it in line
+    // with the name of the service, so is better DX within the test.
+    'update services_entity_test entities' => array(
+      'title' => t('View'),
+    ),
+    'delete services_entity_test entities' => array(
+      'title' => t('View'),
+    ),
+  );
 }
 
 /**
