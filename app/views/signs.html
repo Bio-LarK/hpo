@@ -1,6 +1,6 @@
 <div class="container">
     <div class="title">
-        <h1>All Clinical Signs</h1>
+        <h1>All Disorders</h1>
     </div>
     <div class="row" ng-repeat="row in signs | inSlicesOf:3">
         <div ng-repeat="sign in row" class="col-sm-4">
@@ -22,7 +22,7 @@
                             <div>
                                 <h5>
                                     <a ui-sref="sign({signId: sign.nid })">
-                                        <i class="fa fa-stethoscope"></i> {{ sign.sign_name }}
+                                        {{ sign.sign_name }}
                                     </a>
                                 </h5>
                             </div>

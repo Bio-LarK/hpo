@@ -32,13 +32,12 @@
         </div>
     </div>
 
-    <div class="panels">
+    <!--<div class="panels">
         <form class="form-inline pull-right" role="form" ng-show="sign.sign_parent.length > 1">
             <div class="form-group">
                 <label class="sr-only" for="exampleInputEmail2">Filter</label>
                 <input type="text" class="form-control panels-filter" id="exampleInputEmail2" placeholder="Filter" ng-model="filterClassification">
             </div>
-            <!-- <button type="submit" class="btn btn-default">Sign in</button> -->
         </form>
         <h2>Classification</h2>
         <div ng-hide="signTracker.active()">
@@ -51,7 +50,6 @@
                         <div class="panel-body">
                             <div class="media">
                                 <div class="pull-left">
-                                    <!-- <img src="http://dummyimage.com/40x40/fdd835/fdd835" alt="" class="media-body"> -->
                                 </div>
                                 <div class="media-body">
                                     <div>
@@ -69,11 +67,7 @@
 
                         <div class="list-group" ng-show="disorder_phenotype.ds_sign.sign_dissign.length">
                             <a class="list-group-item" ui-sref="sign({signId: disorder_phenotype.ds_sign.nid })">
-                                <!-- <div class="row" style="font-size: 12px;"> -->
-                                <!-- <div class="col-sm-12"> -->
                                 <i class="fa fa-search"></i> View Disorders
-                                <!-- </div> -->
-                                <!-- </div> -->
                             </a>
                             </ul>
 
@@ -85,15 +79,14 @@
         <div class="spinner" ng-show="signTracker.active();">
             <i class="fa fa-spin fa-circle-o-notch"></i>
         </div>
-    </div>
+    </div>-->
 
-    <div class="panels">
+    <!--<div class="panels">
         <form class="form-inline pull-right" role="form" ng-show="sign.sign_child.length > 1">
             <div class="form-group">
                 <label class="sr-only" for="exampleInputEmail2">Filter</label>
                 <input type="text" class="form-control panels-filter" id="exampleInputEmail2" placeholder="Filter" ng-model="filterChildren">
             </div>
-            <!-- <button type="submit" class="btn btn-default">Sign in</button> -->
         </form>
         <h2>Children</h2>
         <div ng-hide="signTracker.active()">
@@ -109,7 +102,6 @@
                                     <div style="width:50px;height:50px">
                                         <colormap classifications="sign.classifications" type="sign"></colormap>      
                                     </div>
-                                    <!-- <img src="http://dummyimage.com/40x40/fdd835/fdd835" alt="" class="media-body"> -->
                                 </div>
                                 <div class="media-body">
                                     <div>
@@ -129,12 +121,8 @@
 
                         <div class="list-group" ng-show="disorder_phenotype.ds_sign.sign_dissign.length">
                             <a class="list-group-item" ui-sref="sign({signId: disorder_phenotype.ds_sign.nid })">
-                                <!-- <div class="row" style="font-size: 12px;"> -->
-                                <!-- <div class="col-sm-12"> -->
                                 <i class="fa fa-search"></i> View Disorders
                                 <span class="text-muted text-uppercase">({{ disorder_phenotype.ds_sign.sign_dissign.length }})</span>
-                                <!-- </div> -->
-                                <!-- </div> -->
                             </a>
                             </ul>
 
@@ -146,7 +134,7 @@
         <div class="spinner" ng-show="signTracker.active();">
             <i class="fa fa-spin fa-circle-o-notch"></i>
         </div>
-    </div>
+    </div>-->
 
 
     <div class="panels">
@@ -158,11 +146,11 @@
             <!-- <button type="submit" class="btn btn-default">Sign in</button> -->
         </form>
 
-        <h2>Disorders</h2>
+        <h2>Phentype</h2>
 
         <div ng-show="sign.disorders">
             <p ng-hide="sign.disorders.length" class="text-muted">
-                Root disorder.
+                Root sign.
             </p>
 
             <div class="row" ng-repeat="row in sign.disorders | limitTo:limit | filter:disordersFilter | inSlicesOf:3">
@@ -181,7 +169,7 @@
                                             {{ disorder.title }}
                                         </strong>
                                     </a>
-                                    <p>An Orphanet summary for this disease is currently under development.</p>
+                                    <p>An HPO summary for this disease is currently under development.</p>
                                 </div>
                             </div>
 

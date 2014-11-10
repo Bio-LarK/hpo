@@ -526,19 +526,15 @@
             </div>
         </div>
 
-        <div class="panels">
+        <!--<div class="panels">
             <form class="form-inline pull-right" role="form" ng-show="disorder.disorder_disgene.length > 1">
                 <div class="form-group">
                     <label class="sr-only" for="exampleInputEmail2">Filter</label>
                     <input type="text" class="form-control panels-filter" id="exampleInputEmail2" placeholder="Filter" ng-model="filterGenotype">
                 </div>
-                <!-- <button type="submit" class="btn btn-default">Sign in</button> -->
             </form>
 
             <h2>Genotype
-                <!-- <button class="btn btn-default">
-                    <i class="fa fa-plus"></i>
-                </button> -->
             </h2>
 
             <div class="spinner" ng-show="genesTracker.active();">
@@ -567,7 +563,6 @@
                                             <h5 style="display: inline">
                                                 <a ui-sref="gene({geneId: disorder_gene.disgene_gene.nid})">{{ disorder_gene.disgene_gene.title }}</a>
                                             </h5>
-                                            <!--<span ng-repeat="syn in disorder_gene.disgene_gene.gene_synonym">, {{ syn }}</span>)-->
                                         </div>
                                         <div style="margin-top: 10px;">
                                             <div class="detail detail-genotype">
@@ -590,12 +585,10 @@
                         </div>
 
 
-                        <!-- editable -->
                         <div class="panel panel-default editable-card" ng-click="editDisorderGene(disorder_gene)" ng-show="isEditing">
                             <div class="panel-body">
                                 <div class="media">
                                     <div class="pull-left">
-                                        <!-- <img src="http://dummyimage.com/40x40/f57f17/f57f17" alt="" class="media-body"> -->
                                     </div>
                                     <div class="media-body">
                                         <div>
@@ -605,7 +598,6 @@
                                             <h5 style="display: inline">
                                                 {{ disorder_gene.disgene_gene.title }}
                                             </h5>
-                                            <!--<span ng-repeat="syn in disorder_gene.disgene_gene.gene_synonym">, {{ syn }}</span>)-->
                                         </div>
                                         <div style="margin-top: 10px;">
                                             <div class="detail detail-genotype">
@@ -624,7 +616,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
 
         <div class="panels">
             <!-- <button class="btn btn-default pull-right">Edit</button> -->
@@ -635,7 +627,7 @@
                 </div>
                 <!-- <button type="submit" class="btn btn-default">Sign in</button> -->
             </form>
-            <h2>Phenotype</h2>
+            <h2>Disorders</h2>
             <div class="spinner" ng-show="signsTracker.active();">
                 <i class="fa fa-spin fa-circle-o-notch"></i>
             </div>
@@ -675,7 +667,7 @@
 
                             <div class="list-group" ng-show="disorder_phenotype.ds_sign.sign_dissign.length">
                                 <a class="list-group-item" ui-sref="sign({signId: disorder_phenotype.ds_sign.nid })">
-                                    <i class="fa fa-search"></i> View Disorders
+                                    <i class="fa fa-search"></i> View Phenotype
                                     <span class="text-muted text-uppercase">({{ disorder_phenotype.ds_sign.sign_dissign.length }})</span>
                                 </a>
                             </div>
@@ -707,7 +699,3 @@
             </div>
         </div>
     </div>
-
-    <pre>
-        {{ disorder | json }}
-    </pre>
