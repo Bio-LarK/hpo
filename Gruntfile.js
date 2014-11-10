@@ -27,22 +27,6 @@ module.exports = function(grunt) {
         // Project settings
         yeoman: appConfig,
 
-        'gh-pages': {
-            options: {
-                base: '<%= yeoman.dist %>'
-            },
-            'gh-pages': {
-                src: ['**']
-            },
-            'live': {
-                options: {
-                    branch: 'master',
-                    repo: 'ssh://craig@130.56.248.140/var/repo/orphanet.git'
-                },
-                src: ['**']
-            }
-        },
-
         ngconstant: {
             // Options for all targets
             options: {
@@ -58,7 +42,7 @@ module.exports = function(grunt) {
                 constants: {
                     ENV: {
                         name: 'development',
-                        apiEndpoint: 'api'
+                        apiEndpoint: 'drupal/api'
                     }
                 }
             },
@@ -69,15 +53,16 @@ module.exports = function(grunt) {
                 constants: {
                     ENV: {
                         name: 'production',
-                        apiEndpoint: '/drupal/api'
+                        apiEndpoint: 'drupal/api'
                     }
                 }
             }
         },
 
-
         changelog: {
-            options: {}
+            options: {
+                version: require('./package.json').version
+            }
         },
 
         buildcontrol: {
@@ -86,17 +71,17 @@ module.exports = function(grunt) {
                 commit: true,
                 push: true,
                 message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%',
-                connectCommits: true
+                connectCommits: false
             },
             pages: {
                 options: {
-                    remote: 'git@github.com:Bio-LarK/orpha.git',
+                    remote: 'https://github.com/Bio-LarK/orpha.git',
                     branch: 'gh-pages'
                 }
             },
             live: {
                 options: {
-                    remote: 'ssh://craig@130.56.248.140/var/repo/orphanet.git',
+                    remote: 'ssh://craig@130.56.248.140/var/repo/hpo.git',
                     branch: 'master',
                     tag: require('./package.json').version
                 }
@@ -114,8 +99,8 @@ module.exports = function(grunt) {
                 files: ['package.json'],
                 updateConfigs: [],
                 commit: true,
-                commitMessage: 'chore(release): v%VERSION%',
-                commitFiles: ['-a'],
+                commitMessage: 'Release v%VERSION%',
+                commitFiles: ['package.json', 'CHANGELOG.md'],
                 createTag: true,
                 tagName: 'v%VERSION%',
                 tagMessage: 'Version %VERSION%',
@@ -134,7 +119,7 @@ module.exports = function(grunt) {
             },
             js: {
                 files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
-                tasks: ['newer:jshint:all'],
+                tasks: ['newer:jshint:all', 'karma'],
                 options: {
                     livereload: '<%= connect.options.livereload %>'
                 }
@@ -170,24 +155,14 @@ module.exports = function(grunt) {
                 hostname: 'localhost',
                 livereload: 35729
             },
-            // proxies: [{
-            //     context: '/orphanet/api',
-            //     host: '130.56.248.140',
-            //     https: false
-            // }],
             proxies: [{
-                context: '/api',
-                // host: 'orphanet.bio-lark.org',
-                // headers: {
-                //     host: 'orphanet.bio-lark.org:80'
-                // },
-
-                host: 'hpo.bio-lark.org',
-                headers: {
-                    host: 'hpo.bio-lark.org:80'
-                },
+                context: '/drupal',
+                host: '130.56.248.140',
                 rewrite: {
-                    '^/api': '/drupal/api',
+                    '^/drupal': '/hpo/drupal',
+                },
+                headers: {
+                    host: '130.56.248.140:80'
                 }
             }],
             livereload: {
@@ -348,7 +323,8 @@ module.exports = function(grunt) {
                     '<%= yeoman.dist %>/scripts/{,*/}*.js',
                     '<%= yeoman.dist %>/styles/{,*/}*.css',
                     '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-                    '<%= yeoman.dist %>/styles/fonts/*'
+                    '<%= yeoman.dist %>/styles/fonts/*',
+                    '!<%= yeoman.dist %>/images/logo-vitruvian.svg',
                 ]
             }
         },
@@ -490,22 +466,22 @@ module.exports = function(grunt) {
                     dest: '<%= yeoman.dist %>/images',
                     src: ['generated/*']
                 }, {
-                    // put drupal in the dist
-                    expand: true,
-                    dot: true, // include hidden files
-                    cwd: 'drupal',
-                    dest: '<%= yeoman.dist %>/drupal',
-                    src: ['**']
-                }, {
                     expand: true,
                     cwd: '.',
                     src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
                     dest: '<%= yeoman.dist %>'
                 }, {
                     expand: true,
-                    cwd: 'bower_components/fontawesome/fonts',
+                    cwd: 'bower_components/font-awesome/fonts',
                     src: ['**'],
                     dest: '<%= yeoman.dist %>/fonts'
+                }, {
+                    // put drupal in the dist
+                    expand: true,
+                    dot: true, // include hidden files
+                    cwd: 'drupal',
+                    dest: '<%= yeoman.dist %>/drupal',
+                    src: ['**', '!sites/default/settings.php', '!sites/default/files/**/*']
                 }]
             },
             styles: {
@@ -594,11 +570,6 @@ module.exports = function(grunt) {
         'test',
         'build'
     ]);
-
-    grunt.registerTask('deploypages', 'Builds and deploys', function(type) {
-        type = type || 'patch';
-        grunt.task.run(['build', 'bump-only:' + type, 'changelog', 'bump-commit', 'buildcontrol:pages']);
-    });
 
     grunt.registerTask('deploy', 'Builds and deploys', function(type) {
         type = type || 'patch';
