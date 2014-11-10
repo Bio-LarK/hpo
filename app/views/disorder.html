@@ -1,0 +1,715 @@
+<div>
+    <style>
+    .details {
+        float: left;
+        margin-bottom: 0;
+        margin-right: 20px;
+    }
+    .detailsa h3 {
+        font-size: 14px;
+        margin: 0;
+        color: rgba(0, 0, 0, 0.87);
+    }
+    .detailsa {
+        color: rgba(0, 0, 0, 0.54);
+        margin-bottom: 0;
+    }
+    </style>
+
+    <div class="page-nav">
+        <div class="page-nav-sticky" ui-scrollfix="-50">
+            <div class="container">
+                <!--<ul class="nav nav-pills" role="tablist">
+                    <li ng-class="{'active': $state.includes('disorder') && !isEditing }">
+                        <a href ng-click="stopEditing();">
+                            <i class="fa fa-globe"></i>
+                            Abstract
+                        </a>
+                    </li>
+                    <li>
+                        <a href ng-click="stopEditing();">
+                            <i class="fa fa-globe"></i>
+                            Classification
+                        </a>
+                    </li>
+                    <li>
+                        <a href ng-click="stopEditing();">
+                            <i class="fa fa-globe"></i>
+                            Parents
+                        </a>
+                    </li>
+                    <li>
+                        <a href ng-click="stopEditing();">
+                            <i class="fa fa-globe"></i>
+                            Children
+                        </a>
+                    </li>
+                    <li>
+                        <a href ng-click="stopEditing();">
+                            <i class="fa fa-globe"></i>
+                            Genotype
+                        </a>
+                    </li>
+                    <li>
+                        <a href ng-click="stopEditing();">
+                            <i class="fa fa-globe"></i>
+                            Phenotype
+                        </a>
+                    </li>
+                </ul>-->
+                <ul class="nav nav-pills">
+                    <li ng-class="{'active': $state.includes('disorder') && !isEditing }">
+                        <a href ng-click="stopEditing();">
+                            <i class="fa fa-globe"></i>
+                            Public Page
+                        </a>
+                    </li>
+                    <li ng-class="{'active': $state.includes('disorder') && isEditing}">
+                        <a href ng-click="startEditing();">
+                            <i class="fa fa-pencil"></i>
+                            Edit
+                        </a>
+                    </li>
+                    <li class="disabled">
+                        <a href tooltip="Coming soon">
+                            Suggestions
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!-- <div class="edit-bar" style="background-color: white; padding: 10px;" ui-scrollfix>
+        <div class="container "> -->
+    <!-- <div>
+                <button class="btn btn-default" ng-click="startEditing()" ng-hide="isEditing"><i class="fa fa-pencil"></i> Edit</button>
+                <button class="btn btn-default" ng-click="stopEditing()" ng-show="isEditing"><i class="fa fa-check"></i> Finish Editing</button>
+            </div> -->
+
+    <!-- <div class="btn-group">
+                <label class="btn btn-default" ng-class="{'btn-primary': isEditing}" ng-model="isEditing" btn-radio="true">Suggest Change</label>
+                <label class="btn btn-default" ng-model="isEditing" btn-radio="false">Off</label>
+            </div> -->
+
+    <!-- <div class="btn-group"> -->
+    <!-- <button class="btn btn-link">
+                <img src="https://s3.amazonaws.com/uifaces/faces/twitter/aaroni/48.jpg" style="width:18px;height:18px" alt="" />Dr John Smith
+            </button> -->
+
+
+
+    <!-- <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Action</a>
+                    </li>
+                    <li><a href="#">Another action</a>
+                    </li>
+                    <li><a href="#">Something else here</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li><a href="#">Separated link</a>
+                    </li>
+                </ul>
+            </div>
+ -->
+    <!-- <span style="border: 1px solid #ddd; height: 100%; margin: 0 10px; padding: 5px 0" class=""></span>
+
+            <span>
+                Multiple Epiphyseal Dysplasia, Al-Gazali Type
+            </span> -->
+
+
+    <!-- <div class="btn-group">
+                <label class="btn btn-default" ng-class="{'btn-primary': isEditing}" ng-model="isEditing" btn-radio="false">Page</label>
+                <label class="btn btn-default" ng-model="isEditing" btn-radio="true">
+                    Suggestions
+                    <span class="label label-default">3</span>
+                </label>
+            </div> -->
+
+    <!-- <div style="display: inline-block;" class="pull-right">
+                <button class="btn btn-link">
+                    Suggestions
+                    <span class="label label-primary">3</span>
+                </button>
+                <button class="btn btn-link">
+                    Edit
+                </button>
+            </div> -->
+
+
+    <!-- </div>
+    </div> -->
+    <div class="container">
+
+        <div class="title">
+            <div class="pull-right text-muted text-right" ng-hide="disorderTracker.active()">
+
+                Updated {{ disorder.changed * 1000 | date:'d/M/yyyy' }}
+            </div>
+            <div class="media">
+                <div class="pull-left">
+
+                    <div style="width:70px;height:70px;">
+                        <colormap classifications="disorder.disorder_class" type="disorder"></colormap>
+
+                        <!-- <div ng-repeat="classification in disorder.disorder_class|orderBy:'hueIndex'" style="display:inline-block;background-color:{{classification.getColor()}};width:{{100/disorder.disorder_class.length}}%;height:100%;border-left:2px solid white;" tooltip="{{ classification.title }}" ui-sref="classification({classificationId: classification.nid })">
+                        </div> -->
+                    </div>
+                </div>
+                <div class="media-body">
+                    <h1>
+                        <span ng-show="isEditing" class="editable" ng-click="editTitle()">
+                            {{ disorder.title || 'Loading...' }}
+                        </span>
+                        <span ng-hide="isEditing">
+                            {{ disorder.title || 'Loading...' }}
+                        </span>
+                    </h1>
+                    <div style="color: rgba(0,0,0,0.5); margin-top: 7px;" ng-show="disorder.disorder_synonym.length">
+
+                        <span>
+                            <small style="font-size: 16px;">
+                                Synonyms:
+                                <span ng-repeat="synonym in disorder.disorder_synonym">
+                                    {{ synonym }}
+                                    <span ng-show="!$last">,</span>
+                                </span>
+                            </small>
+                        </span>
+                    </div>
+                    <div style="margin-top: 5px;">
+                        <p class="text-muted"></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="panels">
+            <div class="spinner" ng-show="disorderTracker.active();">
+                <i class="fa fa-spin fa-circle-o-notch"></i>
+            </div>
+            <div class="row" ng-hide="disorderTracker.active()">
+                <div class="col-sm-8">
+                    <div class="panel panel-default">
+                        <div class="list-group">
+                            <div class="list-group-item">
+                                <div class="row" ng-show="isEditing">
+                                    <div class="col-sm-3">
+                                        <div class="detail">
+                                            <h3 class="detail-title">Prevalence Class</h3>
+                                            <div class="detail-info" ng-click="editPrevalenceClass()">
+                                                <span class="editable">{{ disorder.disorder_prevalence.title || 'Unknown' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="detail">
+                                            <h3 class="detail-title">Age of Onset</h3>
+                                            <div class="detail-info" ng-click="editAgeOfOnset()">
+                                                <span class="editable">
+                                                    {{ disorder.disorder_onset.title || 'Unknown' }}
+                                                </span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="detail">
+                                            <h3 class="detail-title">Age of Death</h3>
+                                            <div class="detail-info" ng-click="editAgeOfDeath()">
+                                                <span class="editable">
+                                                    {{ disorder.disorder_death.title || 'Unknown' }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="detail">
+                                            <h3 class="detail-title">Type of Inheritance</h3>
+                                            <div>
+                                                <div class="text-muted" ng-hide="disorder.disorder_inheritance.length">Unknown</div>
+                                                <div ng-repeat="inheritance in disorder.disorder_inheritance" class="detail-info">
+                                                    {{ inheritance.title }}
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row" ng-hide="isEditing">
+                                    <div class="col-sm-3">
+                                        <div class="detail">
+                                            <h3 class="detail-title">Prevalence Class</h3>
+                                            <div class="detail-info">
+                                                <span class="">{{ disorder.disorder_prevalence.title || 'Unknown' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="detail">
+                                            <h3 class="detail-title">Age of Onset</h3>
+                                            <div class="detail-info">
+                                                <span class="">
+                                                    {{ disorder.disorder_onset.title || 'Unknown' }}
+                                                </span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="detail">
+                                            <h3 class="detail-title">Age of Death</h3>
+                                            <div class="detail-info">
+                                                <span class="">
+                                                    {{ disorder.disorder_death.title || 'Unknown' }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="detail">
+                                            <h3 class="detail-title">Type of Inheritance</h3>
+                                            <div>
+                                                <div class="text-muted" ng-hide="disorder.disorder_inheritance.length">Unknown</div>
+                                                <div ng-repeat="inheritance in disorder.disorder_inheritance" class="detail-info">
+                                                    {{ inheritance.title }}
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body" ng-click="isEditing && editDescription()" ng-class="{'editable-card': isEditing}">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <!--   <div class="row">
+                                        <div class="col-sm-4">
+                                            <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Idiopathic_cardiomyopathy%2C_gross_pathology_20G0018_lores.jpg/345px-Idiopathic_cardiomyopathy%2C_gross_pathology_20G0018_lores.jpg" alt="" class="pull-left img-responsive" style="border: 1px solid grey;">
+                                        </div>
+                                        <div class="col-sm-8" style="border-left: 1px solid #ccc;"> -->
+                                    <div ng-bind-html="disorder.body"></div>
+                                    <!-- </div>
+                                    </div> -->
+
+
+
+
+                                </div>
+
+                                <!--<div class="col-sm-3">
+                                    <div class="details">
+                                        <h3>Prevalence Class</h3>
+                                        <div>
+                                            <a href="{{ disorder.disorder_prevalence.prevalence_orphaid }}">
+                                                    {{ disorder.disorder_prevalence.prevalence_name }}
+                                                </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="details">
+                                        <h3>Age of Onset</h3>
+                                        <div>
+                                            <a href="{{ disorder.disorder_onset.aoo_orphaid }}">
+                                                {{ disorder.disorder_onset.aoo_name }}
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="details">
+                                        <h3>Age of Death</h3>
+                                        <div>
+                                            <a href="{{ disorder.disorder_death.aod_orphaid }}">
+                                                {{ disorder.disorder_death.aod_name }}
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="details">
+                                        <h3>Type of Inheritance</h3>
+                                        <div ng-repeat="inheritance in disorder.disorder_inheritance">
+                                            <a href="{{ inheritance.toi_orphaid }}">
+                                                {{ inheritance.toi_name }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>-->
+
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4 style="margin: 0; font-weight: bold; color:rgba(0,0,0,0.6); margin-bottom: 14px; font-size: 14px;">External Identifiers</h4>
+
+                            <dl class="dl-horizontal detail detail-externalidentifiers" style="margin: 0;">
+                                <dt class="detail-title">Orphanumber</dt>
+                                <dd class="detail-info">
+                                    <a target="_" ng-href="http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=EN&Expert={{ disorder.disorder_orphanumber }}">
+                                        ORPHA{{ disorder.disorder_orphanumber }}    
+                                    </a>
+                                </dd>
+
+                                <dt class="detail-title" ng-repeat-start="er in disorder.disorder_er">
+                                    {{ er.er_source }}
+                                </dt>
+                                <dd ng-repeat-end class="detail-info">
+                                    {{ er.er_reference }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panels">
+            <h2>Classification</h2>
+            <div class="spinner" ng-show="disorderTracker.active();">
+                <i class="fa fa-spin fa-circle-o-notch"></i>
+            </div>
+
+            <div ng-hide="disorderTracker.active()">
+                <p ng-show="disorder.disorder_root == 0 && disorder.disorder_parent.length == 0" class="text-muted">
+                    No classification found.
+                </p>
+                <div class="row">
+
+                    <div class="col-sm-12">
+                        <div class="row" ng-repeat="row in disorder.disorder_class | inSlicesOf:3">
+                            <div class="col-sm-4" ng-repeat="classification in row">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="media">
+                                            <div class="pull-left">
+                                                <div style="width:50px;height:50px;">
+                                                    <colormap classification="classification" type="disorder"></colormap>
+                                                </div>
+                                                <!-- <div style="display:inline-block;background-color:{{classification.getColor()}};width:40px;height:40px;"></div> -->
+                                            </div>
+                                            <div class="media-body">
+                                                <h5>
+                                                    <a ui-sref="classification({classificationId: classification.nid})">
+                                                        {{ classification.title }}
+                                                    </a> 
+                                                </h5>
+                                                <p>An Orphanet summary for this classification is currently under development.</p>
+                                                <!-- <ul class="list-unstyled" style="margin: 0;">
+                                                    <li ng-repeat="parent in classification.parents">
+                                                        <a ui-sref="classification({classificationId: classification.nid, disorderId: parent.nid})">{{ parent.title }}</a>
+                                                    </li>
+                                                </ul> -->
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="list-group">
+                                        <a class="list-group-item" href ui-sref="classification({classificationId: classification.nid, disorderId: disorder.nid})">
+                                            <i class="fa fa-bullseye"></i> Open to location of {{ disorder.title }}
+                                        </a>
+                                        <!-- <div class="list-group-item" ng-show="classification.parents.length">
+                                            <h5>Parents</h5>
+                                            <ul class="list-unstyled">
+                                                <li ng-repeat="parent in classification.parents">
+                                                    <a ui-sref="classification({classificationId: classification.nid, disorderId: parent.nid})">{{ parent.title }}</a>
+                                                </li>
+                                            </ul>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panels">
+            <form class="form-inline pull-right" role="form" ng-show="disorder.disorder_parent.length > 1">
+                <div class="form-group">
+                    <label class="sr-only" for="exampleInputEmail2">Filter</label>
+                    <input type="text" class="form-control panels-filter" id="exampleInputEmail2" placeholder="Filter" ng-model="filterChildren">
+                </div>
+                <!-- <button type="submit" class="btn btn-default">Sign in</button> -->
+            </form>
+
+            <h2>Parents</h2>
+            <div class="spinner" ng-show="disorderTracker.active();">
+                <i class="fa fa-spin fa-circle-o-notch"></i>
+            </div>
+            <div ng-hide="disorderTracker.active()">
+                <p ng-hide="disorder.disorder_parent.length" class="text-muted">
+                    No parents.
+                </p>
+
+                <div class="row" ng-repeat="row in disorder.disorder_parent | filter:filterChildren |  inSlicesOf:3">
+                    <div class="col-sm-4" ng-repeat="parent in row">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <div style="width:40px;height:40px;">
+                                            <colormap classifications="parent.disorder_class" type="disorder"></colormap>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5>
+                                            <a ui-sref="disorder({disorderId: parent.nid})">
+                                                {{ parent.title }}
+                                            </a>
+                                        </h5>
+
+                                        <p>An Orphanet summary for this disease is currently under development.</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="panels">
+            <form class="form-inline pull-right" role="form" ng-show="disorder.disorder_child.length > 1">
+                <div class="form-group">
+                    <label class="sr-only" for="exampleInputEmail2">Filter</label>
+                    <input type="text" class="form-control panels-filter" id="exampleInputEmail2" placeholder="Filter" ng-model="filterChildren">
+                </div>
+                <!-- <button type="submit" class="btn btn-default">Sign in</button> -->
+            </form>
+
+            <h2>Children</h2>
+            <div class="spinner" ng-show="disorderTracker.active();">
+                <i class="fa fa-spin fa-circle-o-notch"></i>
+            </div>
+            <div ng-hide="disorderTracker.active()">
+                <p ng-hide="disorder.disorder_child.length" class="text-muted">
+                    No children.
+                </p>
+
+                <div class="row" ng-repeat="row in disorder.disorder_child | filter:filterChildren |  inSlicesOf:3">
+                    <div class="col-sm-4" ng-repeat="child in row">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <div style="width:40px;height:40px;">
+                                            <colormap classifications="child.disorder_class" type="disorder"></colormap>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5>
+                                            <a ui-sref="disorder({disorderId: child.nid})">
+                                                {{ child.title }}
+                                            </a>
+                                        </h5>
+
+                                        <p>An Orphanet summary for this disease is currently under development.</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panels">
+            <form class="form-inline pull-right" role="form" ng-show="disorder.disorder_disgene.length > 1">
+                <div class="form-group">
+                    <label class="sr-only" for="exampleInputEmail2">Filter</label>
+                    <input type="text" class="form-control panels-filter" id="exampleInputEmail2" placeholder="Filter" ng-model="filterGenotype">
+                </div>
+                <!-- <button type="submit" class="btn btn-default">Sign in</button> -->
+            </form>
+
+            <h2>Genotype
+                <!-- <button class="btn btn-default">
+                    <i class="fa fa-plus"></i>
+                </button> -->
+            </h2>
+
+            <div class="spinner" ng-show="genesTracker.active();">
+                <i class="fa fa-spin fa-circle-o-notch"></i>
+            </div>
+            <div ng-hide="genesTracker.active()">
+                <p ng-hide="disorder.disorder_disgene.length" class="text-muted">
+                    No genotype.
+                </p>
+                <div class="row" ng-repeat="row in disorder.disorder_disgene | filter:filterGenotype | inSlicesOf:3">
+                    <div class="col-sm-4" ng-repeat="disorder_gene in row">
+
+                        <div class="panel panel-default" ng-hide="isEditing">
+                            <div class="panel-body">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <div style="width:40px;height:40px;">
+                                            <colormap classifications="disorder_gene.disgene_gene.classifications" type="gene"></colormap>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <div>
+                                            <span class="text-muted">
+                                                {{ disorder_gene.disgene_at.title }}
+                                            </span>
+                                            <h5 style="display: inline">
+                                                <a ui-sref="gene({geneId: disorder_gene.disgene_gene.nid})">{{ disorder_gene.disgene_gene.title }}</a>
+                                            </h5>
+                                            <!--<span ng-repeat="syn in disorder_gene.disgene_gene.gene_synonym">, {{ syn }}</span>)-->
+                                        </div>
+                                        <div style="margin-top: 10px;">
+                                            <div class="detail detail-genotype">
+                                                <div class="detail-title">
+                                                    Status:
+                                                </div>
+                                                <div class="detail-info">
+                                                    {{ disorder_gene.disgene_as.title }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group">
+                                <a ui-sref="gene({geneId: disorder_gene.disgene_gene.nid})" class="list-group-item">
+                                    <i class="fa fa-search"></i> View Disorders
+                                </a>
+                            </div>
+                        </div>
+
+
+                        <!-- editable -->
+                        <div class="panel panel-default editable-card" ng-click="editDisorderGene(disorder_gene)" ng-show="isEditing">
+                            <div class="panel-body">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <!-- <img src="http://dummyimage.com/40x40/f57f17/f57f17" alt="" class="media-body"> -->
+                                    </div>
+                                    <div class="media-body">
+                                        <div>
+                                            <span class="text-muted">
+                                                {{ disorder_gene.disgene_at.title }}
+                                            </span>
+                                            <h5 style="display: inline">
+                                                {{ disorder_gene.disgene_gene.title }}
+                                            </h5>
+                                            <!--<span ng-repeat="syn in disorder_gene.disgene_gene.gene_synonym">, {{ syn }}</span>)-->
+                                        </div>
+                                        <div style="margin-top: 10px;">
+                                            <div class="detail detail-genotype">
+                                                <div class="detail-title">
+                                                    Status:
+                                                </div>
+                                                <div class="detail-info">
+                                                    {{ disorder_gene.disgene_as.title }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panels">
+            <!-- <button class="btn btn-default pull-right">Edit</button> -->
+            <form class="form-inline pull-right" role="form" ng-show="disorder.disorder_phenotype.length > 1">
+                <div class="form-group">
+                    <label class="sr-only" for="exampleInputEmail2">Filter</label>
+                    <input type="text" class="form-control panels-filter" id="exampleInputEmail2" placeholder="Filter" ng-model="filterPhenotype">
+                </div>
+                <!-- <button type="submit" class="btn btn-default">Sign in</button> -->
+            </form>
+            <h2>Phenotype</h2>
+            <div class="spinner" ng-show="signsTracker.active();">
+                <i class="fa fa-spin fa-circle-o-notch"></i>
+            </div>
+            <div ng-hide="signsTracker.active();">
+                <p ng-hide="disorder.disorder_phenotype.length" class="text-muted">
+                    No phenotype.
+                </p>
+                <div class="row" ng-repeat="row in disorder.disorder_phenotype | filter:filterPhenotype | inSlicesOf:3">
+                    <div class="col-sm-4 repeated-item" ng-repeat="disorder_phenotype in row">
+
+
+                        <div class="panel panel-default" ng-hide="isEditing">
+                            <div class="panel-body">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <div style="width:40px;height:40px;">
+                                            <colormap classifications="disorder_phenotype.ds_sign.classifications" type="sign"></colormap>
+                                        </div>
+                                        <!-- <img src="http://dummyimage.com/40x40/fdd835/fdd835" alt="" class="media-body"> -->
+                                    </div>
+                                    <div class="media-body">
+                                        <div>
+                                            <h5>
+                                                <a ui-sref="sign({signId: disorder_phenotype.ds_sign.nid })">
+                                                    {{ disorder_phenotype.ds_sign.title }}
+                                                </a>
+                                            </h5>
+                                            <p class="" ng-hide="disorder_phenotype.ds_sign.title">Loading...</p>
+                                        </div>
+                                        <div class="text-muted">
+                                            {{ disorder_phenotype.ds_frequency.title }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="list-group" ng-show="disorder_phenotype.ds_sign.sign_dissign.length">
+                                <a class="list-group-item" ui-sref="sign({signId: disorder_phenotype.ds_sign.nid })">
+                                    <i class="fa fa-search"></i> View Disorders
+                                    <span class="text-muted text-uppercase">({{ disorder_phenotype.ds_sign.sign_dissign.length }})</span>
+                                </a>
+                            </div>
+                        </div>
+
+
+                        <div class="panel panel-default editable-card" ng-click="editDisorderPhenotype(disorder_phenotype)" ng-show="isEditing">
+                            <div class="panel-body">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <!-- <img src="http://dummyimage.com/40x40/fdd835/fdd835" alt="" class="media-body"> -->
+                                    </div>
+                                    <div class="media-body">
+                                        <div>
+                                            <h5>
+                                                {{ disorder_phenotype.ds_sign.sign_name }}
+                                            </h5>
+                                            <p class="" ng-hide="disorder_phenotype.ds_sign.sign_name">Loading...</p>
+                                        </div>
+                                        <div class="text-muted">
+                                            {{ disorder_phenotype.ds_frequency.title }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>

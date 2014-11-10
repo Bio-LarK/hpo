@@ -1,0 +1,7 @@
+name = Age Of Onset
+description = Provides the implementation for the Age of Onset content type.
+core = 7.x
+package = Orphanet
+
+files[] = age_of_onset.module
+files[] = age_of_onset.install

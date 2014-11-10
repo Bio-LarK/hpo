@@ -1,0 +1,7 @@
+name = Disorder Gene At
+description = Provides the implementation for the Disorder - Gene association type.
+core = 7.x
+package = Orphanet
+
+files[] = disorder_gene_at.module
+files[] = disorder_gene_at.install

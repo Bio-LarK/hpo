@@ -1,0 +1,234 @@
+<?php
+
+// $Id: clinical_sign.install $
+
+function clinical_sign_install() {
+    $t = get_t();
+
+    $clinical_sign = array(
+        'type' => 'clinical_sign',
+        'name' => $t('Clinical sign'),
+        'base' => 'node_content',
+        'description' => $t('The Clinical sign content type.')
+    );
+
+    $content_type = node_type_set_defaults($clinical_sign);
+    node_add_body_field($content_type);
+    node_type_save($content_type);
+
+    $body_instance = field_info_instance('node', 'body', 'clinical_sign');
+    $body_instance['type'] = 'text_long';
+    $body_instance['label'] = 'Definition';
+
+    foreach (_clinical_sign_installed_fields() as $field) {
+        field_create_field($field);
+    }
+
+    foreach (_clinical_sign_installed_instances() as $instance) {
+        $instance['entity_type'] = 'node';
+        $instance['bundle'] = $clinical_sign['type'];
+        field_create_instance($instance);
+    }
+
+    variable_set('comment_clinical_sign', COMMENT_NODE_CLOSED);
+    variable_set('node_options_clinical_sign', array('status'));
+    variable_set('node_preview_clinical_sign', DRUPAL_DISABLED);
+    variable_set('node_submitted_clinical_sign', FALSE);
+}
+
+function _clinical_sign_installed_fields() {
+    $t = get_t();
+    return array(
+        'field_sign_orphaid' => array(
+            'field_name'	=> 'field_sign_orphaid',
+            'label'		=> $t('Orpha ID'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_sign_name' => array(
+            'field_name'	=> 'field_sign_name',
+            'label'		=> $t('Name'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_sign_parent' => array(
+            'field_name'	=> 'field_sign_parent',
+            'label'		=> $t('Parent'),
+            'cardinality'	=> -1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+                'referenceable_types' => array(
+                    'clinical_sign' => 'clinical_sign'
+                )
+            )
+        ),
+        'field_sign_child' => array(
+            'field_name'	=> 'field_sign_child',
+            'label'		=> $t('Child'),
+            'cardinality'	=> -1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+                'referenceable_types' => array(
+                    'clinical_sign' => 'clinical_sign'
+                )
+            )
+        ),
+        'field_sign_dissign' => array(
+            'field_name'	=> 'field_sign_dissign',
+            'label'		=> $t('Disorder-Sign association'),
+            'cardinality'	=> -1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+                'referenceable_types' => array(
+                    'disorder_sign' => 'disorder_sign'
+                )
+            )
+        ),
+    );
+}
+
+function _clinical_sign_installed_instances() {
+    $t = get_t();
+    return array(
+        'field_sign_orphaid' => array(
+            'field_name' => 'field_sign_orphaid',
+            'label'       => $t('Orpha ID'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_sign_name' => array(
+            'field_name' => 'field_sign_name',
+            'label'       => $t('Name'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_sign_parent' => array(
+            'field_name'	=> 'field_sign_parent',
+            'label'		=> $t('Parent'),
+            'cardinality'	=> -1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_sign_child' => array(
+            'field_name'	=> 'field_sign_child',
+            'label'		=> $t('Child'),
+            'cardinality'	=> -1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_sign_dissign' => array(
+            'field_name'	=> 'field_sign_dissign',
+            'label'		=> $t('Disorder-Sign association'),
+            'cardinality'	=> -1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+    );
+}
+
+function clinical_sign_uninstall() {
+    $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(':type' => 'clinical_sign'));
+    $nids = array();
+    foreach ($result as $row) {
+        $nids[] = $row->nid;
+    }
+
+    node_delete_multiple($nids);
+
+    foreach (array_keys(_clinical_sign_installed_fields()) as $field) {
+        field_delete_field($field);
+    }
+
+    $instances = field_info_instances('node', 'clinical_sign');
+    foreach ($instances as $instance_name => $instance) {
+        field_delete_instance($instance);
+    }
+
+    node_type_delete('clinical_sign');
+
+    field_purge_batch(1000);
+}

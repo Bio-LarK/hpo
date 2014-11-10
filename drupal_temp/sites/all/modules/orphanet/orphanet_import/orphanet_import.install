@@ -1,0 +1,9 @@
+<?php
+
+// $Id: orphanet_import.install $
+
+function orphanet_import_install() {
+}
+
+function orphanet_import_uninstall() {
+}

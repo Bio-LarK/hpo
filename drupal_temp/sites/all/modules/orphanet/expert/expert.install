@@ -1,0 +1,137 @@
+<?php
+
+// $Id: expert.install $
+
+function expert_install() {
+    $t = get_t();
+
+    $expert = array(
+        'type' => 'expert',
+        'name' => $t('Expert'),
+        'base' => 'node_content',
+        'description' => $t('The Expert content type.')
+    );
+
+    $content_type = node_type_set_defaults($expert);
+    node_add_body_field($content_type);
+    node_type_save($content_type);
+
+    $body_instance = field_info_instance('node', 'body', 'expert');
+    $body_instance['type'] = 'text_long';
+    $body_instance['label'] = 'Description';
+
+    field_update_instance($body_instance);
+
+    foreach (_expert_installed_fields() as $field) {
+        field_create_field($field);
+    }
+
+    foreach (_expert_installed_instances() as $instance) {
+        $instance['entity_type'] = 'node';
+        $instance['bundle'] = $expert['type'];
+        field_create_instance($instance);
+    }
+
+    variable_set('comment_expert', COMMENT_NODE_CLOSED);
+    variable_set('node_options_expert', array('status'));
+    variable_set('node_preview_expert', DRUPAL_DISABLED);
+    variable_set('node_submitted_expert', FALSE);
+}
+
+function _expert_installed_fields() {
+    $t = get_t();
+    return array(
+        'field_expert_orphaid' => array(
+            'field_name'	=> 'field_expert_orphaid',
+            'label'		=> $t('Orpha ID'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_expert_link' => array(
+            'field_name'	=> 'field_expert_link',
+            'label'		=> $t('Link'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        )
+    );
+}
+
+function _expert_installed_instances() {
+    $t = get_t();
+    return array(
+        'field_expert_orphaid' => array(
+            'field_name' => 'field_expert_orphaid',
+            'label'       => $t('Orpha ID'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_expert_link' => array(
+            'field_name' => 'field_expert_link',
+            'label'       => $t('Link'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        )
+    );
+}
+
+function expert_uninstall() {
+    $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(':type' => 'expert'));
+    $nids = array();
+    foreach ($result as $row) {
+        $nids[] = $row->nid;
+    }
+
+    node_delete_multiple($nids);
+
+    foreach (array_keys(_expert_installed_fields()) as $field) {
+        field_delete_field($field);
+    }
+
+    $instances = field_info_instances('node', 'expert');
+    foreach ($instances as $instance_name => $instance) {
+        field_delete_instance($instance);
+    }
+
+    node_type_delete('expert');
+
+    field_purge_batch(1000);
+}

@@ -1,0 +1,85 @@
+<div class="container">
+    <!-- <div ng-repeat="disorder in disorders">
+		{{ disorder.title | }}
+	</div> -->
+
+    <div class="title">
+        <div class="pull-right text-muted">
+            Updated {{ gene.changed * 1000 | date:'d/M/yyyy' }}
+        </div>
+        <div class="media">
+            <div class="pull-left">
+                <div style="width:70px;height:70px">
+                    <colormap classifications="gene.classifications" type="gene"></colormap>    
+                </div>
+                <!-- <img src="http://dummyimage.com/70x70/f57f17/f57f17" alt="" class="media-body"> -->
+            </div>
+            <div class="media-body">
+                <h1>
+                    {{ gene.title || 'Loading...' }} 
+                    <span>({{ gene.gene_symbol }})</span>
+                </h1>
+                <div style="color: rgba(0,0,0,0.5); margin-top: 7px;" ng-show="gene.gene_synonym.length">
+                    <small style="font-size: 16px;">
+                        Synonyms:
+                        <span ng-repeat="synonym in gene.gene_synonym">
+                            {{ synonym }}
+                            <span ng-show="!$last">,</span>
+                        </span>
+                    </small>
+                </div>
+                <div style="margin-top: 5px;">
+                    <p class="text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panels">
+
+    	<form class="form-inline pull-right" role="form" ng-show="disorders.length > 1">
+            <div class="form-group">
+                <label class="sr-only" for="exampleInputEmail2">Filter</label>
+                <input type="text" class="form-control panels-filter" id="exampleInputEmail2" placeholder="Filter" ng-model="disordersFilter">
+            </div>
+            <!-- <button type="submit" class="btn btn-default">Sign in</button> -->
+        </form>
+
+        <h2>Disorders</h2>
+        <div>
+            <p ng-hide="gene.gene_disgene.length" class="text-muted">
+                Root disorder.
+            </p>
+            
+            <div class="row" ng-repeat="row in gene.gene_disgene | filter:disordersFilter | inSlicesOf:3">
+                <div ng-repeat="disorderGene in row" class="col-sm-4">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <div style="width:40px;height:40px;">
+                                        <colormap classifications="disorderGene.disgene_disorder.disorder_class" type="disorder"></colormap>
+                                    </div>
+                                </div>
+                                <div class="media-body">
+                                    <!-- {{ disorderGene.disgene_as.title }} -->
+                                    <span class="text-muted">{{ disorderGene.disgene_at.title }}</span>
+                                    <a ui-sref="disorder({disorderId: disorderGene.disgene_disorder.nid})">
+                                        <strong>
+                                            {{ disorderGene.disgene_disorder.title }}
+                                        </strong>
+                                    </a>
+                                    <p>An Orphanet summary for this disease is currently under development.</p>
+                                </div>
+                            </div>
+            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="spinner" ng-show="geneTracker.active();">
+            <i class="fa fa-spin fa-circle-o-notch"></i>
+        </div>
+    </div>
+</div>

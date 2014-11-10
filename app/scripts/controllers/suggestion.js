@@ -7,67 +7,67 @@
  * # SuggestionCtrl
  * Controller of the orphaApp
  */
-angular.module('hpoApp')
-  .controller('SuggestionCtrl', function ($stateParams, transactionStatusService, 
-    TransactionRequest, $state, $http, toaster, ENV, $log) {
+angular.module('orphaApp')
+  .controller('SuggestionCtrl', function ($stateParams, TransactionRequest, $state,
+   $http, toaster, transactionStatusService, $log) {
     	var vm = this;
         vm.suggestion = null;
         vm.accept = accept;
         vm.reject = reject;
-        vm.statues = null;
+        vm.comments = [];
+        vm.comment = {};
+        vm.addComment = addComment;
         vm.isOpen = false;
     	activate();
 
     	//////////
     	function activate() {
-            transactionStatusService.loadStatusCodes().then(function() {
-                return getTransactions();
+            TransactionRequest.get({
+                nid: $stateParams.suggestionId
+            }).$promise.then(function(transactionRequest) {
+                transactionRequest.loadTransactions().then(function() {
+                    transactionRequest.loadDescription();    
+                });
+                
+                vm.suggestion = transactionRequest;
+                transactionStatusService.loadStatusCodes().then(function() {
+                    $log.debug('status codes loaded', vm.suggestion.tr_status);
+                    vm.isOpen = !transactionStatusService.isClosed(vm.suggestion.tr_status.nid);
+                    vm.suggestion.isAccepted = transactionStatusService.isAcceptedTr(vm.suggestion);
+                    vm.suggestion.isRejected = transactionStatusService.isRejectedTr(vm.suggestion);
+                    vm.suggestion.isSubmitted = transactionStatusService.isSubmittedTr(vm.suggestion);
+                });
+                // _.each(transactionRequest['$tr_trans'], function(listTransaction) {
+                //     listTransaction.loadReferences().then(function(listTransaction) {
+                //         // bit of moving stuff about
+                //         // the transaction request needs to know the nodes
+                //         // but it doesnt, so we just grab those from the first 
+                //         // list transaction
+                //         if(!transactionRequest.$relatedNodes) {
+                //             transactionRequest.$relatedNodes = listTransaction.relatedNodes;
+                //         }
+                //     });
+                // });
             });
     	}
 
-        function getTransactions() {
-            return TransactionRequest.get({
-                nid: $stateParams.suggestionId
-            }).$promise.then(function(transactionRequest) {
-                vm.suggestion = transactionRequest;
-                return transactionRequest.loadTransactions();
-            });
-
-            // return TransactionRequest.get({
-            //     nid: $stateParams.suggestionId
-            // }).$promise.then(function(transactionRequest) {
-            //     vm.suggestion = transactionRequest;
-
-            //     vm.isOpen = transactionStatusService.isSubmitted(vm.suggestion['$tr_status'].nid);
-                
-            //     _.each(transactionRequest['$tr_trans'], function(listTransaction) {
-            //         listTransaction.loadReferences().then(function(listTransaction) {
-            //             // bit of moving stuff about
-            //             // the transaction request needs to know the nodes
-            //             // but it doesnt, so we just grab those from the first 
-            //             // list transaction
-            //             if(!transactionRequest.$relatedNodes) {
-            //                 transactionRequest.$relatedNodes = listTransaction.relatedNodes;
-            //             }
-            //         });
-            //     });
-            // });   
-        }
-
         function accept(suggestion) {
-            suggestion['tr_status'] = transactionStatusService.acceptedNid;
-            suggestion.$update().then(function() {
+            suggestion.accept().then(function() {
                 toaster.pop('success', 'Suggestion Accepted');
                 $state.go('suggestions');    
             });
         }
 
         function reject(suggestion) {
-            suggestion['tr_status'] = transactionStatusService.rejectedNid;
-            suggestion.$update().then(function() {
+            suggestion.reject().then(function() {
                 toaster.pop('success', 'Suggestion Rejected');
-                $state.go('suggestions');    
+                $state.go('suggestions');
             });
+        }
+
+        function addComment(comment) {
+            vm.comments.push(comment);
+            vm.comment = {};
         }
   });
 

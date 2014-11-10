@@ -1,0 +1,10 @@
+<?php
+// $Id: disorder.module $
+
+function disorder_entity_load($nodes, $type)
+{
+	
+	foreach($nodes as &$node) {
+		       $node->hello = "world";
+	}
+}

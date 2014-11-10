@@ -1,0 +1,13 @@
+name = Disorder Gene
+description = Provides the implementation for the Disorder - Gene associations.
+core = 7.x
+package = Orphanet
+
+dependencies[] = entityreference
+dependencies[] = gene
+dependencies[] = disorder
+dependencies[] = disorder_gene_as
+dependencies[] = disorder_gene_at
+
+files[] = disorder_gene.module
+files[] = disorder_gene.install

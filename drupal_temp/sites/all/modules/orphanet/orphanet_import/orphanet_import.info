@@ -1,0 +1,17 @@
+name = Orphanet Configuration
+description = Provides the implementation for importing the Orphanet knowledge.
+core = 7.x
+package = Orphanet
+
+dependencies[] = entityreference
+
+files[] = orphanet_import.module
+files[] = orphanet_import.install
+files[] = includes/OrphanetImport.inc
+files[] = includes/PhenoVocabImport.inc
+files[] = includes/GeneImport.inc
+files[] = includes/DisorderImport.inc
+files[] = includes/DisorderPhenoImport.inc
+files[] = includes/ClassificationImport.inc
+
+configure = admin/config/system/orphanet_configuration

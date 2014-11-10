@@ -1,0 +1,7 @@
+name = External Reference
+description = Provides the implementation for the External reference content type.
+package = Orphanet
+core = 7.x
+
+files[] = external_reference.module
+files[] = external_reference.install

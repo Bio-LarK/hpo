@@ -1,6 +1,6 @@
 <div class="container">
     <div class="title">
-        <ol class="breadcrumb" style="margin:0; padding: 0; margin-bottom: 10px; background-color: transparent;">
+        <ol class="breadcrumb" style="margin:0; padding: 0; margin-bottom: 10px;">
             <li><a ui-sref="suggestions">Suggestions</a>
             </li>
             <li class="active">Suggestion #{{ vm.suggestion.nid }}</li>
@@ -17,9 +17,10 @@
                 <div>
                     {{ vm.suggestion.created * 1000 | date:'mediumDate' }}
                 </div>
-                <div class="label label-default" ng-class="{'label-success': vm.suggestion.$tr_status.nid == 1, 'label-danger': vm.suggestion.$tr_status.nid == 2}">
-                    {{ vm.suggestion.$tr_status.trstatus_value }}
+                <div class="label" ng-class="{'label-success': vm.suggestion.isAccepted, 'label-danger': vm.suggestion.isRejected, 'label-default': vm.suggestion.isSubmitted }">
+                    {{ vm.suggestion.tr_status.title }}
                 </div>
+
             </div>
 
             <div class="media" style="margin-top: 0;">
@@ -29,7 +30,7 @@
                 <div class="media-body">
                     <div>
                         <a href>
-                            <strong>{{ vm.suggestion.$author.name }}</strong>
+                            <strong><!-- FIXME: get real names -->Dr Anonymous {{ vm.suggestion.$author.name }}</strong>
                         </a>
                     </div>
                     <div>
@@ -39,30 +40,13 @@
             </div>
         </div>
         <div class="panel-body">
-            <h4 ng-bind-html="vm.suggestion.$onNodeDescription" style="margin: 0; margin-bottom: 14px;" class="text-capitalize">
+            <h4 style="margin: 0; margin-bottom: 14px;" class="text-capitalize">
+                <span ng-bind-html="vm.suggestion.description"></span>
             </h4>
-            <!-- <h4 class="text-capitalize">
 
-                <span ng-show="vm.suggestion.$relatedNodes.length > 1">
-                    Relationship between
-                    <a ui-sref="disorder({disorderId: vm.suggestion.$relatedNodes[0].nid})">{{ vm.suggestion.$relatedNodes[0].title }}</a> and
-
-                    <a ui-sref="disorder({disorderId: vm.suggestion.$relatedNodes[1].nid})">{{ vm.suggestion.$relatedNodes[1].title }}</a> 
-                </span>
-
-                <span ng-show="vm.suggestion.$relatedNodes.length == 1">
-                    <a ui-sref="disorder({disorderId: vm.suggestion.$relatedNodes[0].nid})">{{ vm.suggestion.$relatedNodes[0].title }}</a>
-                </span>
-
-            </h4> -->
-
-
-            <div ng-repeat="transaction in vm.suggestion.$tr_trans">
-                <div ng-bind-html="transaction.description"></div>
-                
-                <!--<div style="margin-bottom: 14px;">
+            <div ng-repeat="transaction in vm.suggestion.tr_trans">
+                <div style="margin-bottom: 14px;">
                     <div ng-show="transaction.isRefChange">
-                        {{ transaction.ltrans_ctype }}
                         <strong>
                             {{ transaction.ltrans_onprop }}
                         </strong>: {{ transaction.ltrans_cvalref.title || 'Unknown' }}
@@ -75,7 +59,7 @@
                         <div ng-show="transaction.ltrans_onprop=='body'">
                             <div>
                                 <strong>
-                                    {{ transaction.ltrans_onprop }}
+                                {{ transaction.ltrans_onprop }}
                                 </strong>:
                             </div>
                             <div ng-bind-html="transaction.ltrans_cvalplain"></div>
@@ -86,15 +70,17 @@
                         </div>
                         <div ng-hide="transaction.ltrans_onprop=='body'">
                             <strong>
-                                {{ transaction.ltrans_onprop }}
+                            {{ transaction.ltrans_onprop }}
                             </strong>: {{ transaction.ltrans_cvalplain || 'Unknown' }}
                             <i class="fa fa-arrow-right"></i>
                             {{ transaction.ltrans_svalplain }}
                         </div>
                     </div>
-                </div>-->
+                    
+
+                </div>
             </div>
-            <div style="margin-top: 20px;">
+            <div>
                 <div ng-bind-html="vm.suggestion.body.value"></div>
             </div>
             <div>
@@ -102,11 +88,57 @@
             </div>
         </div>
     </div>
-    <div class="panel panel-default" ng-show="vm.suggestion.$isOpen">
+
+    <!-- Discussion -->
+    <div class="panel panel-default" ng-repeat="comment in vm.comments">
+        <div class="panel-heading" style="padding: 15px;">
+            <div class="media" style="margin-top: 0;">
+                <div class="pull-left">
+                    <img src="https://s3.amazonaws.com/uifaces/faces/twitter/aaroni/48.jpg" style="width:20px;height:20px" alt="" />
+                    &nbsp;&nbsp;
+                    <strong>Dr John Smith</strong>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" style="padding: 15px;" ng-bind-html="comment.text">
+        </div>
+    </div>
+
+    <div class="panel panel-default" ng-show="vm.isOpen">
+        <div class="panel-heading" style="padding: 15px;">
+            <div class="media" style="margin-top: 0;">
+                <div class="pull-left">
+                    <img src="https://s3.amazonaws.com/uifaces/faces/twitter/aaroni/48.jpg" style="width:20px;height:20px" alt="" />
+                    &nbsp;&nbsp;
+                    <strong>Dr John Smith</strong>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" style="padding: 15px;">
+            <textarea msd-elastic="\n" ng-model="vm.comment.text" class="form-control" rows="4"></textarea>
+            <div class="pull-right" style="margin-top: 10px;">
+                <button class="btn btn-default" ng-click="vm.accept(vm.suggestion)">
+                    <i class="fa fa-check"></i> Accept <span ng-show="vm.comment.text.length">and comment</span>
+                </button>
+                <button class="btn btn-default" ng-click="vm.reject(vm.suggestion)">
+                    <i class="fa fa-times"></i> Reject <span ng-show="vm.comment.text.length">and comment</span>
+                </button>
+
+                <button class="btn btn-primary" ng-click="vm.addComment(vm.comment)">Comment</button>
+            </div>
+        </div>
+    </div>
+    <!-- /Discussion -->
+
+
+    <!-- Accept / Reject Panel -->
+    <!-- <div class="panel panel-default" ng-hide="vm.suggestion.$tr_status.nid < 3">
         <div class="panel-body">
             <div class="pull-left">
                 <div style="">
-                    <img src="https://s3.amazonaws.com/uifaces/faces/twitter/aaroni/48.jpg" style="width:35px;height:35px" alt="" />&nbsp;&nbsp;Dr John Smith
+                    <img src="https://s3.amazonaws.com/uifaces/faces/twitter/aaroni/48.jpg" style="width:35px;height:35px" alt="" />
+                    &nbsp;&nbsp;
+                    <strong>Dr John Smith</strong>
                 </div>
             </div>
             <div class="pull-right">
@@ -119,6 +151,9 @@
                 </button>
             </div>
         </div>
-    </div>
+    </div> -->
+    <!-- /Accept / Reject Panel -->
+
+    
 
 </div>

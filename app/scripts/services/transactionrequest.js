@@ -7,9 +7,9 @@
  * # transactionrequest
  * Factory in the orphaApp.
  */
-angular.module('hpoApp')
-    .factory('TransactionRequest', function($resource, $http, $log, ENV, ListTransaction, 
-        transactionStatusService, $q, ListTransactionUnlimited, $state) {
+angular.module('orphaApp')
+    .factory('TransactionRequest', function($resource, $http, ENV, ListTransaction, 
+        $q, $state, $log, transactionStatusService) {
         var TransactionRequest = $resource(ENV.apiEndpoint + '/entity_node/:nid', {
             'parameters[type]': 'transaction_request',
             nid: '@nid'
@@ -20,108 +20,157 @@ angular.module('hpoApp')
                     transformGetResponse
                 ])
             },
-            query: {
-                method: 'GET',
-                isArray: true,
-                transformResponse: $http.defaults.transformResponse.concat([
-                    transformQueryResponse
-                ])
-            },
             'update': {
                 method: 'PUT'
             }
         });
 
         TransactionRequest.prototype.loadTransactions = loadTransactions;
-        TransactionRequest.getSubmittedTransactions = getSubmittedTransactions;
-        TransactionRequest.getClosedTransactions = getClosedTransactions;
+        TransactionRequest.prototype.loadDescription = loadDescription;
+        TransactionRequest.prototype.accept = accept;
+        TransactionRequest.prototype.reject = reject;
+
+        TransactionRequest.getOpen = getOpen;
+        TransactionRequest.getClosed = getClosed;
         return TransactionRequest;
 
         ///////////////////
 
-
-        function getSubmittedTransactions() {
+        function getOpen(page) {
+            if(!page) {
+                page = 0;
+            }
             return transactionStatusService.loadStatusCodes().then(function() {
-                return getTransactions(transactionStatusService.submittedNid);
+                return TransactionRequest.query({
+                    'parameters[tr_status]': transactionStatusService.submittedNid,
+                    page: page
+                }).$promise.then(function(transactionRequests) {
+                    if(transactionRequests.length !== 20) {
+                        return transactionRequests;
+                    }
+                    return getOpen(page + 1).then(function(otherOpenTransactionRequests) {
+                        return transactionRequests.concat(otherOpenTransactionRequests);
+                    });
+                }, function() {
+                    return [];
+                });
             });
         }
-        function getClosedTransactions() {
+        function getClosed(page) {
+            if(!page) {
+                page = 0;
+            }
             return transactionStatusService.loadStatusCodes().then(function() {
-                return $q.all([
-                    getTransactions(transactionStatusService.rejectedNid),
-                    getTransactions(transactionStatusService.acceptedNid)
-                ]).then(function(transactions) {
-                    return _.flatten(transactions);
+                var promise1 = TransactionRequest.query({
+                    'parameters[tr_status]': transactionStatusService.acceptedNid,
+                    page: page
+                }).$promise.then(function(transactionRequests) {
+                    return transactionRequests;
+                }, function() {
+                    return [];
+                });
+                var promise2 = TransactionRequest.query({
+                    'parameters[tr_status]': transactionStatusService.rejectedNid,
+                    page: page
+                }).$promise.then(function(transactionRequests) {
+                    return transactionRequests;
+                }, function() {
+                    return [];
+                });
+                return $q.all([promise1, promise2]).then(function(requests) {
+                    var closedTransactionRequests = _.flatten(requests);
+                    if(requests[0].length !== 20 && requests[1].length !== 20) {
+                        return closedTransactionRequests;
+                    }
+                    return getClosed(page + 1).then(function(otherClosedTransactionRequests) {
+                        return closedTransactionRequests.concat(otherClosedTransactionRequests);
+                    });
                 });
             });
         }
 
+        function transformGetResponse(transactionRequest, headersGetter) {
+            return transactionRequest;
+        }
+
+        function accept() {
+            /* jshint validthis: true */
+            var transactionRequest = this;
+            return transactionStatusService.loadStatusCodes().then(function() {
+                return $http.put(ENV.apiEndpoint + '/entity_node/' + transactionRequest.nid, {
+                    nid: transactionRequest.nid,
+                    tr_status: transactionStatusService.acceptedNid
+                });
+            });
+        }
+
+        function reject() {
+            /* jshint validthis: true */
+            var transactionRequest = this;
+            return transactionStatusService.loadStatusCodes().then(function() {
+                return $http.put(ENV.apiEndpoint + '/entity_node/' + transactionRequest.nid, {
+                    nid: transactionRequest.nid,
+                    tr_status: transactionStatusService.rejectedNid
+                });
+            });
+        }
+
+        function loadDescription() {
+            /* jshint validthis: true */
+            var transactionRequest = this;
+            // Get the nodes
+            if(!transactionRequest['tr_trans'].length) {
+                return transactionRequest.title;
+            }
+            var listTransaction = transactionRequest['tr_trans'][0];
+            var node = listTransaction['ltrans_onnode'];
+            if(node.type === 'disorder_gene') {
+                transactionRequest.description = 'Relationship between <a href="' + 
+                $state.href('gene', {'geneId' :node['disgene_gene'].nid}) + '">' + 
+                node['disgene_gene'].title + '<a/> and ' + 
+                '<a href="' + $state.href('disorder', {'disorderId' :node['disgene_disorder'].nid}) + '">' + 
+                node['disgene_disorder'].title + '</a>';
+                return;
+            }
+
+            if(node.type === 'disorder_sign') {
+                transactionRequest.description = 'Relationship between <a href="' + 
+                $state.href('sign', {'signId' :node['ds_sign'].nid}) + '">' + 
+                node['ds_sign'].title + '<a/> and ' + 
+                '<a href="' + $state.href('disorder', {'disorderId' :node['ds_disorder'].nid}) + '">' + 
+                node['ds_disorder'].title + '</a>';
+                return;
+            }
+        
+            var params = {};
+            params[node.type + 'Id'] = node.nid;
+            transactionRequest.description = '<a href="' + 
+            $state.href(node.type, params) + '">' + node.title + '</a>';
+            return;
+            
+            
+        }
 
         function loadTransactions() {
             /* jshint validthis: true */
             var transactionRequest = this;
-
-            transactionRequest.$isOpen = transactionStatusService.isSubmitted(transactionRequest['$tr_status'].nid);
-
-            if(!transactionRequest['$tr_trans'].length) {
-                return;
+            transactionRequest.description = 'Loading...';
+            var ids = _.pluck(transactionRequest['tr_trans'], 'nid');
+            if (!ids.length) {
+                return $q.when([]);
             }
-
-            var listTransactionPromises = _.map(transactionRequest['$tr_trans'], function(listTransaction) {
-                return listTransaction.loadReferences();
+            var request = _.indexBy(ids, function(ids, index) {
+                return 'parameters[nid][' + index + ']';
             });
-
-            return $q.all(listTransactionPromises).then(function() {
-                var firstTransaction = transactionRequest['$tr_trans'][0];
-                $log.debug('on node', firstTransaction.getOnNode());
-
-                // on node descrption
-                var url = $state.href('phenotype', {phenotypeId: firstTransaction.getOnNode().nid});
-                transactionRequest.$onNodeDescription = '<a href="' + url + '">' + 
-                firstTransaction.getOnNode().title + '</a>';
+            return ListTransaction.query(request).$promise.then(function(listTransactions) {
+                transactionRequest['tr_trans'] = listTransactions;
+                var promises = _.map(listTransactions, function(listTransaction) {
+                    return listTransaction.loadReferences();
+                });
+                return $q.all(promises).then(function() {
+                    return listTransactions;
+                });
             });
-        }
-
-        function getTransactions(status) {
-            return TransactionRequest.query({
-                'parameters[tr_status]': status,
-                fields: 'nid,title,tr_status,tr_timestamp,tr_user,tr_trans,created,author,changed'
-            }).$promise.then(function(transactionRequests) {
-                return transactionRequests;
-            }, function() {
-                return [];
-            });
-        }
-
-
-        function transformGetResponse(transactionRequest, headersGetter) {
-            transactionRequest['tr_trans'] = _.map(transactionRequest['tr_trans'], function(transaction) {
-                if (transaction.type === 'list_transaction') {
-                    return new ListTransaction(transaction);
-                } else if(transaction.type === 'list_transaction_unlimited') {
-                    return new ListTransactionUnlimited(transaction);
-                }
-            });
-
-            dollarProperty(transactionRequest, 'tr_trans');
-            dollarProperty(transactionRequest, 'tr_user');
-            dollarProperty(transactionRequest, 'author');
-            dollarProperty(transactionRequest, 'source');
-            dollarProperty(transactionRequest, 'tr_status');
-
-            return transactionRequest;
-        }
-
-        function transformQueryResponse(transactionRequests, headersGetter) {
-            _.each(transactionRequests, function(transactionRequest) {
-                transformGetResponse(transactionRequest);
-            });
-            return transactionRequests;
-        }
-
-        function dollarProperty(transactionRequest, propertyName) {
-            transactionRequest['$' + propertyName] = transactionRequest[propertyName];
-            delete transactionRequest[propertyName];
         }
 
     });

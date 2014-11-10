@@ -1,0 +1,130 @@
+<?php
+
+// $Id: type_of_inheritance.install $
+
+function type_of_inheritance_install() {
+    $t = get_t();
+
+    $type_of_inheritance = array(
+        'type' => 'type_of_inheritance',
+        'name' => $t('Type of inheritance'),
+        'base' => 'node_content',
+        'description' => $t('The Type of inheritance content type.')
+    );
+
+    $content_type = node_type_set_defaults($type_of_inheritance);
+    node_type_save($content_type);
+
+    foreach (_type_of_inheritance_installed_fields() as $field) {
+        field_create_field($field);
+    }
+
+    foreach (_type_of_inheritance_installed_instances() as $instance) {
+        $instance['entity_type'] = 'node';
+        $instance['bundle'] = $type_of_inheritance['type'];
+        field_create_instance($instance);
+    }
+
+    variable_set('comment_type_of_inheritance', COMMENT_NODE_CLOSED);
+    variable_set('node_options_type_of_inheritance', array('status'));
+    variable_set('node_preview_type_of_inheritance', DRUPAL_DISABLED);
+    variable_set('node_submitted_type_of_inheritance', FALSE);
+}
+
+function _type_of_inheritance_installed_fields() {
+    $t = get_t();
+    return array(
+        'field_toi_orphaid' => array(
+            'field_name'	=> 'field_toi_orphaid',
+            'label'		=> $t('Orpha ID'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_toi_name' => array(
+            'field_name'	=> 'field_toi_name',
+            'label'		=> $t('Name'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        )
+    );
+}
+
+function _type_of_inheritance_installed_instances() {
+    $t = get_t();
+    return array(
+        'field_toi_orphaid' => array(
+            'field_name' => 'field_toi_orphaid',
+            'label'       => $t('Orpha ID'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_toi_name' => array(
+            'field_name' => 'field_toi_name',
+            'label'       => $t('Name'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        )
+    );
+}
+
+function type_of_inheritance_uninstall() {
+    $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(':type' => 'type_of_inheritance'));
+    $nids = array();
+    foreach ($result as $row) {
+        $nids[] = $row->nid;
+    }
+
+    node_delete_multiple($nids);
+
+    foreach (array_keys(_type_of_inheritance_installed_fields()) as $field) {
+        field_delete_field($field);
+    }
+
+    $instances = field_info_instances('node', 'type_of_inheritance');
+    foreach ($instances as $instance_name => $instance) {
+        field_delete_instance($instance);
+    }
+
+    node_type_delete('type_of_inheritance');
+
+    field_purge_batch(1000);
+}

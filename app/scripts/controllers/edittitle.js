@@ -7,9 +7,9 @@
  * # EdittitleCtrl
  * Controller of the orphaApp
  */
-angular.module('hpoApp')
+angular.module('orphaApp')
     .controller('EditTitleCtrl', function($scope, $http, $modalInstance,
-        ENV, ListTransaction, config, TransactionRequest, $log,
+        ENV, ListTransaction, config, TransactionRequest, transactionStatusService,
         toaster) {
 
         var vm = this;
@@ -18,7 +18,6 @@ angular.module('hpoApp')
         vm.propertyLabel = config.propertyLabel;
         vm.propertyValue = vm.concept[vm.propertyName].substring(0, 400);
         vm.save = save;
-        vm.statuses = null;
         vm.cancel = cancel;
         vm.reason = '';
 
@@ -27,25 +26,9 @@ angular.module('hpoApp')
         ////
 
         function activate() {
-            getStatusCodes();
         }
-
-        function getStatusCodes() {
-            return $http.get(ENV.apiEndpoint + '/entity_node?parameters[type]=tr_status').then(function(response) {
-                vm.statuses = response.data;
-                $log.debug('loading statuses', vm.statuses);
-            });
-        }
-
 
         function save() {
-            var submittedStatus = _.find(vm.statuses, {
-                'title': 'Submitted'
-            });
-            if (!submittedStatus) {
-                $log.error('couldnt find submitted status');
-                return;
-            }
             // Create a transaction
             var listTransaction = new ListTransaction({
                 title: vm.concept.title,
@@ -62,22 +45,24 @@ angular.module('hpoApp')
             });
             listTransaction.$save().then(function() {
                 // Add it to a transaction request
-                var transactionRequest = new TransactionRequest({
-                    title: vm.concept.title + ' - ' + vm.propertyLabel,
-                    type: 'transaction_request',
-                    'tr_timestamp': new Date().getTime() / 1000,
-                    'tr_trans': [
-                        listTransaction.nid
-                    ],
-                    'tr_status': submittedStatus.nid,
-                    'tr_user': 0,
-                    body: {
-                        value: vm.reason,
-                        summary: vm.reason
-                    }
+                return transactionStatusService.loadStatusCodes().then(function() {
+                    var transactionRequest = new TransactionRequest({
+                        title: vm.concept.title + ' - ' + vm.propertyLabel,
+                        type: 'transaction_request',
+                        'tr_timestamp': new Date().getTime() / 1000,
+                        'tr_trans': [
+                            listTransaction.nid
+                        ],
+                        'tr_status': transactionStatusService.submittedNid,
+                        'tr_user': 0,
+                        body: {
+                            value: vm.reason,
+                            summary: vm.reason
+                        }
+                    });
+                    toaster.pop('success', 'Suggestion submitted.');
+                    return transactionRequest.$save();
                 });
-                toaster.pop('success', 'Suggestion submitted.');
-                return transactionRequest.$save();
             });
 
             $modalInstance.close();

@@ -1,0 +1,9 @@
+name = Test Entity
+description = Provides the implementation for the Test Entity.
+core = 7.x
+package = Orphanet
+
+files[] = test_entity.module
+files[] = test_entity.install
+files[] = TestEntity.inc
+files[] = TestEntityController.inc

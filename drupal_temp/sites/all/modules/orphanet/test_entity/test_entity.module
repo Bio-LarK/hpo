@@ -1,0 +1,62 @@
+<?php
+// $Id: test_entity.module $
+
+function test_entity_entity_info() {
+    $test_entity_entity_info['test_entity'] = array(
+        'label' => t('Test Entity'),
+        'label callback' => 'entity_class_label',
+        'entity class' => 'TestEntity',
+        'controller class' => 'TestEntityController',
+        'base table' => 'test_entity',
+        'uri callback' => 'entity_class_uri',
+        'fieldable' => TRUE,
+        'entity keys' => array(
+            'id' => 'test_entity_id',
+            'bundle' => 'type'
+        ),
+        'bundle keys' => array(
+            'bundle' => 'type',
+        ),
+        'load hook' => 'test_entity_load',
+        'static cache' => TRUE,
+        'module' => 'test_entity',
+        'access callback' => 'test_entity_access_callback',
+        'bundles' => array(
+            'test_entity' => array(
+                'label' => 'Test Entity',
+            ),
+        ),
+//        'views controller class' => 'EntityDefaultViewsController',
+    );
+
+    return $test_entity_entity_info;
+}
+
+function test_entity_load($test_entity_id, $reset = FALSE) {
+    $test_entity = test_entity_load_multiple(array($test_entity_id), array(), $reset);
+    return reset($test_entity);
+}
+
+function test_entity_load_multiple($test_entity_ids = array(), $conditions = array(), $reset = FALSE) {
+    return entity_load('test_entity', $test_entity_ids, $conditions, $reset);
+}
+
+function test_entity_save($test_entity) {
+    entity_save('test_entity', $test_entity);
+}
+
+function test_entity_delete($test_entity) {
+    entity_delete('test_entity', entity_id('test_entity' ,$test_entity));
+}
+
+function test_entity_delete_multiple($test_entity_ids) {
+    entity_delete_multiple('test_entity', $test_entity_ids);
+}
+
+function test_entity_access_callback() {
+    if (user_is_anonymous()) {
+        return FALSE;
+    } else {
+        return TRUE;
+    }
+}

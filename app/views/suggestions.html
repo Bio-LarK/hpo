@@ -28,10 +28,10 @@
             </div>
             
             <div class="list-group">
-                <div class="list-group-item text-center" ng-show="vm.suggestions == null">
+                <div class="list-group-item text-center" ng-show="vm.suggestions === null">
                     <i class="fa fa-spin fa-circle-o-notch"></i>
                 </div>
-                <div class="list-group-item text-muted" ng-show="vm.suggestions.length == 0">
+                <div class="list-group-item text-muted" ng-hide="vm.suggestions.length">
                     No suggestions
                 </div>
                 <div class="list-group-item" ng-repeat="suggestion in vm.suggestions | orderBy:'-changed'">
@@ -45,10 +45,9 @@
                             <div class="pull-right text-muted text-right">
                                 <div>
                                     {{ suggestion.created * 1000 | date:'mediumDate' }}     
-
                                 </div>
-                                <div class="label" ng-class="{'label-success': suggestion.tr_status.nid == 1, 'label-danger': suggestion.tr_status.nid == 2}">
-                                    {{ suggestion.tr_status.trstatus_value }}
+                                <div class="label" ng-class="{'label-success': suggestion.isAccepted, 'label-danger': suggestion.isRejected, 'label-default': suggestion.isSubmitted }">
+                                    {{ suggestion.tr_status.title }}
                                 </div>
                             </div>
                             <h5>
@@ -60,7 +59,8 @@
                                 <i class="fa fa-comment"></i> 3
                             </h5>
                             <div class="text-muted">
-                                Dr {{ suggestion.$author.name }}
+                                <!-- FIXME: get real author name somewhere -->
+                                Dr {{ suggestion.author.name }} Anonymous
                             </div>
                         </div>
                     </div>

@@ -1,0 +1,7 @@
+name = Type Of Inheritance
+description = Provides the implementation for the Type of Inheritance content type.
+core = 7.x
+package = Orphanet
+
+files[] = type_of_inheritance.module
+files[] = type_of_inheritance.install

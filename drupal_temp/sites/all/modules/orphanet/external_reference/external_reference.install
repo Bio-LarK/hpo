@@ -1,0 +1,161 @@
+<?php
+// $Id: external_reference.install $
+
+
+function external_reference_install() {
+    $t = get_t();
+
+    $external_reference = array(
+        'type' => 'external_reference',
+        'name' => $t('External reference'),
+        'base' => 'node_content',
+        'description' => $t('The External reference content type.')
+    );
+
+    $content_type = node_type_set_defaults($external_reference);
+    node_type_save($content_type);
+
+    foreach (_er_installed_fields() as $field) {
+        field_create_field($field);
+    }
+
+    foreach (_er_installed_instances() as $instance) {
+        $instance['entity_type'] = 'node';
+        $instance['bundle'] = $external_reference['type'];
+        field_create_instance($instance);
+    }
+
+    variable_set('comment_external_reference', COMMENT_NODE_CLOSED);
+    variable_set('node_options_external_reference', array('status'));
+    variable_set('node_preview_external_reference', DRUPAL_DISABLED);
+    variable_set('node_submitted_external_reference', FALSE);
+}
+
+function _er_installed_fields() {
+    $t = get_t();
+    return array(
+        'field_er_orphaid' => array(
+            'field_name'	=> 'field_er_orphaid',
+            'label'		=> t('Orpha ID'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_er_source' => array(
+            'field_name'	=> 'field_er_source',
+            'label'		=> $t('Source'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_er_reference' => array(
+            'field_name'	=> 'field_er_reference',
+            'label'		=> $t('Reference'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        )
+    );
+}
+
+function _er_installed_instances() {
+    $t = get_t();
+    return array(
+        'field_er_orphaid' => array(
+            'field_name' => 'field_er_orphaid',
+            'label'       => $t('Orpha ID'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_er_source' => array(
+            'field_name' => 'field_er_source',
+            'label'       => $t('Source'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_er_reference' => array(
+            'field_name' => 'field_er_reference',
+            'label'       => $t('Reference'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        )
+    );
+}
+
+function external_reference_uninstall() {
+    $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(':type' => 'external_reference'));
+    $nids = array();
+    foreach ($result as $row) {
+        $nids[] = $row->nid;
+    }
+
+    node_delete_multiple($nids);
+
+    foreach (array_keys(_er_installed_fields()) as $field) {
+        field_delete_field($field);
+    }
+
+    $instances = field_info_instances('node', 'external_reference');
+    foreach ($instances as $instance_name => $instance) {
+        field_delete_instance($instance);
+    }
+
+    node_type_delete('external_reference');
+
+    field_purge_batch(1000);
+}

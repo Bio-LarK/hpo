@@ -1,0 +1,37 @@
+$page-nav-link-padding: 7px 15px;
+
+.page-nav {
+
+    height: 55px;
+    z-index: 99;
+    text-align: left;
+
+    &.page-nav-center {
+        text-align: center;
+    }
+
+    a { 
+        color: #444;
+    }
+
+    .page-nav-sticky {
+        &.ui-scrollfix {
+            position: fixed;
+            top: 50px;
+            width: 100%;
+        }
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+        color: rgba(0,0,0,0.5); 
+        background-color: white;
+        z-index: 1;
+
+        .nav-pills {
+            display: inline-block;
+            margin-bottom: -7px;
+            a {
+                padding: $page-nav-link-padding;
+            }
+        } 
+    }
+}

@@ -1,0 +1,10 @@
+.btn-tour {
+	@extend .btn-primary;
+	@extend .btn-lg;
+	padding: 14px 35px;
+	padding-right: 25px;
+	border-radius: 100px;
+	.fa-arrow-right {
+		margin-left: 10px;
+	}
+}

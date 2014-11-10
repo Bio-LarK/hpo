@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc service
- * @name hpoApp.Page
+ * @name orphaApp.Page
  * @description
  * # Page
- * Factory in the hpoApp.
+ * Service in the orphaApp.
  */
-angular.module('hpoApp')
-    .factory('pageService', function () {
+angular.module('orphaApp')
+    .factory('Page', function Page() {
         var page = {
             title: null,
             setTitle: setTitle,
@@ -18,6 +18,6 @@ angular.module('hpoApp')
         ////////////
 
         function setTitle(newTitle) {
-            page.title = newTitle + ' - HPO';
+            page.title = newTitle + ' - Orphanet';
         }
     });

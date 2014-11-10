@@ -1,0 +1,530 @@
+<?php
+// $Id: disorder.install $
+
+
+function disorder_install() {
+    $t = get_t();
+
+    $disorder = array(
+        'type' => 'disorder',
+        'name' => $t('Disorder'),
+        'base' => 'node_content',
+        'description' => $t('The Disorder content type.')
+    );
+
+    $content_type = node_type_set_defaults($disorder);
+    node_add_body_field($content_type);
+    node_type_save($content_type);
+
+    $body_instance = field_info_instance('node', 'body', 'disorder');
+    $body_instance['type'] = 'text_long';
+    $body_instance['label'] = 'Description';
+
+    foreach (_disorder_installed_fields() as $field) {
+        field_create_field($field);
+    }
+
+    foreach (_disorder_installed_instances() as $instance) {
+        $instance['entity_type'] = 'node';
+        $instance['bundle'] = $disorder['type'];
+        field_create_instance($instance);
+    }
+
+    variable_set('comment_disorder', COMMENT_NODE_CLOSED);
+    variable_set('node_options_disorder', array('status'));
+    variable_set('node_preview_disorder', DRUPAL_DISABLED);
+    variable_set('node_submitted_disorder', FALSE);
+}
+
+function _disorder_installed_fields() {
+    $t = get_t();
+    return array(
+        'field_disorder_orphaid' => array(
+            'field_name'	=> 'field_disorder_orphaid',
+            'label'		=> $t('Orpha ID'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_disorder_orphanumber' => array(
+            'field_name'	=> 'field_disorder_orphanumber',
+            'label'		=> $t('Orpha Number'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_disorder_name' => array(
+            'field_name'	=> 'field_disorder_name',
+            'label'		=> $t('Name'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_disorder_synonym' => array(
+            'field_name'	=> 'field_disorder_synonym',
+            'label'		=> $t('Synonym'),
+            'cardinality'	=> -1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_disorder_er' => array(
+            'field_name'	=> 'field_disorder_er',
+            'label'		=> $t('External reference'),
+            'cardinality'	=> -1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+                'referenceable_types' => array(
+                    'external_reference' => 'external_reference'
+                )
+            )
+        ),
+        'field_disorder_disgene' => array(
+            'field_name'	=> 'field_disorder_disgene',
+            'label'		=> $t('Disorder-gene association'),
+            'cardinality'	=> -1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+                'referenceable_types' => array(
+                    'disorder_gene' => 'disorder_gene'
+                )
+            )
+        ),
+        'field_disorder_expert' => array(
+            'field_name'	=> 'field_disorder_expert',
+            'label'		=> $t('Expert'),
+            'cardinality'	=> -1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+                'referenceable_types' => array(
+                    'expert' => 'expert'
+                )
+            )
+        ),
+        'field_disorder_onset' => array(
+            'field_name'	=> 'field_disorder_onset',
+            'label'		=> $t('Average age of onset'),
+            'cardinality'	=> 1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+                'referenceable_types' => array(
+                    'age_of_onset' => 'age_of_onset'
+                )
+            )
+        ),
+        'field_disorder_death' => array(
+            'field_name'	=> 'field_disorder_death',
+            'label'		=> $t('Average age of death'),
+            'cardinality'	=> 1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+                'referenceable_types' => array(
+                    'age_of_death' => 'age_of_death'
+                )
+            )
+        ),
+        'field_disorder_prevalence' => array(
+            'field_name'	=> 'field_disorder_prevalence',
+            'label'		=> $t('Class of prevalence'),
+            'cardinality'	=> 1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+                'referenceable_types' => array(
+                    'prevalence_class' => 'prevalence_class'
+                )
+            )
+        ),
+        'field_disorder_inheritance' => array(
+            'field_name'	=> 'field_disorder_inheritance',
+            'label'		=> $t('Type of inheritance'),
+            'cardinality'	=> -1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+                'referenceable_types' => array(
+                    'type_of_inheritance' => 'type_of_inheritance'
+                )
+            )
+        ),
+        'field_disorder_parent' => array(
+            'field_name'	=> 'field_disorder_parent',
+            'label'		=> $t('Parent'),
+            'cardinality'	=> -1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+                'referenceable_types' => array(
+                    'disorder' => 'disorder'
+                )
+            )
+        ),
+        'field_disorder_child' => array(
+            'field_name'	=> 'field_disorder_child',
+            'label'		=> $t('Child'),
+            'cardinality'	=> -1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+                'referenceable_types' => array(
+                    'disorder' => 'disorder'
+                )
+            )
+        ),
+        'field_disorder_phenotype' => array(
+            'field_name'	=> 'field_disorder_phenotype',
+            'label'		=> $t('Disorder - Clinical sign association'),
+            'cardinality'	=> -1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+                'referenceable_types' => array(
+                    'disorder_sign' => 'disorder_sign'
+                )
+            )
+        ),
+    );
+}
+
+function _disorder_installed_instances() {
+    $t = get_t();
+    return array(
+        'field_disorder_orphaid' => array(
+            'field_name' => 'field_disorder_orphaid',
+            'label'       => $t('Orpha ID'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_disorder_orphanumber' => array(
+            'field_name' => 'field_disorder_orphanumber',
+            'label'       => $t('Orpha Number'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_disorder_name' => array(
+            'field_name' => 'field_disorder_name',
+            'label'       => $t('Name'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_disorder_synonym' => array(
+            'field_name' => 'field_disorder_synonym',
+            'label'       => $t('Synonym'),
+            'cardinality' => -1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_disorder_er' => array(
+            'field_name'	=> 'field_disorder_er',
+            'label'		=> $t('External reference'),
+            'cardinality'	=> -1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_disorder_disgene' => array(
+            'field_name'	=> 'field_disorder_disgene',
+            'label'		=> $t('Disorder-gene association'),
+            'cardinality'	=> -1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_disorder_expert' => array(
+            'field_name'	=> 'field_disorder_expert',
+            'label'		=> $t('Expert'),
+            'cardinality'	=> -1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_disorder_onset' => array(
+            'field_name'	=> 'field_disorder_onset',
+            'label'		=> $t('Average age of onset'),
+            'cardinality'	=> 1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_disorder_death' => array(
+            'field_name'	=> 'field_disorder_death',
+            'label'		=> $t('Average age of death'),
+            'cardinality'	=> 1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_disorder_prevalence' => array(
+            'field_name'	=> 'field_disorder_prevalence',
+            'label'		=> $t('Class of prevalence'),
+            'cardinality'	=> 1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_disorder_inheritance' => array(
+            'field_name'	=> 'field_disorder_inheritance',
+            'label'		=> $t('Type of inheritance'),
+            'cardinality'	=> -1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+
+
+        'field_disorder_parent' => array(
+            'field_name'	=> 'field_disorder_parent',
+            'label'		=> $t('Parent'),
+            'cardinality'	=> -1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_disorder_child' => array(
+            'field_name'	=> 'field_disorder_child',
+            'label'		=> $t('Child'),
+            'cardinality'	=> -1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_disorder_phenotype' => array(
+            'field_name'	=> 'field_disorder_phenotype',
+            'label'		=> $t('Disorder - Clinical sign association'),
+            'cardinality'	=> -1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+
+    );
+}
+
+function disorder_uninstall() {
+    $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(':type' => 'disorder'));
+    $nids = array();
+    foreach ($result as $row) {
+        $nids[] = $row->nid;
+    }
+
+    node_delete_multiple($nids);
+
+    foreach (array_keys(_disorder_installed_fields()) as $field) {
+        field_delete_field($field);
+    }
+
+    $instances = field_info_instances('node', 'disorder');
+    foreach ($instances as $instance_name => $instance) {
+        field_delete_instance($instance);
+    }
+
+    node_type_delete('disorder');
+
+    field_purge_batch(1000);
+}

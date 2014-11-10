@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name hpoApp.controller:MainCtrl
+ * @name orphaApp.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of the hpoApp
+ * Controller of the orphaApp
  */
-angular.module('hpoApp')
+angular.module('orphaApp')
   .controller('MainCtrl', function ($scope) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',

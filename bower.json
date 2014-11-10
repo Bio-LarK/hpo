@@ -1,30 +1,42 @@
 {
-  "name": "hpo",
-  "version": "0.0.0",
+  "name": "orpha",
+  "version": "0.7.2",
   "dependencies": {
-    "angular": "1.2.25",
+    "angular": "1.3.0",
     "json3": "~3.3.1",
     "es5-shim": "~3.1.0",
     "bootstrap-sass-official": "~3.2.0",
-    "angular-resource": "1.2.25",
-    "angular-cookies": "1.2.25",
-    "angular-sanitize": "1.2.25",
-    "angular-animate": "1.2.25",
-    "angular-touch": "1.2.25",
-    "angular-ui-router": "~0.2.11",
-    "angular-promise-tracker": "~2.0.1",
+    "angular-sanitize": "1.3.0",
+    "angular-animate": "1.3.0",
+    "angular-ui-router": "0.2.12-pre1",
+    "animate-css": "~3.2.0",
+    "angular-truncate": "*",
+    "restangular": "~1.4.0",
+    "angular-resource": "~1.3.0",
     "lodash": "~2.4.1",
+    "angular-bootstrap": "~0.11.2",
+    "angular-ui-tree": "~2.1.5",
     "dotjem-angular-tree": "~0.1.1",
-    "font-awesome": "~4.2.0",
-    "angular-bootstrap": "~0.11.0",
+    "angular-ui-utils": "bower",
+    "angular-loading-bar": "~0.5.0",
+    "angular-xeditable": "~0.1.8",
     "angularjs-toaster": "~0.4.7",
-    "textAngular": "~1.2.2",
     "angular-elastic": "~2.4.0",
-    "angular-ui-select": "~0.7.0"
+    "textAngular": "~1.2.2",
+    "angular-scroll": "~0.6.2",
+    "angular-tree-repeat": "~0.0.1",
+    "promise-tracker": "Igosuki/angular-promise-tracker#ec2bdf76471436a9028eb804a998299b9952dab3",
+    "fontawesome": "~4.2.0",
+    "angular-ui-select": "~0.8.3"
   },
   "devDependencies": {
-    "angular-mocks": "1.2.25",
-    "angular-scenario": "1.2.25"
+    "angular-mocks": "1.3.0",
+    "angular-scenario": "1.3.0"
   },
-  "appPath": "app"
+  "appPath": "app",
+  "resolutions": {
+    "angular": "~1.3.0",
+    "es5-shim": "~3.1.0",
+    "angular-animate": "1.3.0"
+  }
 }

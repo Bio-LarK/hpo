@@ -1,0 +1,17 @@
+name = Disorder
+description = Provides the implementation for the Disorder content type.
+core = 7.x
+package = Orphanet
+
+dependencies[] = entityreference
+dependencies[] = external_reference
+dependencies[] = expert
+dependencies[] = prevalence_class
+dependencies[] = age_of_onset
+dependencies[] = age_of_death
+dependencies[] = type_of_inheritance
+dependencies[] = disorder_sign
+dependencies[] = disorder_gene
+
+files[] = disorder.module
+files[] = disorder.install

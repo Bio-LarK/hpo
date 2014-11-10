@@ -1,0 +1,12 @@
+name = Disorder Sign
+description = Provides the implementation for the Disorder - Clinical sign associations.
+core = 7.x
+package = Orphanet
+
+dependencies[] = entityreference
+dependencies[] = clinical_sign
+dependencies[] = disorder
+dependencies[] = sign_frequency
+
+files[] = disorder_sign.module
+files[] = disorder_sign.install

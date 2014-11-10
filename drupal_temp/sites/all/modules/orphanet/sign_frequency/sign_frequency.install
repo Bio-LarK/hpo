@@ -1,0 +1,130 @@
+<?php
+
+// $Id: sign_frequency.install $
+
+function sign_frequency_install() {
+    $t = get_t();
+
+    $sign_frequency = array(
+        'type' => 'sign_frequency',
+        'name' => $t('Clinical sign frequency'),
+        'base' => 'node_content',
+        'description' => $t('The Clinical sign frequency content type.')
+    );
+
+    $content_type = node_type_set_defaults($sign_frequency);
+    node_type_save($content_type);
+
+    foreach (_sign_frequency_installed_fields() as $field) {
+        field_create_field($field);
+    }
+
+    foreach (_sign_frequency_installed_instances() as $instance) {
+        $instance['entity_type'] = 'node';
+        $instance['bundle'] = $sign_frequency['type'];
+        field_create_instance($instance);
+    }
+
+    variable_set('comment_sign_frequency', COMMENT_NODE_CLOSED);
+    variable_set('node_options_sign_frequency', array('status'));
+    variable_set('node_preview_sign_frequency', DRUPAL_DISABLED);
+    variable_set('node_submitted_sign_frequency', FALSE);
+}
+
+function _sign_frequency_installed_fields() {
+    $t = get_t();
+    return array(
+        'field_signfreq_orphaid' => array(
+            'field_name'	=> 'field_signfreq_orphaid',
+            'label'		=> $t('Orpha ID'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_signfreq_name' => array(
+            'field_name'	=> 'field_signfreq_name',
+            'label'		=> $t('Name'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        )
+    );
+}
+
+function _sign_frequency_installed_instances() {
+    $t = get_t();
+    return array(
+        'field_signfreq_orphaid' => array(
+            'field_name' => 'field_signfreq_orphaid',
+            'label'       => $t('Orpha ID'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_signfreq_name' => array(
+            'field_name' => 'field_signfreq_name',
+            'label'       => $t('Name'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        )
+    );
+}
+
+function sign_frequency_uninstall() {
+    $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(':type' => 'sign_frequency'));
+    $nids = array();
+    foreach ($result as $row) {
+        $nids[] = $row->nid;
+    }
+
+    node_delete_multiple($nids);
+
+    foreach (array_keys(_sign_frequency_installed_fields()) as $field) {
+        field_delete_field($field);
+    }
+
+    $instances = field_info_instances('node', 'sign_frequency');
+    foreach ($instances as $instance_name => $instance) {
+        field_delete_instance($instance);
+    }
+
+    node_type_delete('sign_frequency');
+
+    field_purge_batch(1000);
+}

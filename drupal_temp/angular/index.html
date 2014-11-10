@@ -1,0 +1,46 @@
+<!doctype html> <html class="no-js" ng-app="orphaApp"> <head> <meta charset="utf-8"> <title ng-bind="Page.title"></title> <meta name="description" content=""> <meta name="viewport" content="width=device-width"> <!-- <link href='http://fonts.googleapis.com/css?family=PT+Serif' rel='stylesheet' type='text/css'> --> <!-- <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'> --> <!-- Place favicon.ico and apple-touch-icon.png in the root directory --> <link rel="stylesheet" href="styles/vendor.987e5b91.css"> <link rel="stylesheet" href="styles/main.5d2c9fcc.css"> <link href="//fonts.googleapis.com/css?family=Open+Sans:400,300,700" rel="stylesheet" type="text/css">  <body> <style>body {
+            padding-top: 50px;
+        }
+        .navbar {
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+        .navbar.ui-scrollfix {
+            position:fixed;
+            top:0;
+            z-index: 100;
+        }</style> <nav class="navbar navbar-bright" role="navigation" ui-scrollfix> <div class="container"> <!-- Brand and toggle get grouped for better mobile display --> <div class="navbar-header"> <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> <a class="navbar-brand" href="#"><img style="width: 100px; position: relative; top: -2px" src="images/logo-orphanet.7b247235.png" alt=""></a> </div> <!-- Collect the nav links, forms, and other content for toggling --> <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"> <ul class="nav navbar-nav"> <li ng-class="{'active': $state.includes('disorders') || $state.includes('disorder')}"><a ui-sref="disorders">Disorders</a> </li> <li ng-class="{'active': $state.includes('genes') || $state.includes('gene')}"><a ui-sref="genes">Genes</a> </li> <li ng-class="{'active': $state.includes('signs') || $state.includes('sign')}"><a ui-sref="signs">Clinical Signs</a> </li> <!--<li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">Action</a>
+                            </li>
+                            <li><a href="#">Another action</a>
+                            </li>
+                            <li><a href="#">Something else here</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li><a href="#">One more separated link</a>
+                            </li>
+                        </ul>
+                    </li>--> </ul> <ul class="nav navbar-nav navbar-right"> <!-- <li><a href="#"></a> -->  <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dr John Smith <span class="caret"></span></a> <ul class="dropdown-menu" role="menu"> <li><a href="#">Action</a> </li> <li><a href="#">Another action</a> </li> <li><a href="#">Something else here</a> </li> <li class="divider"></li> <li><a href="#">Separated link</a> </li> </ul> </li> </ul> <form class="navbar-form navbar-right navbar-search" role="search"> <div class="form-group"> <input type="text" class="form-control" ng-model="asyncSelected" placeholder="Search" typeahead="result.title for result in getResults($viewValue)" typeahead-on-select="changed($item, $model, $label)"> </div> <!-- <button type="submit" class="btn btn-default">Search</button> --> </form> </div> <!-- /.navbar-collapse --> </div> <!-- /.container-fluid --> </nav> <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]--> <!-- Add your site or application content here --> <div> <ui-view></ui-view> <!-- <div ng-include="'views/main.html'" ng-controller="MainCtrl"></div> --> <footer class="footer"> <div class="container"> <div class="text-muted footer-poweredby"> Powered By <a href="http://human-phenotype-ontology.org">Human Phenotype Ontology</a> and <a href="http://bio-lark.org/">Bio-LarK</a> </div> <ul class="logo-list"> <li class="logo-list-item logo-list-item-usyd"> <img src="images/logo-orphanet.7b247235.png" alt=""> </li> <li class="logo-list-item logo-list-item-garvan"> <img src="images/logo-garvan.a04fdd4f.png" alt="" class="logo"> </li> <li class="logo-list-item logo-list-item-uq"> <img src="images/logo-uq.e4dfa24d.gif" alt=""> </li> <li class="logo-list-item logo-list-item-usyd"> <img src="images/logo-usyd.2e6fd04b.jpeg" alt=""> </li> </ul> </div> </footer> </div> <!-- Google Analytics: change UA-XXXXX-X to be your site's ID --> <script>(function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function() {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-XXXXX-X');
+    ga('send', 'pageview');</script> <!--[if lt IE 9]>
+    <script src="scripts/oldieshim.ff90b0fb.js"></script>
+    <![endif]--> <script src="scripts/vendor.93b65b8d.js"></script> <script src="scripts/scripts.e9f16e1f.js"></script>  

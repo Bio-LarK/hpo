@@ -2,45 +2,98 @@
 
 /**
  * @ngdoc overview
- * @name hpoApp
+ * @name orphaApp
  * @description
- * # hpoApp
+ * # orphaApp
  *
  * Main module of the application.
  */
 angular
-    .module('hpoApp', [
+    .module('orphaApp', [
         'ngAnimate',
-        'ngCookies',
-        'ngResource',
         'ngSanitize',
-        'ngTouch',
+        'ngResource',
         'ui.router',
-        'config',
-        'dotjem.angular.tree',
+        'truncate',
+        'restangular',
         'ui.bootstrap',
+        'dotjem.angular.tree',
+        'ui.utils',
         'ajoslin.promise-tracker',
+        'angular-loading-bar',
+        'xeditable',
+        'config',
         'toaster',
         'monospaced.elastic',
         'textAngular',
+        'duScroll',
+        'sf.treeRepeat',
         'ui.select'
     ])
-    .run(function ($state, $stateParams, $rootScope, searchService, pageService) {
+    .run(function ($rootScope, $http, $state, $stateParams, 
+        editableOptions, Page, ENV, siteSearchService, $log) {
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
-        $rootScope.searchService = searchService;
-        $rootScope.pageService = pageService;
+        $rootScope.Page = Page;
+        editableOptions.theme = 'bs3';
+
+        $rootScope.siteSearchService = siteSearchService;
     })
-    .config(function ($stateProvider, $urlRouterProvider,uiSelectConfig) {
+    .config(function ($stateProvider, $animateProvider, uiSelectConfig, $urlRouterProvider, RestangularProvider, ENV) {
+
+        RestangularProvider.setBaseUrl(ENV.apiEndpoint);
 
         uiSelectConfig.theme = 'bootstrap';
 
+        $animateProvider.classNameFilter(/^((?!(fa-spin)).)*$/);
+
         // For any unmatched url, redirect to /state1
-        $urlRouterProvider.otherwise('/phenotypes');
+        $urlRouterProvider.otherwise('/landing');
         //
         // Now set up the states
         $stateProvider
-        .state('suggestions', {
+            .state('home', {
+                url: '/landing',
+                controller: 'HomeCtrl as vm',
+                templateUrl: 'views/home.html'
+            })
+            .state('classification', {
+                url: '/classification/:classificationId?disorderId',
+                controller: 'ClassificationCtrl as vm',
+                templateUrl: 'views/classification.html'
+            })
+            .state('landing', {
+                url: '/landing',
+                templateUrl: 'views/landing.html'
+            })
+            .state('tour', {
+                url: '/tour',
+                controller: ['Page', function(Page) {
+                    Page.setTitle('Tour');
+                }],
+                templateUrl: 'views/tour.html'
+            })
+            .state('gene', {
+                url: '/gene/:geneId/disorders',
+                controller: 'GeneCtrl',
+                templateUrl: 'views/gene.html'
+            })
+            .state('genes', {
+                url: '/genes',
+                controller: 'GenesCtrl',
+                templateUrl: 'views/genes.html'
+            })
+            .state('sign', {
+                url: '/sign/:signId/disorders',
+                controller: 'SignCtrl',
+                templateUrl: 'views/sign.html'
+            })
+            .state('signs', {
+                url: '/signs',
+                controller: 'SignsCtrl',
+                templateUrl: 'views/signs.html'
+            })
+            .state('suggestions', {
                 url: '/suggestions',
                 controller: 'SuggestionsCtrl as vm',
                 templateUrl: 'views/suggestions.html',
@@ -50,29 +103,28 @@ angular
                 controller: 'SuggestionCtrl as vm',
                 templateUrl: 'views/suggestion.html',
             })
-
-        .state('phenotype', {
-            url: '/phenotypes/:phenotypeId',
-            controller: 'PhenotypeCtrl',
-            templateUrl: 'views/phenotype.html',
-        })
-        .state('phenotype.edit', {
-            url: '/edit',
-        })
-            .state('phenotypes', {
-                url: '/phenotypes',
-                controller: 'PhenotypesCtrl',
-                templateUrl: 'views/phenotypes.html'
+            .state('disorder', {
+                url: '/disorders/:disorderId',
+                controller: 'DisorderCtrl',
+                templateUrl: 'views/disorder.html',
+            })
+            .state('disorder.edit', {
+                url: '/edit'
+            })
+            .state('disorders', {
+                url: '/disorders?page?signId',
+                controller: 'DisordersCtrl as vm',
+                templateUrl: 'views/disorders.html'
+            })
+            .state('concept', {
+                url: '/concept/:conceptId',
+                controller: function ($scope, Disorder) {
+                    var disorder = Disorder.get({
+                        nid: 136402
+                    }, function () {
+                        $scope.disorder = disorder;
+                    });
+                },
+                templateUrl: 'views/concept.html'
             });
-        // .state('concept', {
-        //     url: '/concept/:conceptId',
-        //     controller: function ($scope, Disorder) {
-        //         var disorder = Disorder.get({
-        //             nid: 136402
-        //         }, function () {
-        //             $scope.disorder = disorder;
-        //         });
-        //     },
-        //     templateUrl: 'views/concept.html'
-        // });
     });

@@ -1,0 +1,163 @@
+<?php
+// $Id: test_entity.install $
+
+
+function test_entity_install() {
+    $t = get_t();
+
+    $test_entity = array(
+        'type' => 'test_entity',
+        'name' => $t('Test Entity'),
+        'base' => 'node_content',
+        'description' => $t('The Test Entity content type.')
+    );
+
+    $content_type = node_type_set_defaults($test_entity);
+    node_type_save($content_type);
+
+    foreach (_test_entity_installed_fields() as $field) {
+        field_create_field($field);
+    }
+
+    foreach (_test_entity_installed_instances() as $instance) {
+        $instance['entity_type'] = 'node';
+        $instance['bundle'] = $test_entity['type'];
+        field_create_instance($instance);
+    }
+
+    variable_set('comment_test_entity', COMMENT_NODE_CLOSED);
+    variable_set('node_options_test_entity', array('status'));
+    variable_set('node_preview_test_entity', DRUPAL_DISABLED);
+    variable_set('node_submitted_test_entity', FALSE);
+}
+
+function _test_entity_installed_fields() {
+    $t = get_t();
+    return array(
+        'field_te_orphaid' => array(
+            'field_name'	=> 'field_te_orphaid',
+            'label'		=> $t('Orpha ID'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        ),
+        'field_te_er' => array(
+            'field_name'	=> 'field_te_er',
+            'label'		=> $t('External reference'),
+            'cardinality'	=> -1,
+            'type'		=> 'entityreference',
+            'settings'	=> array(
+                'referenceable_types' => array(
+                    'external_reference' => 'external_reference'
+                )
+            )
+        ),
+        'field_te_name' => array(
+            'field_name'	=> 'field_te_name',
+            'label'		=> $t('Name'),
+            'cardinality'	=> 1,
+            'type'		=> 'text',
+            'settings'	=> array(
+                'max_length' => 500,
+            )
+        )
+    );
+}
+
+function _test_entity_installed_instances() {
+    $t = get_t();
+    return array(
+        'field_te_orphaid' => array(
+            'field_name' => 'field_te_orphaid',
+            'label'       => $t('Orpha ID'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_te_name' => array(
+            'field_name' => 'field_te_name',
+            'label'       => $t('Name'),
+            'cardinality' => 1,
+            'widget'      => array(
+                'type'    => 'text_textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+        'field_te_er' => array(
+            'field_name'	=> 'field_te_er',
+            'label'		=> $t('External reference'),
+            'cardinality'	=> -1,
+            'widget'		=> array(
+                'type'    => 'entityreference_autocomplete',
+            ),
+            'display' => array(
+                'default' => array(
+                    'type'  => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'full' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+                'teaser' => array(
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                ),
+            )
+        ),
+    );
+}
+
+function test_entity_uninstall() {
+    $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(':type' => 'test_entity'));
+    $nids = array();
+    foreach ($result as $row) {
+        $nids[] = $row->nid;
+    }
+
+    node_delete_multiple($nids);
+
+    foreach (array_keys(_test_entity_installed_fields()) as $field) {
+        field_delete_field($field);
+    }
+
+    $instances = field_info_instances('node', 'test_entity');
+    foreach ($instances as $instance_name => $instance) {
+        field_delete_instance($instance);
+    }
+
+    node_type_delete('test_entity');
+
+    field_purge_batch(1000);
+}

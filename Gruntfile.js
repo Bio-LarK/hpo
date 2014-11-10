@@ -7,7 +7,7 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
     // Load grunt tasks automatically
     require('load-grunt-tasks')(grunt);
@@ -27,6 +27,22 @@ module.exports = function (grunt) {
         // Project settings
         yeoman: appConfig,
 
+        'gh-pages': {
+            options: {
+                base: '<%= yeoman.dist %>'
+            },
+            'gh-pages': {
+                src: ['**']
+            },
+            'live': {
+                options: {
+                    branch: 'master',
+                    repo: 'ssh://craig@130.56.248.140/var/repo/orphanet.git'
+                },
+                src: ['**']
+            }
+        },
+
         ngconstant: {
             // Options for all targets
             options: {
@@ -42,7 +58,7 @@ module.exports = function (grunt) {
                 constants: {
                     ENV: {
                         name: 'development',
-                        apiEndpoint: 'drupal/api'
+                        apiEndpoint: 'api'
                     }
                 }
             },
@@ -53,16 +69,15 @@ module.exports = function (grunt) {
                 constants: {
                     ENV: {
                         name: 'production',
-                        apiEndpoint: 'drupal/api'
+                        apiEndpoint: '/drupal/api'
                     }
                 }
             }
         },
 
+
         changelog: {
-            options: {
-                version: require('./package.json').version
-            }
+            options: {}
         },
 
         buildcontrol: {
@@ -71,17 +86,17 @@ module.exports = function (grunt) {
                 commit: true,
                 push: true,
                 message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%',
-                connectCommits: false
+                connectCommits: true
             },
             pages: {
                 options: {
-                    remote: 'https://github.com/Bio-LarK/orpha.git',
+                    remote: 'git@github.com:Bio-LarK/orpha.git',
                     branch: 'gh-pages'
                 }
             },
             live: {
                 options: {
-                    remote: 'ssh://craig@130.56.248.140/var/repo/hpo.git',
+                    remote: 'ssh://craig@130.56.248.140/var/repo/orphanet.git',
                     branch: 'master',
                     tag: require('./package.json').version
                 }
@@ -99,8 +114,8 @@ module.exports = function (grunt) {
                 files: ['package.json'],
                 updateConfigs: [],
                 commit: true,
-                commitMessage: 'Release v%VERSION%',
-                commitFiles: ['package.json', 'CHANGELOG.md'],
+                commitMessage: 'chore(release): v%VERSION%',
+                commitFiles: ['-a'],
                 createTag: true,
                 tagName: 'v%VERSION%',
                 tagMessage: 'Version %VERSION%',
@@ -155,20 +170,30 @@ module.exports = function (grunt) {
                 hostname: 'localhost',
                 livereload: 35729
             },
+            // proxies: [{
+            //     context: '/orphanet/api',
+            //     host: '130.56.248.140',
+            //     https: false
+            // }],
             proxies: [{
-                context: '/drupal',
-                host: '130.56.248.140',
-                rewrite: {
-                    '^/drupal': '/hpo/drupal',
-                },
+                context: '/api',
+                // host: 'orphanet.bio-lark.org',
+                // headers: {
+                //     host: 'orphanet.bio-lark.org:80'
+                // },
+
+                host: 'hpo.bio-lark.org',
                 headers: {
-                    host: '130.56.248.140:80'
+                    host: 'hpo.bio-lark.org:80'
+                },
+                rewrite: {
+                    '^/api': '/drupal/api',
                 }
             }],
             livereload: {
                 options: {
                     open: true,
-                    middleware: function (connect) {
+                    middleware: function(connect) {
                         return [
                             require('grunt-connect-proxy/lib/utils').proxyRequest,
                             connect.static('.tmp'),
@@ -184,7 +209,7 @@ module.exports = function (grunt) {
             test: {
                 options: {
                     port: 9001,
-                    middleware: function (connect) {
+                    middleware: function(connect) {
                         return [
                             connect.static('.tmp'),
                             connect.static('test'),
@@ -268,6 +293,22 @@ module.exports = function (grunt) {
             sass: {
                 src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
                 ignorePath: /(\.\.\/){1,2}bower_components\//
+            },
+            test: {
+                devDependencies: true,
+                src: 'test/karma.conf.js',
+                ignorePath: /\.\.\//,
+                fileTypes: {
+                    js: {
+                        block: /(([\s\t]*)\/\/\s*bower:*(\S*))(\n|\r|.)*?(\/\/\s*endbower)/gi,
+                        detect: {
+                            js: /'(.*\.js)'/gi
+                        },
+                        replace: {
+                            js: '\'{{filePath}}\','
+                        }
+                    }
+                }
             }
         },
 
@@ -307,8 +348,7 @@ module.exports = function (grunt) {
                     '<%= yeoman.dist %>/scripts/{,*/}*.js',
                     '<%= yeoman.dist %>/styles/{,*/}*.css',
                     '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-                    '<%= yeoman.dist %>/styles/fonts/*',
-                    '!<%= yeoman.dist %>/images/logo-vitruvian.svg',
+                    '<%= yeoman.dist %>/styles/fonts/*'
                 ]
             }
         },
@@ -450,22 +490,22 @@ module.exports = function (grunt) {
                     dest: '<%= yeoman.dist %>/images',
                     src: ['generated/*']
                 }, {
+                    // put drupal in the dist
+                    expand: true,
+                    dot: true, // include hidden files
+                    cwd: 'drupal',
+                    dest: '<%= yeoman.dist %>/drupal',
+                    src: ['**']
+                }, {
                     expand: true,
                     cwd: '.',
                     src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
                     dest: '<%= yeoman.dist %>'
                 }, {
                     expand: true,
-                    cwd: 'bower_components/font-awesome/fonts',
+                    cwd: 'bower_components/fontawesome/fonts',
                     src: ['**'],
                     dest: '<%= yeoman.dist %>/fonts'
-                }, {
-                    // put drupal in the dist
-                    expand: true,
-                    dot: true, // include hidden files
-                    cwd: 'drupal',
-                    dest: '<%= yeoman.dist %>/drupal',
-                    src: ['**', '!sites/default/settings.php', '!sites/default/files/**/*']
                 }]
             },
             styles: {
@@ -501,7 +541,7 @@ module.exports = function (grunt) {
     });
 
 
-    grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
+    grunt.registerTask('serve', 'Compile then start a connect web server', function(target) {
         if (target === 'dist') {
             return grunt.task.run(['build', 'connect:dist:keepalive']);
         }
@@ -518,7 +558,7 @@ module.exports = function (grunt) {
         ]);
     });
 
-    grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function (target) {
+    grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function(target) {
         grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
         grunt.task.run(['serve:' + target]);
     });
@@ -555,7 +595,12 @@ module.exports = function (grunt) {
         'build'
     ]);
 
-    grunt.registerTask('deploy', 'Builds and deploys', function (type) {
+    grunt.registerTask('deploypages', 'Builds and deploys', function(type) {
+        type = type || 'patch';
+        grunt.task.run(['build', 'bump-only:' + type, 'changelog', 'bump-commit', 'buildcontrol:pages']);
+    });
+
+    grunt.registerTask('deploy', 'Builds and deploys', function(type) {
         type = type || 'patch';
 
         grunt.task.run(['build', 'bump-only:' + type, 'changelog', 'bump-commit', 'buildcontrol:live']);

@@ -1,0 +1,12 @@
+.edit-bar {
+  width: 100%;
+  position:fixed;
+  top:50px;
+  z-index: 1;
+  border-bottom: 1px solid #ddd;
+}
+@media (max-width: $screen-xs-max) {
+	.edit-bar {
+		position: static;
+	}
+}

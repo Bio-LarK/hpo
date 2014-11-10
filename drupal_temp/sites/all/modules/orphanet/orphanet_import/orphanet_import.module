@@ -1,0 +1,199 @@
+<?php
+
+// $Id: orphanet_import.module $
+
+define('_IMPORT_CONTENT_', 'edit-configuration-import-content');
+define('_IMPORT_CLASSIFICATION_', 'edit-configuration-import-classifications');
+
+function orphanet_import_menu() {
+    $items['admin/config/system/orphanet_configuration'] = array(
+        'title' => 'Orphanet Configuration',
+        'description' => 'Configuration of the Orphanet content.',
+        'page callback' => 'orphanet_config_page',
+        'access arguments' => array('administer content'),
+        'type' => MENU_NORMAL_ITEM,
+    );
+
+    return $items;
+}
+
+function orphanet_config_page() {
+    return drupal_get_form('orphanet_config_form');
+}
+
+function orphanet_config_form() {
+    $form['#attributes'] = array('enctype' => "multipart/form-data");
+
+    $form['configuration'] = array(
+        '#type' => 'vertical_tabs',
+        '#title' => t('Configuration'),
+        '#collapsible' => TRUE,
+        '#collapsed' => FALSE,
+        '#tree' => TRUE,
+    );
+
+    $form['configuration']['import_content'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Import content'),
+        '#weight' => 1,
+        '#collapsible' => TRUE,
+        '#collapsed' => FALSE,
+        '#tree' => TRUE,
+        'value' => import_content_form(),
+    );
+
+
+    $form['configuration']['import_classifications'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Import classifications'),
+        '#weight' => 2,
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
+        '#tree' => TRUE,
+        'value' => import_classification_form(),
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Submit',
+    );
+
+    return $form;
+}
+
+function import_classification_form() {
+    $classification_form = array();
+    $classification_form['#attributes'] = array('enctype' => "multipart/form-data");
+
+    $classification_form['classifications_folder'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Folder containing the classification files'),
+        '#description' => t('Specify the path to the folder containing the classification files.'),
+    );
+
+    return $classification_form;
+}
+
+function import_content_form() {
+    $content_form = array();
+    $content_form['#attributes'] = array('enctype' => "multipart/form-data");
+
+    $content_form['pheno_vocab_file'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Clinical signs vocabulary file'),
+        '#description' => t('Specify the path to the clinical signs vocabulary file (e.g., orpha_phenos_vocab.xml).'),
+    );
+
+    $content_form['disorders_file'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Disorders file'),
+        '#description' => t('Specify the path to the disorders file (e.g., orpha_RareDiseases.xml).'),
+    );
+
+    $content_form['disorders_epidem_file'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Disorders - Epidemiological information file'),
+        '#description' => t('Specify the path to the disorders - epidemiological information file (e.g., orpha_RareDiseasesEpidem.xml).'),
+    );
+
+    $content_form['genes_file'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Disorders - Gene file'),
+        '#description' => t('Specify the path to the disorders - gene file (e.g., orpha_genes.xml).'),
+    );
+
+
+    $content_form['disorders_pheno_file'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Disorders - Clinical signs file'),
+        '#description' => t('Specify the path to the disorders - clinical signs file (e.g., orpha_phenos.xml).'),
+    );
+
+    return $content_form;
+}
+
+function orphanet_config_form_submit($form, &$form_state) {
+    $active_tab = $form_state['input']['configuration']['configuration__active_tab'];
+    if ($active_tab === _IMPORT_CONTENT_) {
+        $pheno_vocab_file = $form_state['values']['configuration']['import_content']['value']['pheno_vocab_file'];
+        $disorders_file = $form_state['values']['configuration']['import_content']['value']['disorders_file'];
+        $disorders_epidem_file = $form_state['values']['configuration']['import_content']['value']['disorders_epidem_file'];
+        $genes_file = $form_state['values']['configuration']['import_content']['value']['genes_file'];
+        $disorders_pheno_file = $form_state['values']['configuration']['import_content']['value']['disorders_pheno_file'];
+
+        $ok = 1;
+        if ($pheno_vocab_file === '') {
+            $ok = 0;
+            drupal_set_message('Please enter a valid clinical signs vocabulary file.', 'error');
+        }
+        if ($genes_file === '') {
+            $ok = 0;
+            drupal_set_message('Please enter a valid disorders - gene file.', 'error');
+        }
+        if ($disorders_file === '') {
+            $ok = 0;
+            drupal_set_message('Please enter a valid disorders file.', 'error');
+        }
+        if ($disorders_epidem_file === '') {
+            $ok = 0;
+            drupal_set_message('Please enter a valid disorders - epidemiological information file.', 'error');
+        }
+        if ($disorders_pheno_file === '') {
+            $ok = 0;
+            drupal_set_message('Please enter a valid disorders - clinical signs file.', 'error');
+        }
+
+        if ($ok === 1) {
+/*
+            delete_nodes('age_of_death');
+            delete_nodes('age_of_onset');
+            delete_nodes('clinical_sign');
+            delete_nodes('disorder');
+            delete_nodes('disorder_gene');
+            delete_nodes('disorder_gene_as');
+            delete_nodes('disorder_gene_at');
+            delete_nodes('disorder_sign');
+            delete_nodes('expert');
+            delete_nodes('external_reference');
+            delete_nodes('gene');
+            delete_nodes('prevalence_class');
+            delete_nodes('sign_frequency');
+            delete_nodes('type_of_inheritance');
+*/
+
+            $import_obj = new OrphanetImport($pheno_vocab_file, $genes_file, $disorders_file, $disorders_epidem_file);
+            $import_obj->load_orphanet();
+            $import_obj->map_disoders_to_pheno($disorders_pheno_file);
+        }
+    }
+
+    if ($active_tab === _IMPORT_CLASSIFICATION_) {
+        $classification_folder = $form_state['values']['configuration']['import_classifications']['value']['classifications_folder'];
+
+        $import_class_obj = new ClassificationImport($classification_folder);
+        $import_class_obj->loadClassifications();
+    }
+
+    return $form;
+}
+
+function count_nodes($type) {
+    $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(':type' => $type));
+    $count = 0;
+    foreach ($result as $row) {
+        $count++;
+    }
+    drupal_set_message($count);
+}
+
+function delete_nodes($type) {
+    $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(':type' => $type));
+    $nids = array();
+    foreach ($result as $row) {
+        node_delete($row->nid);
+//        $nids[] = $row->nid;
+    }
+//    node_delete_multiple($nids);
+}

@@ -2,48 +2,23 @@
 
 /**
  * @ngdoc service
- * @name hpoApp.searchService
+ * @name orphaApp.SearchService
  * @description
- * # searchService
- * Factory in the hpoApp.
+ * # SearchService
+ * Factory in the orphaApp.
  */
-angular.module('hpoApp')
-    .factory('searchService', function(ENV, $http, $state, Phenotype) {
+angular.module('orphaApp')
+    .factory('searchService', function ($http, ENV, $state) {
         var service = {
-            getResults: getResults,
-            findPhenotypes: findPhenotypes,
-            changed: changed
+        	search: search,
         };
         return service;
 
-        function getResults(text) {
+        function search(text) {
             var keys = encodeURIComponent(text);
             var url = ENV.apiEndpoint + '/search_node/retrieve.json?keys=' + keys + '&simple=1';
-            return $http.get(url).then(function(response) {
+            return $http.get(url).then(function (response) {
                 return response.data;
             });
         }
-
-        function findPhenotypes(text) {
-            var url = ENV.apiEndpoint + '/entity_node'; 
-            return $http.get(url, {
-                params: {
-                    'parameters[title]': text + '*',
-                    'parameters[type]': 'hpo_concept',
-                    'field': 'nid,title'
-                }
-            }).then(function(response) {
-                return _.map(response.data, function(data) {
-                    return new Phenotype(data);
-                });
-            }); 
-        }
-
-        function changed($item, $model, $label) {
-            var params = {
-                phenotypeId: $item.nid
-            };
-            $state.go('phenotype', params);
-        }
-
     });

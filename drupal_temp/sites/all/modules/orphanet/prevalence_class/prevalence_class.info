@@ -1,0 +1,7 @@
+name = Prevalence Class
+description = Provides the implementation for the Class of Prevalence content type.
+core = 7.x
+package = Orphanet
+
+files[] = prevalence_class.module
+files[] = prevalence_class.install

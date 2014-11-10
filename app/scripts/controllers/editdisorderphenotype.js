@@ -9,7 +9,7 @@
  */
 angular.module('orphaApp')
     .controller('EditDisorderPhenotypeCtrl', function($scope, $http, $modalInstance,
-        config, ENV, ListTransaction, $q, TransactionRequest, toaster) {
+        config, ENV, ListTransaction, $q, TransactionRequest, toaster, transactionStatusService) {
         var vm = this;
         vm.disorderSign = config.relationshipNode;
         vm.disorder = config.leftNode;
@@ -63,22 +63,25 @@ angular.module('orphaApp')
             listTransaction.$save().then(function(listTransaction) {
                 // var transactionIds = _.pluck(cats, 'nid');
                 // Add it to a transaction request
-                var transactionRequest = new TransactionRequest({
-                    title: 'Relationship between ' + vm.disorder.title + ' and ' + vm.sign.title,
-                    type: 'transaction_request',
-                    'tr_timestamp': new Date().getTime() / 1000,
-                    'tr_trans': [
-                        listTransaction.nid
-                    ],
-                    'tr_status': 3,
-                    'tr_user': 0,
-                    body: {
-                        value: vm.reason,
-                        summary: vm.reason
-                    }
+                return transactionStatusService.loadStatusCodes().then(function() {
+                    var transactionRequest = new TransactionRequest({
+                        title: 'Relationship between ' + vm.disorder.title + ' and ' + vm.sign.title,
+                        type: 'transaction_request',
+                        'tr_timestamp': new Date().getTime() / 1000,
+                        'tr_trans': [
+                            listTransaction.nid
+                        ],
+                        'tr_status': transactionStatusService.submittedNid,
+                        'tr_user': 0,
+                        body: {
+                            value: vm.reason,
+                            summary: vm.reason
+                        }
+                    });
+                    toaster.pop('success', 'Suggestion submitted.');
+                    return transactionRequest.$save();
                 });
-                toaster.pop('success', 'Suggestion submitted.');
-                return transactionRequest.$save();
+                
             });
 
             $modalInstance.dismiss('cancel');

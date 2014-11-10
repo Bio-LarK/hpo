@@ -1,0 +1,7 @@
+name = Sign Frequency
+description = Provides the implementation for the Clinical sign frequency.
+core = 7.x
+package = Orphanet
+
+files[] = sign_frequency.module
+files[] = sign_frequency.install

@@ -7,39 +7,19 @@
  * # modalService
  * Factory in the orphaApp.
  */
-angular.module('hpoApp')
+angular.module('orphaApp')
     .factory('modalService', function($modal) {
         var service = {
             openPrevalenceClassModal: openPrevalenceClassModal,
             openAgeOfOnset: openAgeOfOnset,
             openAgeOfDeath: openAgeOfDeath,
             openEditTitle: openEditTitle,
-            openEditDescription: openEditDescription,
-            openEditClassification: openEditClassification,
-            openEditChildren: openEditChildren,
-            openEditSynonym: openEditSynonym
+            openEditDescription: openEditDescription
         };
         return service;
 
         ///////
 
-        function openEditSynonym(phenotype, synonym) {
-            var config = {
-                synonym: synonym,
-                phenotype: phenotype
-            };
-
-            return $modal.open({
-                templateUrl: 'views/editsynonym.modal.html',
-                controller: 'EditSynonymCtrl as vm',
-                resolve: {
-                    config: function() {
-                        return config;
-                    }
-
-                }
-            });
-        }
         function openEditTitle(concept) {   
             var config = {
                 concept: concept,
@@ -58,48 +38,6 @@ angular.module('hpoApp')
                 }
             });
         }
-
-        function openEditChildren(concept) {
-            var config = {
-                concept: concept,
-                infoMessage: 'Add or remove children from ' + concept.title,
-                propertyName: 'concept_child',
-                transactionRequestTitle: concept.title + ' - Update Children'
-            };
-
-            return $modal.open({
-                templateUrl: 'views/editclassification.modal.html',
-                controller: 'EditChildrenCtrl as vm',
-                resolve: {
-                    config: function() {
-                        return config;
-                    }
-
-                }
-            });
-        }
-
-        function openEditClassification(concept) {   
-
-            var config = {
-                concept: concept,
-                infoMessage: 'Add or remove parent from ' + concept.title,
-                propertyName: 'concept_parent',
-                transactionRequestTitle: concept.title + ' - Update Parent Hierarchy'
-            };
-
-            return $modal.open({
-                templateUrl: 'views/editclassification.modal.html',
-                controller: 'EditChildrenCtrl as vm',
-                resolve: {
-                    config: function() {
-                        return config;
-                    }
-
-                }
-            });
-        }
-
 
         function openEditDescription(concept) {   
             var config = {

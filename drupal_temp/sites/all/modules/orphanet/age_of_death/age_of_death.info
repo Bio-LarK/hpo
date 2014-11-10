@@ -1,0 +1,7 @@
+name = Age Of Death
+description = Provides the implementation for the Age of Death content type.
+core = 7.x
+package = Orphanet
+
+files[] = age_of_death.module
+files[] = age_of_death.install
