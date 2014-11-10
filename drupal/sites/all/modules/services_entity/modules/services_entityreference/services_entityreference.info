@@ -4,9 +4,9 @@ package = Services
 core = 7.x
 dependencies[] = services_entity
 
-; Information added by Drupal.org packaging script on 2013-12-22
-version = "7.x-2.0-alpha7"
+; Information added by Drupal.org packaging script on 2014-08-11
+version = "7.x-2.0-alpha8"
 core = "7.x"
 project = "services_entity"
-datestamp = "1387704808"
+datestamp = "1407747229"
 
