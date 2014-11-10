@@ -18,6 +18,10 @@ angular.module('orphaApp')
         ////////////
 
         function setTitle(newTitle) {
-            page.title = newTitle + ' - HPO - Human Phenotype Ontology';
+            page.title = '';
+            if(newTitle && newTitle.length) {
+                page.title += newTitle + ' - ';
+            }
+            page.title += 'HPO - Human Phenotype Ontology';
         }
     });

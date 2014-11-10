@@ -17,7 +17,7 @@ angular.module('orphaApp')
 
 		function activate() {
 			getAllClassifications();
-			Page.setTitle('Orphanet - Rare diseases are rare but rare disease patients are numerous.');
+			Page.setTitle('');
 		}
 
 		function getAllClassifications() {
