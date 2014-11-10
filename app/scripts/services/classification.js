@@ -80,11 +80,9 @@ angular.module('orphaApp')
             }).$promise]).then(function(results) {
                 var classifications = _.flatten(results);
                 _.each(classifications, function(classification) {
-                    var metadata = _.find(classificationMetadata, {
-                        name: classification.title
-                    });
+                    var metadata = _findClassificationMetadata(classification.title);
                     if (metadata) {
-                        classification.disorderCount = metadata.count;
+                        // classification.disorderCount = metadata.count;
                         classification.color = metadata.color;
                     }
 
@@ -121,9 +119,7 @@ angular.module('orphaApp')
         function getColor() {
             // jshint validthis: true 
             var classification = this;
-            var metadata = _.find(classificationMetadata, {
-                name: classification.title
-            });
+            var metadata = _findClassificationMetadata(classification.title);
             return metadata.color;
         }
 

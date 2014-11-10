@@ -71,13 +71,7 @@ module.exports = function(grunt) {
                 commit: true,
                 push: true,
                 message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%',
-                connectCommits: false
-            },
-            pages: {
-                options: {
-                    remote: 'https://github.com/Bio-LarK/orpha.git',
-                    branch: 'gh-pages'
-                }
+                connectCommits: true
             },
             live: {
                 options: {
@@ -157,12 +151,12 @@ module.exports = function(grunt) {
             },
             proxies: [{
                 context: '/drupal',
-                host: '130.56.248.140',
-                rewrite: {
-                    '^/drupal': '/hpo/drupal',
-                },
+                host: 'hpo.bio-lark.org',
+                // rewrite: {
+                    // '^/drupal': '/hpo/drupal',
+                // },
                 headers: {
-                    host: '130.56.248.140:80'
+                    host: 'hpo.bio-lark.org:80'
                 }
             }],
             livereload: {

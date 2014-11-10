@@ -15,7 +15,7 @@ describe('Service: classification', function() {
         $httpBackend.whenGET(/views.*/).respond(200, '');
 
         classification = new Classification({
-            title: 'Rare eye disease'
+            title: 'Abnormality of the genitourinary system'
         });
     }));
 
@@ -34,12 +34,12 @@ describe('Service: classification', function() {
     it('getAll should return expected value', function() {
 
         var page1 = [{
-            title: 'Rare bone disease'
+            title: 'Abnormality of the genitourinary system'
         }];
         var page2 = [{
-            title: 'Rare eye disease'
+            title: 'Abnormality of head and neck'
         }, {
-            title: 'Rare respiratory disease'
+            title: 'Abnormality of the eye'
         }];
         $httpBackend.expectGET(ENV.apiEndpoint + '/entity_node?page=0&parameters%5Btype%5D=disorder_classification').respond(page1);
         $httpBackend.expectGET(ENV.apiEndpoint + '/entity_node?page=1&parameters%5Btype%5D=disorder_classification').respond(page2);
@@ -53,7 +53,7 @@ describe('Service: classification', function() {
 
         expect(myClassifications.length).toEqual(page1.length + page2.length);
         expect(myClassifications[0].title).toEqual(page1[0].title);
-        expect(myClassifications[0].color).toBe('hsla(348.38709677419354, 80%, 70%, 1)');
+        expect(myClassifications[0].color).toBe('hsla(0, 70%, 70%, 1)');
     });
 
     describe('classification resource', function() {
@@ -62,7 +62,7 @@ describe('Service: classification', function() {
         });
         it('getColor should return expected value', function() {
             var color = classification.getColor();
-            expect(color).toBe('hsla(336.77419354838713, 80%, 70%, 1)');
+            expect(color).toBe('hsla(0, 70%, 70%, 1)');
         });
     });
 

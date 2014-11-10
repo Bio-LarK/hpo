@@ -1,5 +1,4 @@
 <?php
-
 // $Id: tr_status.install $
 
 function tr_status_install() {
@@ -29,7 +28,7 @@ function tr_status_install() {
     variable_set('node_options_tr_status', array('status'));
     variable_set('node_preview_tr_status', DRUPAL_DISABLED);
     variable_set('node_submitted_tr_status', FALSE);
-
+    
     _create_nodes();
 }
 
@@ -41,7 +40,7 @@ function _create_nodes() {
     $accept_node->title = 'Accepted';
     $accept_node->field_trstatus_value['und'][0]['value'] = 'Accepted';
     node_save($accept_node);
-    
+	
     $reject_node = new stdClass();
     $reject_node->type = 'tr_status';
     $reject_node->language = 'und';
@@ -72,13 +71,13 @@ function _tr_status_installed_fields() {
     return array(
         'field_trstatus_value' => array(
             'field_name'	=> 'field_trstatus_value',
-            'label'		=> $t('Status value'),
+            'label'		=>$t('Status value'),
             'cardinality'	=> 1,
             'type'		=> 'text',
             'settings'	=> array(
                 'max_length' => 500,
             )
-        ),
+        )
     );
 }
 

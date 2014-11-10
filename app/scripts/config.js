@@ -2,6 +2,6 @@
 
  angular.module('config', [])
 
-.constant('ENV', {name:'development',apiEndpoint:'api'})
+.constant('ENV', {name:'development',apiEndpoint:'drupal/api'})
 
 ;

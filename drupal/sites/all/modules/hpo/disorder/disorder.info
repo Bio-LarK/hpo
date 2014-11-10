@@ -1,0 +1,10 @@
+name = Disorder
+description = Provides the implementation for the Disorder content type.
+core = 7.x
+package = HPO
+
+dependencies[] = entityreference
+dependencies[] = disorder_sign
+
+files[] = disorder.module
+files[] = disorder.install

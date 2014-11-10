@@ -350,11 +350,8 @@ class ServicesEntityGenericEntityResource extends ServicesEntityTestHelper {
 
     $this->resource_path = $this->endpoint->path . '/entity_services_entity_test';
 
-    // Create and log in our privileged user.
-    $this->privilegedUser = $this->drupalCreateUser(array(
-      // Let this user access all services.
-      'administer services',
-    ));
+    // Create an unprivileged user.
+    $this->unPrivilegedUser = $this->drupalCreateUser();
 
     // Set the resource class to use.
     variable_set('services_entity_resource_class', $this->services_entity_resource_class);
@@ -364,11 +361,10 @@ class ServicesEntityGenericEntityResource extends ServicesEntityTestHelper {
    * Test 'Retrieve' service.
    */
   public function testEntityRetrieve() {
-    $this->drupalLogin($this->privilegedUser);
-
-    // Try getting an entity that doesn't exist.
-    $responseArray = $this->servicesGet($this->resource_path . '/42');
-    $this->assertTrue($responseArray['code'] == '404', 'Retrieval of a non-existent entity returns a 404.');
+    // Create our privileged user.
+    $this->privilegedUser = $this->drupalCreateUser(array(
+      'view services_entity_test entities',
+    ));
 
     // Create an entity to retrieve.
     $entity = entity_create('services_entity_test', array(
@@ -386,19 +382,36 @@ class ServicesEntityGenericEntityResource extends ServicesEntityTestHelper {
 
     $this->drupalGet($this->resource_path . '/' . $entity->eid);
 
+    // Log in as the unprivileged user.
+    $this->drupalLogin($this->unPrivilegedUser);
+
+    // Try getting an entity without access.
+    $response = $this->servicesGet($this->endpoint->path . '/entity_services_entity_test/' . $entity->eid);
+    $this->assertTrue($response['code'] == '401', 'Retrieval of an entity without view access returns a 401.');
+
+    // Log in as the privileged user.
+    $this->drupalLogin($this->privilegedUser);
+
     $response = $this->servicesGet($this->endpoint->path . '/entity_services_entity_test/' . $entity->eid);
     $retrieved_entity_data = $response['body'];
 
     // Check values on the retrieved entity data.
     $this->assertEqual($entity->name, $retrieved_entity_data->name, 'Retrieved entity has the name property correctly set.');
     $this->assertEqual($test_text_value, $retrieved_entity_data->field_test_text_alpha['und'][0]['value'], 'Retrieved entity has the field value correctly set.');
+
+    // Try getting an entity that doesn't exist.
+    $responseArray = $this->servicesGet($this->resource_path . '/42');
+    $this->assertTrue($responseArray['code'] == '404', 'Retrieval of a non-existent entity returns a 404.');
   }
 
   /**
    * Test 'Create' service.
    */
   public function testEntityCreate() {
-    $this->drupalLogin($this->privilegedUser);
+    // Create our privileged user.
+    $this->privilegedUser = $this->drupalCreateUser(array(
+      'create services_entity_test entities',
+    ));
 
     // An array of entity data to pass to the service to create an entity.
     $entity_data = array(
@@ -408,6 +421,16 @@ class ServicesEntityGenericEntityResource extends ServicesEntityTestHelper {
     );
     $test_text_value = $this->randomString();
     $entity_data['field_test_text_alpha']['und'][0]['value'] = $test_text_value;
+
+    // Log in as the unprivileged user.
+    $this->drupalLogin($this->unPrivilegedUser);
+
+    // Try to create the entity using the service, without access.
+    $response = $this->servicesPost($this->resource_path, $entity_data);
+    $this->assertTrue($response['code'] == '401', "Creation of an entity without 'create' access returns a 401.");
+
+    // Log in as the privileged user.
+    $this->drupalLogin($this->privilegedUser);
 
     // Create the entity using the service.
     $response = $this->servicesPost($this->resource_path, $entity_data);
@@ -429,6 +452,11 @@ class ServicesEntityGenericEntityResource extends ServicesEntityTestHelper {
    * Test 'Update' service.
    */
   public function testEntityUpdate() {
+    // Create our privileged user.
+    $this->privilegedUser = $this->drupalCreateUser(array(
+      'update services_entity_test entities',
+    ));
+
     // Create an entity to update.
     $original_entity_data = array(
       'type' => 'alpha',
@@ -443,8 +471,6 @@ class ServicesEntityGenericEntityResource extends ServicesEntityTestHelper {
 
     $original_entity->save();
 
-    $this->drupalLogin($this->privilegedUser);
-
     // Build an array of data to update to the entity.
     $update_entity_data = $original_entity_data;
     // We have to add the entity id.
@@ -454,6 +480,16 @@ class ServicesEntityGenericEntityResource extends ServicesEntityTestHelper {
     // Change the field value.
     $test_text_value = $this->randomString();
     $update_entity_data['field_test_text_alpha']['und'][0]['value'] = $test_text_value;
+
+    // Log in as the unprivileged user.
+    $this->drupalLogin($this->unPrivilegedUser);
+
+    // Attempt to update the entity using the service, without access.
+    $response = $this->servicesPut($this->resource_path . '/' . $original_entity->eid, $update_entity_data);
+    $this->assertTrue($response['code'] == '401', "Update of an entity without 'update' access returns a 401.");
+
+    // Log in as the privileged user.
+    $this->drupalLogin($this->privilegedUser);
 
     // Update the entity using the service.
     $response = $this->servicesPut($this->resource_path . '/' . $original_entity->eid, $update_entity_data);
@@ -476,6 +512,11 @@ class ServicesEntityGenericEntityResource extends ServicesEntityTestHelper {
    * Test 'Delete' service.
    */
   public function testEntityDelete() {
+    // Create our privileged user.
+    $this->privilegedUser = $this->drupalCreateUser(array(
+      'delete services_entity_test entities',
+    ));
+
     // Create an entity to delete.
     $entity_data = array(
       'type' => 'alpha',
@@ -485,6 +526,15 @@ class ServicesEntityGenericEntityResource extends ServicesEntityTestHelper {
     );
     $entity = entity_create('services_entity_test', $entity_data);
     $entity->save();
+
+    // Log in as the unprivileged user.
+    $this->drupalLogin($this->unPrivilegedUser);
+
+    $response = $this->servicesDelete($this->resource_path . '/' . $entity->eid);
+    $this->assertTrue($response['code'] == '401', "Deletion of an entity without 'delete' access returns a 401.");
+
+    // Log in as the privileged user.
+    $this->drupalLogin($this->privilegedUser);
 
     $response = $this->servicesDelete($this->resource_path . '/' . $entity->eid);
 
@@ -500,6 +550,11 @@ class ServicesEntityGenericEntityResource extends ServicesEntityTestHelper {
    * Test 'Index' service.
    */
   public function testEntityIndex() {
+    // Create our privileged user.
+    $this->privilegedUser = $this->drupalCreateUser(array(
+      'view services_entity_test entities',
+    ));
+
     // Create some entities to index.
     $entity_data = array(
       'type' => 'alpha',
@@ -538,6 +593,16 @@ class ServicesEntityGenericEntityResource extends ServicesEntityTestHelper {
     );
     $entity = entity_create('services_entity_test', $entity_data);
     $entity->save();
+
+    // Log in as the unprivileged user.
+    $this->drupalLogin($this->unPrivilegedUser);
+
+    // Attempt to get the index of all entities without access.
+    $response = $this->servicesGet($this->resource_path);
+    $this->assertTrue($response['code'] == '404', "Retrieving an index of entities without 'view' access for any returns a 404.");
+
+    // Log in as the privileged user.
+    $this->drupalLogin($this->privilegedUser);
 
     // Get the index of all entities.
     $response = $this->servicesGet($this->resource_path);
@@ -590,6 +655,9 @@ class ServicesEntityGenericEntityResource extends ServicesEntityTestHelper {
     $retrieved_data = $response['body'];
 
     $this->assertEqual(count($retrieved_data), 2, "The correct number of entities was returned by the index when filtered by a field value.");
+
+    // todo: check that if a single entity denies access, it is excluded from
+    // the returned list of entities.
   }
 }
 
@@ -744,16 +812,20 @@ class ServicesEntityNodeResourceTest extends ServicesEntityTestHelper {
     }
 
     // Test retrieving a specific revision.
-    // @todo complete these tests if/when https://drupal.org/node/1981890 lands.
-    // $nodes = $this->createNodeRevisions();
-    // foreach ($nodes as $node) {
-    // $retrieved = $this->retrieve($resource, $node->nid,
-    // array(
-    // 'revision' => $node->vid,
-    // 'XDEBUG_SESSION_START' => 'ECLIPSE_DBGP'
-    // ), 200);
-    // $this->assertEqual($retrieved->title, $node->title);
-    // }
+    $revisions = $this->createNodeRevisions();
+    foreach ($revisions as $revision) {
+      $retrieved = $this->retrieve($resource, $revision->nid,
+        array(
+          'revision' => $revision->vid,
+          // 'XDEBUG_SESSION_START' => 'ECLIPSE_DBGP'
+        ), 200);
+      $this->assertEqual($retrieved['title'], $revision->title, 'Revision ' . $revision->vid . ' has the correct title.');
+    }
+
+    // Ensure that retrieving the node without specifying a revision gets the
+    // most recent revision.
+    $retrieved = $this->retrieve($resource, $revision->nid);
+    $this->assertEqual($retrieved['title'], $revision->title, 'Plain retrieve gets the lastest revision.');
 
     // We are only going to test properties that we set explicitly.
     $test_properties = array_keys($node);
@@ -862,6 +934,38 @@ class ServicesEntityNodeResourceTest extends ServicesEntityTestHelper {
 
     $drupal_node = $this->nodeLoad($created_node_sans_body['nid'], $clean);
     $this->assertNodeProperties($node_sans_body, $drupal_node, array_keys($node_sans_body), 'Created node without body');
+  }
+
+  /**
+   * Create several revisions of a node.
+   *
+   * @param int $number
+   *   The number of revisions to create.
+   *
+   * @return
+   *   An array containing the original node and revisions.
+   */
+  protected function createNodeRevisions($number = 3) {
+    $nodes = array();
+    for ($i = 0; $i < $number; $i++) {
+      if (empty($nodes)) {
+        $nodes[] = $this->drupalCreateNode(array('title' => $this->randomName()));
+      }
+      else {
+        $node = end($nodes);
+        $new_node = (object) array(
+          'nid' => $node->nid,
+          'vid' => $node->vid,
+          'uid' => $node->uid,
+          'type' => $node->type,
+          'title' => $this->randomName(),
+          'revision' => 1,
+        );
+        node_save($new_node);
+        $nodes[] = $new_node;
+      }
+    }
+    return $nodes;
   }
 
   /**
