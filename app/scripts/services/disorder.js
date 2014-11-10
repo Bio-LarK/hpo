@@ -93,8 +93,9 @@ angular.module('orphaApp')
             /* jshint validthis: true */
             var disorder = this;
             // Get the gene ids
-            var fields = ['disgene_as', 'disgene_at', 'disgene_gene'];
-            return RelationshipService.getRelatedThroughIntermediary(disorder, 'disorder_disgene', fields);
+            return $q.when([]);
+            // var fields = ['disgene_as', 'disgene_at', 'disgene_gene'];
+            // return RelationshipService.getRelatedThroughIntermediary(disorder, 'disorder_disgene', fields);
         }
 
         function getSigns() {
@@ -223,7 +224,7 @@ angular.module('orphaApp')
             var disorder = this;
             // // $log.debug('ers', disorder['disorder_er']);
 
-            if (!disorder['disorder_er'].length) {
+            if (!disorder['disorder_er'] || disorder['disorder_er'].length) {
                 return [];
             }
             var request = _.reduce(disorder['disorder_er'], function(request, er, key) {
