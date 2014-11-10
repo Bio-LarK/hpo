@@ -69,6 +69,7 @@ angular.module('orphaApp')
         Classification.getAll = getAll;
         Classification.getColorForClassificationName = getColorForClassificationName;
         Classification.getPositionForClassificationName = getPositionForClassificationName;
+        Classification.getMetadata = getMetadata;
         Classification.prototype.getColor = getColor;
         return Classification;
 
@@ -91,6 +92,9 @@ angular.module('orphaApp')
             });
         }
 
+        function getMetadata() {
+            return classificationMetadata;            
+        }
         function getColorForClassificationName(name) {
             var classification = _findClassificationMetadata(name);
             if(!classification) {

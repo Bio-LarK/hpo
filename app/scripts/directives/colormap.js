@@ -53,9 +53,9 @@ angular.module('orphaApp')
                         // the grid type
                         var highestCount = 0;
 
-                        var myClassifications = angular.copy(scope.allClassifications);
+                        var myClassifications = angular.copy(Classification.getMetadata());
                         _.each(classifications, function(classification) {
-                            var myClassification = _.find(myClassifications, {name: classification.title});
+                            var myClassification = _.find(myClassifications, {title: classification.title});
                             if(!myClassification) {
                                 $log.error('No matching classification found', classification);
                             }
