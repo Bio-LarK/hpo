@@ -18,6 +18,6 @@ angular.module('orphaApp')
         ////////////
 
         function setTitle(newTitle) {
-            page.title = newTitle + ' - Orphanet';
+            page.title = newTitle + ' - HPO - Human Phenotype Ontology';
         }
     });
