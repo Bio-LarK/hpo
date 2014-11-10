@@ -106,7 +106,9 @@ angular.module('orphaApp')
             if(ids.length === 0) {
                 return $q.when([]);
             }
-            var params = {};
+            var params = {
+                fields: 'nid,title,disorder_class'
+            };
             var paginatedIds = ids.slice(page * 20, page * 20 + 20);
             _.each(paginatedIds, function(id, i) {
                 params['parameters[nid][' + i + ']'] = id;
