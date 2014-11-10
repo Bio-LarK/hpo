@@ -1,3 +1,14 @@
+<a name="0.21.10"></a>
+### 0.21.10 (2014-11-10)
+
+
+#### Bug Fixes
+
+* **colormap:**
+  * stop loading taking ages ([fbafa355](git@github.com:Bio-LarK/orpha/commit/fbafa3557cf078df76d8b60255ee03a8fad1941c))
+  * fix not loading for disorders ([d76fc84f](git@github.com:Bio-LarK/orpha/commit/d76fc84f258797db1e481d06a5c482f3ec5f84ec))
+
+
 <a name="0.21.9"></a>
 ### 0.21.9 (2014-11-10)
 

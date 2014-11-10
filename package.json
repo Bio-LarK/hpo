@@ -1,6 +1,6 @@
 {
   "name": "orpha",
-  "version": "0.21.10",
+  "version": "0.21.11",
   "devDependencies": {
     "grunt": "^0.4.1",
     "grunt-autoprefixer": "^0.7.3",
