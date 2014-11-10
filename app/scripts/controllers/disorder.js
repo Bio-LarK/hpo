@@ -51,7 +51,7 @@ angular.module('orphaApp')
                     });
                 });
 
-                Page.setTitle(disorder['disorder_name']);
+                Page.setTitle(disorder['title']);
 
                 // FIXME: This is terrible, and should all be serverside
                 var genesPromise = disorder.getGenes();
