@@ -71,8 +71,8 @@ class ServicesEntityResourceControllerClean extends ServicesEntityResourceContro
     return $this->get_data($wrapper, '*');
   }
 
-  public function retrieve($entity_type, $entity_id, $fields, $revision) {
-    $entity = parent::retrieve($entity_type, $entity_id, '*', $revision);
+  public function retrieve($entity_type, $entity_id, $fields) {
+    $entity = parent::retrieve($entity_type, $entity_id, '*');
     return $this->get_data(entity_metadata_wrapper($entity_type, $entity), $fields);
   }
 
@@ -142,82 +142,62 @@ class ServicesEntityResourceControllerClean extends ServicesEntityResourceContro
    * @param type $wrapper
    * @return type
    */
-/*  protected function get_data($wrapper, $fields = '*') {
+  protected function get_data($wrapper, $fields = '*', $related = true) {
     if ($fields != '*') {
       $fields_array = explode(',', $fields);
     }
+    //echo 'getting data<br/>';
     $data = array();
+    
     $filtered = $this->property_access_filter($wrapper);
+    //echo 'wrapper is ' . $wrapper . '<br/>';
     foreach ($filtered as $name => $property) {
+      //echo "name is " . $name . "<br/>";
       // We don't want 'field_' at the beginning of fields. This is a drupalism and shouldn't be in the api.
       $name = preg_replace('/^field_/', '', $name);
       // If fields is set and it isn't one of them, go to the next.
-      if ($fields != '*' && !in_array($name, $fields_array)) {
+      if ($related && $fields != '*' && !in_array($name, $fields_array)) {
         continue;
       }
+      
       try {
         if ($property instanceof EntityDrupalWrapper) {
           // For referenced entities only return the URI.
-          if ($id = $property->getIdentifier()) {
-            $data[$name] = $this->get_resource_reference($property->type(), $id);
+          if($related) {
+            $data[$name] = $this->get_data($property, $fields, false);
+          } else {
+            if ($id = $property->getIdentifier()) {
+              $data[$name] = $this->get_resource_reference($property->type(), $id);
+            }
           }
         }
         elseif ($property instanceof EntityValueWrapper) {
-          $data[$name] = $property->value();
+	   //echo $name . "- value<br/>";          
+$data[$name] = $property->value();
         }
         elseif ($property instanceof EntityListWrapper || $property instanceof EntityStructureWrapper) {
-          $data[$name] = $this->get_data($property);
-        }
+	  //echo 'list<br/>';
+	  $data[$name] = array();
+	  if($related) {
+	    //print_r($property->value());
+	    //echo '<br/>';
+	    foreach($property as $id => $value) {
+	      if($value instanceof EntityValueWrapper) {
+	        //echo 'yo<br/>';
+	        $data[$name][$id] = $value->value();
+	      } else {
+	        //echo "loading $id $value $propertybr/>";
+	        $data[$name][$id] = $this->get_data($value, $fields, false);
+	      }
+	    }
+	  } else {
+            $data[$name] = $this->get_data($property, $fields, false);
+          }
+	}
       }
       catch (EntityMetadataWrapperException $e) {
         // A property causes problems - ignore that.
       }
-    }
-    // If bundle = entity_type, don't send it.
-    if (method_exists($wrapper, 'entityInfo')) {
-      $entity_info = $wrapper->entityInfo();
-      if (isset($entity_info['bundle keys'])) {
-        foreach ($entity_info['bundle keys'] as $bundle_key) {
-          if (array_key_exists($bundle_key, $data) && $data[$bundle_key] == $wrapper->type()) {
-            unset($data[$bundle_key]);
-          }
-        }
-      }
-    }
-    return $data;
-  }*/
-
-  protected function get_data($wrapper, $fields = '*') {
-    if ($fields != '*') {
-      $fields_array = explode(',', $fields);
-    }
-    $data = array();
-    $filtered = $this->property_access_filter($wrapper);
-    foreach ($filtered as $name => $property) {
-      // We don't want 'field_' at the beginning of fields. This is a drupalism and shouldn't be in the api.
-      $name = preg_replace('/^field_/', '', $name);
-      // If fields is set and it isn't one of them, go to the next.
-      if ($fields != '*' && !in_array($name, $fields_array)) {
-        continue;
-      }
-      try {
-        if ($property instanceof EntityDrupalWrapper) {
-          // For referenced entities only return the URI.
-          if ($id = $property->getIdentifier()) {
-            $data[$name] = $this->get_resource_reference($property->type(), $id, $property->title->value());
-          }
-        }
-        elseif ($property instanceof EntityValueWrapper) {
-          $data[$name] = $property->value();
-        }
-        elseif ($property instanceof EntityListWrapper || $property instanceof EntityStructureWrapper) {
-          $data[$name] = $this->get_data($property);
-        }
-      }
-      catch (EntityMetadataWrapperException $e) {
-        // A property causes problems - ignore that.
-      }
-
     }
     // If bundle = entity_type, don't send it.
     if (method_exists($wrapper, 'entityInfo')) {
@@ -240,12 +220,10 @@ class ServicesEntityResourceControllerClean extends ServicesEntityResourceContro
    * @param type $id
    * @return type
    */
-  protected function get_resource_reference($resource, $id, $title = '') {
+  protected function get_resource_reference($resource, $id) {
     $return = array(
       'uri' => services_resource_uri(array('entity_' . $resource, $id)),
       'id' => $id,
-      'nid' => $id,
-      'title' => $title,
       'resource' => $resource,
     );
     if (module_exists('uuid') && entity_get_info($resource)) {

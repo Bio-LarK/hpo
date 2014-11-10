@@ -6,9 +6,8 @@
 function services_entity_menu() {
   $items = array();
 
-  $items['admin/config/services/services-entity'] = array(
-    'title' => 'Services Entity settings',
-    'description' => 'Configure entity resources provided by Services.',
+  $items['admin/structure/services/entity'] = array(
+    'title' => 'Services Entity Settings',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('services_entity_settings_form'),
     'access arguments' => array('administer services'),
@@ -27,8 +26,8 @@ function services_entity_settings_form($form, $form_state) {
   }
 
   $form['services_entity_resource_class'] = array(
-    '#title' => 'Default Entity Resource Class',
-    '#description' => 'Select which Resource Controller to use to process the entities where the entity type does not define one.',
+    '#title' => 'Entity Resource Class',
+    '#description' => 'Select which Resource Controller to use to process the entities.',
     '#type' => 'radios',
     '#options' => $options,
     '#default_value' => variable_get('services_entity_resource_class', 'ServicesEntityResourceController'),
@@ -79,7 +78,12 @@ function services_entity_services_entity_resource_info() {
     'description' => 'An entity wrapper that strips out "drupalisms" such as the array structure and field_ prefixes.',
     'class' => 'ServicesEntityResourceControllerClean',
   );
-
+  // Once this processor works better it will be readded. Either that or removed.
+/*  $result['recurse'] = array(
+    'title' => 'Recursive Entity Processor',
+    'description' => 'Allows recursively accessing sub resources such as a taxonomy item on a node.',
+    'class' => 'ServicesEntityResourceControllerRecurse',
+  );*/
   return $result;
 }
 
@@ -136,24 +140,4 @@ function services_entity_entity_query_alter($query) {
     $query->propertyCondition('vid', $vids, $conditions['bundle']['operator']);
     unset($conditions['bundle']);
   }
-}
-
-/**
- * Gets an instance of the resource controller for an entity type.
- *
- * @param string $entity_type
- *   The entity type.
- *
- * @return ServicesEntityResourceControllerInterface
- *   A resource controller object.
- */
-function _services_entity_get_controller($entity_type) {
-  $info = entity_get_info($entity_type);
-  if (isset($info['resource controller']) && class_exists($info['resource controller'])) {
-    $class = $info['resource controller'];
-  }
-  else {
-    $class = variable_get('services_entity_resource_class', 'ServicesEntityResourceController');
-  }
-  return new $class();
 }
