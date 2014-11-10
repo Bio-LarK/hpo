@@ -104,7 +104,7 @@ angular
                 templateUrl: 'views/suggestion.html',
             })
             .state('disorder', {
-                url: '/disorders/:disorderId',
+                url: '/term/:disorderId',
                 controller: 'DisorderCtrl',
                 templateUrl: 'views/disorder.html',
             })
@@ -112,7 +112,7 @@ angular
                 url: '/edit'
             })
             .state('disorders', {
-                url: '/disorders?page?signId',
+                url: '/term?page?signId',
                 controller: 'DisordersCtrl as vm',
                 templateUrl: 'views/disorders.html'
             })
