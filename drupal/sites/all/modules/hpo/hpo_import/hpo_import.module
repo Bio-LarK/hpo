@@ -67,13 +67,17 @@ function hpo_config_form_submit($form, &$form_state) {
     if ($active_tab === _IMPORT_CONTENT_) {
         $hpo_onto_file = $form_state['values']['configuration']['import_content']['value']['hpo_onto_file'];
 
-	delete_nodes('hpo_concept');
+        delete_nodes('hpo_concept');
 
-	$import_obj = new HPOImport();
+        $import_obj = new HPOImport();
         $import_obj->create_hpo_list();
+        $import_obj->create_hpo_classification();
         $import_obj->create_hpo_concepts();
 
-	/*
+        $import_obj->create_disease_list();
+        $import_obj->create_disease_concepts();
+
+        /*
         $ok = 1;
         if ($hpo_onto_file === '') {
             $ok = 0;
@@ -87,7 +91,7 @@ function hpo_config_form_submit($form, &$form_state) {
 
             $import_obj = new HPOImport($hpo_onto_file);
         }
-	*/
+        */
     }
 
     return $form;

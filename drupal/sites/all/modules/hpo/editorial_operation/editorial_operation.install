@@ -65,7 +65,7 @@ function _editorial_operation_installed_fields() {
             'cardinality'	=> 1,
             'type'		=> 'entityreference',
             'settings'	=> array(
-		 'target_type' => 'user',
+                'target_type' => 'user',
             )
         ),
         'field_eop_ontrans' => array(

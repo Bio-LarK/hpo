@@ -13,7 +13,12 @@ function transaction_request_install() {
     );
 
     $content_type = node_type_set_defaults($transaction_request);
+    node_add_body_field($content_type);
     node_type_save($content_type);
+
+    $body_instance = field_info_instance('node', 'body', 'transaction_request');
+    $body_instance['type'] = 'text_long';
+    $body_instance['label'] = 'Description';
 
     foreach (_transaction_request_installed_fields() as $field) {
         field_create_field($field);
@@ -60,7 +65,7 @@ function _transaction_request_installed_fields() {
             'cardinality'	=> 1,
             'type'		=> 'entityreference',
             'settings'	=> array(
-		 'target_type' => 'user',
+                'target_type' => 'user',
             )
         ),
         'field_tr_trans' => array(

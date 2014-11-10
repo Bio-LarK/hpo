@@ -11,6 +11,19 @@
 interface ServicesResourceControllerInterface {
 
   /**
+   * Specify services resource informatino for an entity type.
+   *
+   * @param string $entity_type
+   *   The entity type whose info should be specified.
+   *
+   * @return
+   *   An info array as would be returned by hook_services_resources().
+   *
+   * @see hooK_services_resources().
+   */
+  public function resourceInfo($entity_type);
+
+  /**
    * Determines access for a given operation and resource.
    *
    * @param string $op
@@ -45,11 +58,14 @@ interface ServicesResourceControllerInterface {
    *   The id of the resource that should be returned.
    * @param array $fields (optional)
    *   The fields for the resource that should be returned.
+   * @param int $revision (optional)
+   *   The revision of the resource that should be returned.  If omitted,
+   *   the current revision will be returned.
    *
    * @return
    *   The internal representation of the resource.
    */
-  public function retrieve($entity_type, $entity_id, $fields);
+  public function retrieve($entity_type, $entity_id, $fields, $revision);
 
   /**
    * Update an existing resource.
@@ -107,6 +123,5 @@ interface ServicesResourceControllerInterface {
    *  Entity data for the field.
    */
   public function field($entity_type, $entity_id, $field_name, $fields = '*', $raw = FALSE);
-
 }
 
