@@ -17,7 +17,7 @@ angular.module('orphaApp')
         /////////////
 
         function activate() {
-            Page.setTitle('All Clinical Signs');
+            Page.setTitle('All Disorders');
             
             getSigns($scope.page++).then(function(signs) {
                 $scope.signs = signs;
