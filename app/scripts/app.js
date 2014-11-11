@@ -84,7 +84,7 @@ angular
                 templateUrl: 'views/genes.html'
             })
             .state('sign', {
-                url: '/disorder/:signId/concepts',
+                url: '/disorder/:signId/phenotypes',
                 controller: 'SignCtrl',
                 templateUrl: 'views/sign.html'
             })
@@ -104,7 +104,7 @@ angular
                 templateUrl: 'views/suggestion.html',
             })
             .state('disorder', {
-                url: '/concepts/:disorderId',
+                url: '/phenotypes/:disorderId',
                 controller: 'DisorderCtrl',
                 templateUrl: 'views/disorder.html',
             })
