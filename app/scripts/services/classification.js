@@ -86,7 +86,6 @@ angular.module('orphaApp')
                         // classification.disorderCount = metadata.count;
                         classification.color = metadata.color;
                     }
-
                 });
                 return classifications;
             });

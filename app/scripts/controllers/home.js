@@ -8,7 +8,7 @@
  * Controller of the orphaApp
  */
 angular.module('orphaApp')
-	.controller('HomeCtrl', function (Disorder, Classification, $log, Page) {
+	.controller('HomeCtrl', function (Disorder, Classification, $log, Page, $q) {
 		var vm = this;
 		vm.classifications = null;
 		activate();
@@ -23,6 +23,23 @@ angular.module('orphaApp')
 		function getAllClassifications() {
 			return Classification.getAll({}).then(function(classifications) {
 				vm.classifications = classifications;
+				var disorders = [Disorder.query({
+                    fields: 'title,disorder_nochildren,disorder_class',
+                    'parameters[disorder_root]': 1,
+                    page: 0
+                }).$promise, Disorder.query({
+                    fields: 'title,disorder_nochildren,disorder_class',
+                    'parameters[disorder_root]': 1,
+                    page: 1
+                }).$promise];
+
+                $q.all(disorders).then(function(results) {
+                    var disorders = _.flatten(results);
+                    _.forEach(disorders, function(disorder) {
+                        var classification = _.find(vm.classifications, {nid: disorder['disorder_class'][0].nid});
+                        classification.count = disorder['disorder_nochildren'];
+                    });
+                });
 			});
 		}
 
