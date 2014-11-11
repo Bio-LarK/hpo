@@ -57,7 +57,7 @@ angular.module('orphaApp')
         }
 
         function openParents(disorder) {
-            $log.debug('opening parents', disorder);
+            // $log.debug('opening parents', disorder);
             disorder.getParents({nid:$stateParams.classificationId}).then(function(parents) {
                 if(!parents || !parents.length) {
                     vm.rootDisorder = disorder;
@@ -120,7 +120,7 @@ angular.module('orphaApp')
                     selectDisorder(parent);
                     return;
                 }
-                $log.debug('open', disorder);
+                // $log.debug('open', disorder);
                 setVisibleDisorders(vm.selectedDisorder['disorder_child']);
             });
         }

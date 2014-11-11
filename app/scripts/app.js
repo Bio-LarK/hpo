@@ -89,7 +89,7 @@ angular
                 templateUrl: 'views/sign.html'
             })
             .state('signs', {
-                url: '/signs',
+                url: '/disorders',
                 controller: 'SignsCtrl',
                 templateUrl: 'views/signs.html'
             })
