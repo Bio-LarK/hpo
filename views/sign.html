@@ -100,4 +100,23 @@
         <div class="spinner" ng-show="signTracker.active();">
             <i class="fa fa-spin fa-circle-o-notch"></i>
         </div>
-    </div>--> <div class="panels"> <form class="form-inline pull-right" role="form" ng-show="disorders.length > 1"> <div class="form-group"> <label class="sr-only" for="exampleInputEmail2">Filter</label> <input type="text" class="form-control panels-filter" id="exampleInputEmail2" placeholder="Filter" ng-model="disordersFilter"> </div> <!-- <button type="submit" class="btn btn-default">Sign in</button> --> </form> <h2>Phenotype</h2> <div ng-show="sign.disorders"> <p ng-hide="sign.disorders.length" class="text-muted"> Root sign. </p> <div class="row" ng-repeat="row in sign.disorders | limitTo:limit | filter:disordersFilter | inSlicesOf:3"> <div ng-repeat="disorder in row" class="col-sm-4"> <div class="panel panel-default"> <div class="panel-body"> <div class="media"> <div class="pull-left"> <div style="width:50px;height:50px"> <colormap classifications="disorder.disorder_class" type="disorder"></colormap> </div> </div> <div class="media-body"> <a ui-sref="disorder({disorderId: disorder.nid})"> <strong> {{ disorder.title }} </strong> </a> <p>An HPO summary for this disease is currently under development.</p> </div> </div> </div> </div> </div> </div> <button class="btn btn-default" ng-click="showMore()" ng-show="limit < sign.disorders.length">Load More</button> </div> <div class="spinner" ng-show="disordersTracker.active();"> <i class="fa fa-spin fa-circle-o-notch"></i> </div> </div> </div>
+    </div>--> <div class="panels"> <form class="form-inline pull-right" role="form" ng-show="disorders.length > 1"> <div class="form-group"> <label class="sr-only" for="exampleInputEmail2">Filter</label> <input type="text" class="form-control panels-filter" id="exampleInputEmail2" placeholder="Filter" ng-model="disordersFilter"> </div> <!-- <button type="submit" class="btn btn-default">Sign in</button> --> </form> <h2>Phenotype</h2> <div ng-show="sign.disorders"> <p ng-hide="sign.disorders.length" class="text-muted"> Root sign. </p> <div class="row" ng-repeat="row in sign.disorders | limitTo:limit | filter:disordersFilter | inSlicesOf:3"> <div ng-repeat="disorder in row" class="col-sm-4"> <card> <card-phenotype phenotype="disorder"></card-phenotype> </card> <!--<div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <div style="width:50px;height:50px;">
+                                        <colormap classifications="disorder.disorder_class" type="disorder"></colormap>
+                                    </div>
+                                </div>
+                                <div class="media-body">
+                                    <a ui-sref="disorder({disorderId: disorder.nid})">
+                                        <strong>
+                                            {{ disorder.title }}
+                                        </strong>
+                                    </a>
+                                    <p>An HPO summary for this disease is currently under development.</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>--> </div> </div> <button class="btn btn-default" ng-click="showMore()" ng-show="limit < sign.disorders.length">Load More</button> </div> <div class="spinner" ng-show="disordersTracker.active();"> <i class="fa fa-spin fa-circle-o-notch"></i> </div> </div> </div>
