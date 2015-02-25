@@ -152,6 +152,8 @@
             <div class="pull-right text-muted text-right" ng-hide="disorderTracker.active()">
 
                 Updated {{ disorder.changed * 1000 | date:'d/M/yyyy' }}
+
+                <a href="{{ disorder.monarchUrl }}" class="btn btn-default" target="_blank" style="margin-left: 10px;">View term in Monarch Initiative</a>
             </div>
             <div class="media">
                 <div class="pull-left">

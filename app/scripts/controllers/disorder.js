@@ -44,6 +44,10 @@ angular.module('orphaApp')
 
             disorderPromise.then(function (disorder) {
                 vm.disorder = disorder;
+                vm.disorder.monarchUrl = 'http://monarchinitiative.org/phenotype/HP:';
+                var uriParts = vm.disorder.disorder_uri.split('HP_');
+
+                vm.disorder.monarchUrl += uriParts[1];
 
                 vm.disorder.loadChildren();
                 vm.disorder.loadParents().then(function(parents) {
