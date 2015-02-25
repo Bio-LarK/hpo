@@ -108,6 +108,11 @@ angular
                 controller: 'DisorderCtrl',
                 templateUrl: 'views/disorder.html',
             })
+            .state('hpo', {
+                url: '/hpo/:hpoId',
+                controller: 'DisorderCtrl',
+                templateUrl: 'views/disorder.html',
+            })
             .state('disorder.edit', {
                 url: '/edit'
             })

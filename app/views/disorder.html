@@ -443,6 +443,7 @@
             </form>
 
             <h2>Parents</h2>
+            
             <div class="spinner" ng-show="disorderTracker.active();">
                 <i class="fa fa-spin fa-circle-o-notch"></i>
             </div>
@@ -453,7 +454,11 @@
 
                 <div class="row" ng-repeat="row in disorder.disorder_parent | filter:filterChildren |  inSlicesOf:3">
                     <div class="col-sm-4" ng-repeat="parent in row">
-                        <div class="panel panel-default">
+                        <card>
+                            <card-phenotype phenotype="parent"></card-phenotype>
+                        </card>
+
+                        <!--<div class="panel panel-default">
                             <div class="panel-body">
                                 <div class="media">
                                     <div class="pull-left">
@@ -473,12 +478,11 @@
                                 </div>
 
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
         </div>
-
 
         <div class="panels">
             <form class="form-inline pull-right" role="form" ng-show="disorder.disorder_child.length > 1">
@@ -500,7 +504,10 @@
 
                 <div class="row" ng-repeat="row in disorder.disorder_child | filter:filterChildren |  inSlicesOf:3">
                     <div class="col-sm-4" ng-repeat="child in row">
-                        <div class="panel panel-default">
+                        <card>
+                            <card-phenotype phenotype="child"></card-phenotype>
+                        </card>
+                        <!--<div class="panel panel-default">
                             <div class="panel-body">
                                 <div class="media">
                                     <div class="pull-left">
@@ -520,7 +527,7 @@
                                 </div>
 
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
             </div>

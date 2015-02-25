@@ -30,6 +30,7 @@ angular.module('orphaApp')
                 ])
             },
         });
+        var uriPrefix = 'http://purl.obolibrary.org/obo/';
         Disorder.prototype.getGenes = getGenes;
         Disorder.prototype.getSigns = getSigns;
         Disorder.prototype.getParents = getParents;
@@ -37,6 +38,7 @@ angular.module('orphaApp')
         Disorder.prototype.loadParents = loadParents;
         Disorder.prototype.loadExternalIdentifiers = loadExternalIdentifiers;
 
+        Disorder.findByHpoId = findByHpoId;
         Disorder.getFromSign = getFromSign;
         Disorder.getFromGene = getFromGene;
         Disorder.getParentsFromDisorderInClassification = getParentsFromDisorderInClassification;
@@ -45,6 +47,7 @@ angular.module('orphaApp')
         return Disorder;
 
         ///////////////////
+
 
         function transformQueryResponse(transactionRequests, headersGetter) {
             if(transactionRequests.length && transactionRequests[0] === 'No entities found.') {
@@ -73,6 +76,11 @@ angular.module('orphaApp')
             disorder['disorder_class'] = _.map(disorder.disorder_class, function(classification) {
                 return new Classification(classification);
             });
+            if(disorder['disorder_uri']) {
+                disorder.hpoId = disorder['disorder_uri']
+                .substring(uriPrefix.length).replace('_', ':');
+            }
+            
             disorder.isOpenable = true;
             disorder.body = disorderBodyService.getBody(disorder);
             // Add in shorthand for inheritance
@@ -88,6 +96,14 @@ angular.module('orphaApp')
             return disorder;
         }
 
+        function findByHpoId(hpoId) {
+            return new Error('Don\'t call this method, the server is broken');
+            // return Disorder.query({
+            //     'parameters[disorder_uri]': encodeURIComponent(uriPrefix + hpoId)
+            // }).$promise.then(function(disorders) {
+            //     return disorders[0];
+            // });
+        }
 
         function getGenes() {
             /* jshint validthis: true */
@@ -122,7 +138,7 @@ angular.module('orphaApp')
             if (classification) {
                 request['parameters[disorder_class]'] = classification.nid;
             }
-            request.fields = ['nid', 'disorder_name', 'title', 'disorder_parent', 'disorder_class'].join(',');
+            request.fields = ['nid', 'disorder_name', 'title', 'disorder_parent', 'disorder_uri', 'disorder_class', 'disorder_altid'].join(',');
             return Disorder.query(request).$promise;
         }
 
@@ -188,7 +204,7 @@ angular.module('orphaApp')
 
         function _loadChildrenHelper(disorder, classification, page) {
             var request = {
-                fields: 'nid,title,disorder_name,disorder_child,disorder_class',
+                fields: 'nid,title,disorder_name,disorder_child,disorder_class,disorder_altid,disorder_uri',
                 'parameters[disorder_parent]': disorder.nid,
                 page: page
             };

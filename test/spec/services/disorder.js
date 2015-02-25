@@ -119,6 +119,29 @@ describe('Service: disorder', function() {
         it('should provide a getRootForClassification function', function() {
             expect(typeof Disorder.getRootForClassification).toBe('function');
         });
+        it('should provide a findByHpoId function', function() {
+            expect(typeof Disorder.findByHpoId).toBe('function');
+        });
+        it('myMethod should return expected value', function() {
+            var hpoId = 'HP:0001825';
+            var results = [{
+                nid: '2273',
+                title: 'Large for gestational age'
+            }];
+            $httpBackend.expectGET(ENV.apiEndpoint +
+                '/entity_node?parameters%5Bdisorder_altid%5D=' + hpoId + '&parameters%5Btype%5D=disorder').respond(results);
+
+            Disorder.findByHpoId(hpoId).then(function(disorder) {
+                expect(disorder.nid).toBe(results[0].nid);
+            });
+
+            $httpBackend.flush();
+            $rootScope.$digest();
+            // expect(disorder.hasLoadedChildren).toBe(true);
+            // expect(disorder.disorder_child[0].title).toBe(children[0].title);
+            // expect(result).toBe('Not implemented');
+        });
+
     });
 
     describe('instance methods', function() {
@@ -142,8 +165,10 @@ describe('Service: disorder', function() {
         });
 
         it('loadChildren should return expected value', function() {
-            var children = [{title: 'hello world'}];
-            $httpBackend.expectGET(ENV.apiEndpoint + 
+            var children = [{
+                title: 'hello world'
+            }];
+            $httpBackend.expectGET(ENV.apiEndpoint +
                 '/entity_node?fields=nid,title,disorder_name,disorder_child,disorder_class&page=0&parameters%5Bdisorder_parent%5D=113950&parameters%5Btype%5D=disorder').respond(children);
 
             disorder.loadChildren();

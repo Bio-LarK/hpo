@@ -27,16 +27,28 @@ angular.module('orphaApp')
         vm.isEditing = false;
         vm.editDescription = editDescription;
         activate();
+
         ////////////
 
-        function activate() {
-            var disorder = Disorder.get({
-                nid: $stateParams.disorderId //136402
-            }, function (disorder) {
+        function activate() {   
+
+            var disorderPromise;
+            
+            if($stateParams.hpoId) {
+                disorderPromise = Disorder.findByHpoId($stateParams.hpoId);    
+            } else {
+                disorderPromise = Disorder.get({
+                   nid: $stateParams.disorderId //136402
+                }).$promise;
+            }
+
+            disorderPromise.then(function (disorder) {
                 vm.disorder = disorder;
 
                 vm.disorder.loadChildren();
-                vm.disorder.loadParents();
+                vm.disorder.loadParents().then(function(parents) {
+                    $log.debug('parents', parents);
+                });
                 vm.disorder.loadExternalIdentifiers();
 
                 Disorder.getParentsFromDisorderInClassification(disorder).then(function(parents) {
@@ -84,9 +96,9 @@ angular.module('orphaApp')
                 // vm.signsTracker.addPromise(signsPromise);
                 vm.genesTracker.addPromise(genesPromise);
             });
-            vm.disorderTracker.addPromise(disorder.$promise);
-            vm.signsTracker.addPromise(disorder.$promise);
-            vm.genesTracker.addPromise(disorder.$promise);
+            vm.disorderTracker.addPromise(disorderPromise);
+            vm.signsTracker.addPromise(disorderPromise);
+            vm.genesTracker.addPromise(disorderPromise);
         }
 
         function startEditing() {

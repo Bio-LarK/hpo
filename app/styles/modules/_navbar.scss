@@ -13,9 +13,9 @@
 .navbar.navbar-bright {
 	border-radius: 0;
 	margin-bottom: 0;
-	background-color: $brand-secondary;
+	background-color: #222 ; //$brand-secondary;
 	border: none;
-	color: rgba(0,0,0,0.7);
+	color: #999; // rgba(0,0,0,0.7);
 	font-size: 14px;
 	border-bottom: 1px solid rgba(0,0,0,0.1);
 	z-index: 2;
@@ -39,9 +39,13 @@
 		padding-top: 7px;
 		padding-bottom: 7px;
 		transition: 0.12s background-color;
+      &:hover {
+        color: white;
+      }
 	}
 	.navbar-nav > li.active > a {
-		background-color: white;
+		color: #222;
+        background-color: white;
 	}
 	.nav > li > a:hover, .nav > li > a:focus {
 		background-color: rgba(255,255,255, 0.75);

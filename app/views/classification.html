@@ -147,14 +147,17 @@
 
             <div class="row" ng-repeat="row in vm.visibleDisorders | inSlicesOf:2">
                 <div class="col-sm-6" ng-repeat="disorder in row">
-                    <div class="panel panel-default" ng-class="{'selected-card': vm.initialDisorder.nid == disorder.nid}">
+                    <card highlight="vm.initialDisorder.nid == disorder.nid">
+                        <card-phenotype phenotype="disorder"></card-phenotype>
+                    </card>
+
+                    <!--<div class="panel panel-default" >
                         <div class="panel-body">
                             <div class="media">
                                 <div class="pull-left">
                                     <div style="width:50px;height:50px;">
                                         <colormap classifications="disorder.disorder_class" type="disorder"></colormap>
                                     </div>
-                                    <!-- <img src="http://dummyimage.com/40x40/dddddd/dddddd" alt="" class="media-object"> -->
                                 </div>
                                 <div class="media-body">
                                     <h5>
@@ -168,7 +171,7 @@
                             </div>
 
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </div>

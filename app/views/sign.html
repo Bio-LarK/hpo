@@ -155,7 +155,11 @@
 
             <div class="row" ng-repeat="row in sign.disorders | limitTo:limit | filter:disordersFilter | inSlicesOf:3">
                 <div ng-repeat="disorder in row" class="col-sm-4">
-                    <div class="panel panel-default">
+                    <card>
+                        <card-phenotype phenotype="disorder"></card-phenotype>
+                    </card>
+
+                    <!--<div class="panel panel-default">
                         <div class="panel-body">
                             <div class="media">
                                 <div class="pull-left">
@@ -174,7 +178,7 @@
                             </div>
 
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
             <button class="btn btn-default" ng-click="showMore()" ng-show="limit < sign.disorders.length">Load More</button>
